@@ -1,0 +1,100 @@
+# ===================================================
+# 🌐 FRONTEND: Vue.js + Vuetify
+# ===================================================
+node_modules/
+dist/
+public/build/
+coverage/
+*.log
+*.local
+*.env
+.env.*
+.vscode/
+
+# Optional lock files (pick based on your package manager)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ===================================================
+# 🧠 BACKEND: ASP.NET Core + ADO.NET
+# ===================================================
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dbmdl
+*.bak
+*.pdb
+*.tmp
+
+# ASP.NET config files (keep production versions)
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# User secrets (dotnet user-secrets)
+**/secrets/
+
+# IIS Express + Visual Studio
+.vs/
+.vsconfig
+*.vspscc
+*.vssscc
+
+# dotnet watch reload temp files
+*.hotreload
+
+# Rider / JetBrains IDE
+.idea/
+*.sln.iml
+
+# ===================================================
+# 🐳 DATABASE: IBM Db2 (via Docker)
+# ===================================================
+
+# Local persistent volume directories
+db2_data/
+db2_logs/
+db2_backup/
+db2config/
+
+# Docker Compose environment files
+.env
+.env.db2
+.env.local
+
+# Docker image exports / temp files
+*.tar
+*.pid
+
+# Optional local-only overrides
+docker-compose.override.yml
+docker-compose.*.local.yml
+
+# Container logs if output to local filesystem
+*.container.log
+
+# ===================================================
+# 💼 GENERAL
+# ===================================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+
+# GitHub or CI/CD workflow files you don’t want to push
+*.generated.cs
+*.generated.json
+
+# ===================================================
+# ✅ ALLOW TRACKING OF TEMPLATE CONFIG FILES
+# ===================================================
+
+# Allow sample env files
+!env.template
+!docker-compose.yml
+!appsettings.json
+

@@ -1,0 +1,6 @@
+@lineshift_v3_backend_HostAddress = http://localhost:5109
+
+GET {{lineshift_v3_backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
