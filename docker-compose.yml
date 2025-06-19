@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  marialsdb:
+    container_name: marialsdb # Name of Container
+    image: mariadb:10.11 # Specific MariaDB Image
+    restart: always 
+    ports:
+      - "3307:3306" # Associated ports (accouting for MySQL already on port)
+    environment:
+      - MARIADB_ROOT_PASSWORD: MyPassword123
+      - MARIADB_DATABASE: lineshiftdb
+    volumes:
+      - mariadata:/var/lib/mysql # Mounted Volume name and location
+    networks:
+      - lineshift-network
+
+volumes:
+  mariadata: 
+
+networks:
+  lineshift-network:
+    driver: bridge
+
+  
+
+
+
+
