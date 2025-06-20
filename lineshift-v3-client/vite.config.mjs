@@ -11,6 +11,7 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import path from 'node:path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -75,6 +76,16 @@ export default defineConfig({
     ],
   },
   server: {
+    proxy: {
+      '/api': { // The path out frontend will request
+        target: 'https://localhost:44372', // .NET Web Core API URL
+        changeOrigin: true, // Important step to get CORS to work with proxy
+        secure: false, 
+        rewrite: (path) => path.replace(/^\/api/, '') // Removes the '/api' prefix when forwarding to the backend
+      }
+    },
+    // we could optionally set an explicit port number but (for docker container network)
+    // the port will default to port: 3000
     port: 3000,
   },
   css: {
