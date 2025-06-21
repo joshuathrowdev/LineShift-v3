@@ -1,0 +1,60 @@
+Sprint-1 -> setting inital project config 
+- set up container instance of mariadb server using ✅
+  - docker
+  - initialize and understand env vars for that container ✅ 
+    - how to add and delete (if we can/applicable)
+
+- establish a connection to the databse using dbeaver or cli tools ✅
+
+- mount a volume to the container (for persistent data) ✅
+  - understand how the volume works and 
+
+- initialize the database service section of the docker-compose file ✅
+  - understand how everthing works in the docker compose file
+
+ 
+- refactor the readme file to show change from imb db2 database server ✅
+architecture to the mariadb architecture
+
+
+- create the inital application db in our MariaDB server ✅
+  -> lineshiftdb (the name of the databse)
+  -> think about putting some evn vars so it can be dynamic/hidden in code
+
+
+- create base tables for the application
+  - Core Tables
+    Sports ✅
+    Teams✅
+    Leagues ✅
+    Players *
+    Games *
+
+  - Statistical Metrics
+    Statistics
+    GamePlayerStats * (for ai model)
+
+  - Web Scraping
+    PropLines
+    ScrapedPicks
+    PickSourceRankings
+
+
+Sprint 2
+- Define a simple model for the basic core tales (sports)
+
+- connect the front end services (using axios) to the backend api 
+  - test the fontend server connect to the api
+
+- make the Dockerfile for the frontend container
+  - remember, Dockerfiles are what define how to build your container
+    - what dependencies it needs (Vuetify, Axios, etc)
+    - What command to run to install those dependencies
+    - What command to run after the container if built to start the application 
+      - npm run dev (for the frontend container) 
+
+- install and make sure we can run the api within an IIS Express server ✅
+
+- figure out a GUI way to interact with the api and call it (maybe using swagger) ✅
+
+- make the config for the linter to auto lint out files on save
