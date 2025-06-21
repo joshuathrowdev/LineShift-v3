@@ -8,6 +8,9 @@ namespace lineshift_v3_backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            // Any dependencies or transative dependencies to controller (services and repos)
+
+            // Add the DBContext (Connection/Connection String) to MariaDB
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
