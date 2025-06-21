@@ -44,7 +44,7 @@ Sprint 2
 - Define a simple model for the basic core tales (sports)
 
 - connect the front end services (using axios) to the backend api 
-  - test the fontend server connect to the api
+  - test the frontend server connect to the api
 
 - make the Dockerfile for the frontend container
   - remember, Dockerfiles are what define how to build your container
