@@ -89,6 +89,9 @@ Thumbs.db
 *.generated.cs
 *.generated.json
 
+# Project Specific
+task.txt
+
 # ===================================================
 # ✅ ALLOW TRACKING OF TEMPLATE CONFIG FILES
 # ===================================================
