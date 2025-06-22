@@ -3,8 +3,10 @@ using lineshift_v3_backend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using lineshift_v3_backend.Services;
 using lineshift_v3_backend.DataAccess.Repository;
+using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Runtime.CompilerServices;
 
 namespace lineshift_v3_backend
 {
@@ -16,7 +18,8 @@ namespace lineshift_v3_backend
 
             // Add services to the container.
             // Any dependencies or transative dependencies to controller (services and repos)
-            builder.Services.AddSingleton<ISportsService, SportsService>();
+            builder.Services.AddScoped<ISportsService, SportsService>();
+            builder.Services.AddScoped<ISportsRepository,  SportsRepository>();
 
 
             // Add the DBContext (Connection/Connection String) to MariaDB
@@ -56,7 +59,17 @@ namespace lineshift_v3_backend
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            // Register and config the swagger generator with the builder (server container) so it can
+            // inspect our api endpoints and build out the UI
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v3", new OpenApiInfo
+                {
+                    Version = "3.0",
+                    Title = "LineShift-v3 Backend API",
+                    Description = "A ASP.NET Core Web API for the lineshift_v3_backend",
+                });
+            });
 
             var app = builder.Build();
 
@@ -66,11 +79,34 @@ namespace lineshift_v3_backend
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwagger(); // Enables the middleware to serve the generated OpenAPI JSON
+                // enable swagger UI and serve JSON using the Swagger generated defined by build
+                app.UseSwaggerUI(options =>
+                {
+                    // Specifies the endpoint where the Swagger JSON is served.
+                    // The "v3" here must match the document name used in AddSwaggerGen (options.SwaggerDoc("v3", ...)
+                    options.SwaggerEndpoint("/swagger/v3/swagger.json", "LineShift-v3 Backend API 3.0");
+
+                    // Optional: Set the Swagger UI to be at the root of your application (e.g., http://localhost:5000/)
+                    // instead of http://localhost:5000/swagger
+                    // options.RoutePrefix = string.Empty;
+                });
             }
 
-            app.UseHttpsRedirection();
+
+            // Automatically Applying Migrations on applcation start up (In Dev Env)
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                dbContext.Database.Migrate();
+                // everytime the application is ran locally (through VSCode) or deployed to a server (on application startup)
+                // we will create a new scipe of the app services and pull the DbContext related to our connection 
+                // then, the .Database.Migrate() will automatically compare out migrations folder to the databases histoty of migration
+                // and applly the local migration folder changes in order (if any)
+                // then the scope is resolved and the app is ran normally
+            }
+
+                app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
