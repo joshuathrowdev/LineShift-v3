@@ -1,9 +1,9 @@
 <template>
   <v-app-bar 
-    color="background"
     elevation="2"
-    rounded  
     density="compact"
+    color="background"
+    rounded  
   > 
     <v-app-bar-title>LineShift (Logo)</v-app-bar-title>
     <v-spacer />

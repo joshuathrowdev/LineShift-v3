@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- Any top level content that we want to persist between pages -->
-     <NavigationLayout/>
+    <NavigationLayout />
 
     <v-main> 
       <router-view /> <!-- the content of the page we are on -->
