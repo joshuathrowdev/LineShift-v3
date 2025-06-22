@@ -59,6 +59,7 @@ namespace lineshift_v3_backend
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
             // Register and config the swagger generator with the builder (server container) so it can
             // inspect our api endpoints and build out the UI
             builder.Services.AddSwaggerGen(options =>
@@ -70,6 +71,7 @@ namespace lineshift_v3_backend
                     Description = "A ASP.NET Core Web API for the lineshift_v3_backend",
                 });
             });
+
 
             var app = builder.Build();
 
