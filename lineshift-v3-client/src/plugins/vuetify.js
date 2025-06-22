@@ -15,8 +15,8 @@ import { createVuetify } from 'vuetify'
 const mainTheme = {
   dark: true,
   colors: {
-    background: '#292927', // default background for theme
-    surface: '#212121', // default background for surface components (ex: cards) (slightly darker)
+    background: '#212121', // default background for theme
+    surface: '#292927', // default background for surface components (ex: cards) (slightly darker)
     primary: '#22577A',
     secondary: '#57CC99',
     ternary: '#80ED99',

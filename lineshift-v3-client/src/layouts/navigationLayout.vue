@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld />
+  <app-bar />
 </template>
 
 <script setup>
