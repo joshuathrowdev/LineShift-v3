@@ -8,10 +8,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AccountAvatar: typeof import('./src/components/navigation/AccountAvatar.vue')['default']
+    AccountAvatar: typeof import('./src/components/navigation/AccountSection.vue')['default']
+    AccountSection: typeof import('./src/components/navigation/AccountSection.vue')['default']
     AppBar: typeof import('./src/components/navigation/AppBar.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    NaviationLogo: typeof import('./src/components/navigation/NavLogo.vue')['default']
+    NavigationLogo: typeof import('./src/components/navigation/NavLogo.vue')['default']
+    NavLinkItem: typeof import('./src/components/navigation/NavLinkItem.vue')['default']
+    NavLinks: typeof import('./src/components/navigation/NavLinks.vue')['default']
+    NavLogo: typeof import('./src/components/navigation/NavLogo.vue')['default']
+    RailBar: typeof import('./src/components/navigation/RailBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

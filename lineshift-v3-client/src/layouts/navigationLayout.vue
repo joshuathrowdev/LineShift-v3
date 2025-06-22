@@ -1,7 +1,5 @@
 <template>
-  <app-bar />
-
-  <v-btn></v-btn>
+  <rail-bar />
 </template>
 
 <script setup>

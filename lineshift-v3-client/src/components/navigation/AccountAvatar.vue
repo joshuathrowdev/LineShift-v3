@@ -1,9 +1,0 @@
-<template>
-  <v-avatar
-    color="secondary"
-    variant="tonal"
-    class="font-weight-bold"
-  >
-    JT
-  </v-avatar>
-</template>
