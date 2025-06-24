@@ -1,3 +1,3 @@
-const ProxyTrigger = '/api'
+const ProxyTrigger = '/api';
 
-export default ProxyTrigger
+export default ProxyTrigger;

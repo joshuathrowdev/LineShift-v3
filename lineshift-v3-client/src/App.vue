@@ -12,11 +12,15 @@
 <script setup>
   import NavigationLayout from './layouts/navigationLayout.vue';
   
-  // Weather API Test
-  import { ref } from 'vue';
-  import weatherApi from './services/weather.api';
-  
-  const weatherData = ref(weatherApi.get('/WeatherForecast'))
-  console.log(weatherData.value)
+  // Test for sports composable vertical
+  import { useSports } from './composables/useSports';
+
+  const {sports, getAllSports} = useSports()
+
+  onMounted(async () => {
+    getAllSports()
+    console.log(sports.value)
+  })
+
   
 </script>

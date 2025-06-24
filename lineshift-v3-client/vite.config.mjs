@@ -1,17 +1,17 @@
 // Plugins
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import Fonts from 'unplugin-fonts/vite'
-import Layouts from 'vite-plugin-vue-layouts-next'
-import Vue from '@vitejs/plugin-vue'
-import VueRouter from 'unplugin-vue-router/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import Fonts from 'unplugin-fonts/vite';
+import Layouts from 'vite-plugin-vue-layouts-next';
+import Vue from '@vitejs/plugin-vue';
+import VueRouter from 'unplugin-vue-router/vite';
+import { VueRouterAutoImports } from 'unplugin-vue-router';
+import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 // Utilities
-import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'node:url'
-import path from 'node:path'
+import { defineConfig } from 'vite';
+import { fileURLToPath, URL } from 'node:url';
+import path from 'node:path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -80,7 +80,7 @@ export default defineConfig({
       '/api': { // The path out frontend will request
         target: 'https://localhost:44372', // .NET Web Core API URL
         changeOrigin: true, // Important step to get CORS to work with proxy
-        secure: false, 
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, '') // Removes the '/api' prefix when forwarding to the backend
       }
     },
@@ -98,4 +98,4 @@ export default defineConfig({
       },
     },
   },
-})
+});

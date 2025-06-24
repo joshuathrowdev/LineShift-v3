@@ -1,5 +1,7 @@
 <template>
-  <HelloWorld />
+  <home-layout />
 </template>
 
-<script setup></script>
+<script setup>
+  import HomeLayout from '@/layouts/HomeLayout.vue';
+</script>

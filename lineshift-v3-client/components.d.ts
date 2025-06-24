@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AccountAvatar: typeof import('./src/components/navigation/AccountSection.vue')['default']
     AccountSection: typeof import('./src/components/navigation/AccountSection.vue')['default']
+    AnnouncementBanner: typeof import('./src/components/home/AnnouncementBanner.vue')['default']
     AppBar: typeof import('./src/components/navigation/AppBar.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
