@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Runtime.CompilerServices;
+using Serilog;
 
 namespace lineshift_v3_backend
 {
@@ -53,7 +54,16 @@ namespace lineshift_v3_backend
                 });
             });
 
-            // Add other services (Authentication, Authorization, etc.)
+            // Add other services (Authentication, Authorization, logger, etc.)
+            builder.Host.UseSerilog((context, loggerConfig) =>
+            {
+                loggerConfig.ReadFrom.Configuration(context.Configuration) // Read from appsettings.json
+                    .Enrich.FromLogContext() // Add contextual properties (e.g., correlation IDs)
+                    .WriteTo.Console() // Still log to console for local dev feedback
+                    .WriteTo.File("logs/log-txt", // Log to a file in the backend root "logs" folder
+                                  rollingInterval: RollingInterval.Day, // New File Daily
+                                  outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}");
+            });
             // ...
 
             builder.Services.AddControllers();

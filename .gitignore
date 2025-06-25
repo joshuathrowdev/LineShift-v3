@@ -91,6 +91,7 @@ Thumbs.db
 
 # Project Specific
 task.txt
+logs/
 
 # ===================================================
 # ✅ ALLOW TRACKING OF TEMPLATE CONFIG FILES
