@@ -1,15 +1,26 @@
 <template>
   <v-app>
-    <router-view />
+    <!-- Any top level content that we want to persist between pages -->
+    <NavigationLayout />
+
+    <v-main> 
+      <router-view /> <!-- the content of the page we are on -->
+    </v-main>
   </v-app>
 </template>
 
 <script setup>
-  // Weather API Test
-  import { ref } from 'vue';
-  import weatherApi from './services/weather.api';
+  import NavigationLayout from './layouts/navigationLayout.vue';
   
-  const weatherData = ref(weatherApi.get('/WeatherForecast'))
-  console.log(weatherData.value)
+  // Test for sports composable vertical
+  import { useSports } from './composables/useSports';
+
+  const {sports, getAllSports} = useSports()
+
+  onMounted(async () => {
+    getAllSports()
+    console.log(sports.value)
+  })
+
   
 </script>

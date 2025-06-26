@@ -15,11 +15,14 @@ namespace lineshift_v3_backend.Services
     {
         // Layer Vars
         private readonly ISportsRepository _sportsRepository;
+            // Logger instance
+        private readonly ILogger<SportsService> _logger;
 
         // DI constructor for vars
-        public SportsService(ISportsRepository sportsRepository)
+        public SportsService(ISportsRepository sportsRepository, ILogger<SportsService> logger)
         {
             _sportsRepository = sportsRepository;
+            _logger = logger;
         }
 
         #region Methods
@@ -28,10 +31,12 @@ namespace lineshift_v3_backend.Services
             try
             {
                 var result = await _sportsRepository.GetSportsAsync();
+                _logger.LogInformation("Accessing sports repository from sports service layer");
                 return result;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occured while accessing sport reposity");
                 throw;
             }
         }
