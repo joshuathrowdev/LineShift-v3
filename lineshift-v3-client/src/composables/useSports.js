@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import SportsService from '@/services/sports.api';
+import sportsService from '@/services/sports.api';
 
 export const useSports = () => {
   // any data members of the composable initializer
@@ -9,7 +9,7 @@ export const useSports = () => {
   // logic tied directly to var and will updated that instance
   const getAllSports = async () => {
     try {
-      sports.value = await SportsService.getAllSports();
+      sports.value = await sportsService.getAllSports();
       // testing data assignment
       console.log(sports.value);
     } catch (error) {

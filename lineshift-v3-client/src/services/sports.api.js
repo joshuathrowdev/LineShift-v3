@@ -1,11 +1,12 @@
-import AxiosInstance from './api';
-import { SportsEndpoint } from './globalEndpoints';
+import axiosInstance from './api';
+import { sportsEndpoint } from './endpoints';
 
-const SportsService = {
+
+const sportsService = {
 
   async getAllSports() {
     try {
-      const response = await AxiosInstance.get(`${SportsEndpoint}`);
+      const response = await axiosInstance.get(sportsEndpoint);
       return response.data;
     } catch (error) {
       console.warn('Error fetching all sports: ', error);
@@ -14,4 +15,4 @@ const SportsService = {
   }
 };
 
-export default SportsService;
+export default sportsService;

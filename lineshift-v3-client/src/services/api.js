@@ -1,8 +1,9 @@
 import axios from 'axios';
-import ProxyTrigger from './globalServices';
 
-const AxiosInstance = axios.create({
-  baseURL: `${ProxyTrigger}`,
+const proxyTrigger = '/api';
+
+const axiosInstance = axios.create({
+  baseURL: `${proxyTrigger}`,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -10,7 +11,7 @@ const AxiosInstance = axios.create({
   }
 });
 
-export default AxiosInstance;
+export default axiosInstance;
 
 // For the Proxy server to work, axios needs to point to the relative path of our frontend
 // if we use the fully qualified path for the URL, the proxy server will be bypassed entirely
