@@ -11,10 +11,6 @@
 
     
     <template #default>
-      <v-divider
-        thickness="4"
-        color="primary"
-      />
       <div
         class="py-10"
       >
