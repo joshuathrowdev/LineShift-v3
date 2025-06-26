@@ -5,11 +5,19 @@
     <nav-link-item
       title="Home"
       icon="mdi-home-outline"
+      :to="{name: '/'}"
+      color="secondary"
+      link
+      exact
     />
 
     <nav-link-item 
       title="Stats"
       icon="mdi-chart-donut-variant"
+      :to="{name: '/stats/'}"
+      link
+      exact
+      color="secondary"
     />
 
     <v-tooltip 
@@ -21,6 +29,8 @@
           title="Live Picks"
           icon="mdi-lightning-bolt-outline"
           v-bind="props"
+          link
+          exact
         />
       </template>
     </v-tooltip>
@@ -34,6 +44,8 @@
           title="Generative Picks"
           icon="mdi-brain"
           v-bind="props"
+          link
+          exact
         />
       </template>
     </v-tooltip>

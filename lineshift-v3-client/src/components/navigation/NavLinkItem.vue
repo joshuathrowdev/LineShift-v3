@@ -6,7 +6,7 @@
       <v-icon :icon="icon" />
     </template>
     <v-list-item-title
-      class="font-weight-bold"
+      class="font-weight-bold text-h6"
     >
       {{ title }}
     </v-list-item-title>
