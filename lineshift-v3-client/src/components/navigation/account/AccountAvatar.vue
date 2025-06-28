@@ -1,8 +1,8 @@
 <template>
   <v-avatar
-    color="secondary"
+    color="ternary"
     size="45"
   >
-    JT
+    ADM
   </v-avatar>
 </template>

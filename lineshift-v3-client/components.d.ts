@@ -11,6 +11,7 @@ declare module 'vue' {
     AccountAvatar: typeof import('./src/components/navigation/account/AccountAvatar.vue')['default']
     AccountCard: typeof import('./src/components/navigation/account/AccountCard.vue')['default']
     AccountSection: typeof import('./src/components/navigation/account/AccountSection.vue')['default']
+    AccoutSection: typeof import('./src/components/navigation/account/AccountSection.vue')['default']
     AnnouncementBanner: typeof import('./src/components/home/AnnouncementBanner.vue')['default']
     AppBar: typeof import('./src/components/navigation/AppBar.vue')['default']
     NavLinkItem: typeof import('./src/components/navigation/NavLinkItem.vue')['default']
