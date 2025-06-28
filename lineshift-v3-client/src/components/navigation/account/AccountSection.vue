@@ -3,9 +3,17 @@
     <div
       class="d-flex justify-center"
     >
-      <account-avatar />
+      <v-btn 
+        icon
+        variant="text"      
+        @click="handleShowAccountInformation"
+      >
+        <account-avatar />
+      </v-btn>
     </div>
-    <v-card>
+    <v-card
+      v-if="showAccountInformation"
+    >
       <template #prepend />
       <template #title>
         Admin (username)
@@ -54,5 +62,12 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 
+const showAccountInformation = ref(false)
+
+
+const handleShowAccountInformation = () => {
+  showAccountInformation.value === false ? showAccountInformation.value = true : showAccountInformation.value = false
+}
 </script>

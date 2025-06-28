@@ -17,16 +17,10 @@
 
     <v-divider />
     
-    <v-list>
-      <div
-        class="py-10"
-      >
-        <v-list 
-          density="compact"
-        >
-          <nav-links />
-        </v-list>
-      </div>
+    <v-list
+      class="d-flex flex-column justify-center"
+    >
+      <nav-links />
     </v-list>
 
     <template #append>
