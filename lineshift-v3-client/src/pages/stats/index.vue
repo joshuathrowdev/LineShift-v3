@@ -25,6 +25,6 @@
   const {sports, getAllSports} = useSports()
 
   onMounted(async () => {
-    getAllSports()
+    await getAllSports()
   })
 </script>

@@ -10,17 +10,6 @@
 </template>
 
 <script setup>
-  import NavigationLayout from './layouts/navigationLayout.vue';
-  
-  // Test for sports composable vertical
-  import { useSports } from './composables/useSports';
-
-  const {sports, getAllSports} = useSports()
-
-  onMounted(async () => {
-    getAllSports()
-    console.log(sports.value)
-  })
-
+  import NavigationLayout from './layouts/NavigationLayout.vue';
   
 </script>
