@@ -1,5 +1,4 @@
 <template>
-  This is the Form Page
   <v-container>
     <v-row>
       <v-col cols="12">
@@ -20,58 +19,14 @@
     </v-row>
 
     <v-row>
-      <v-col cols="6">
-        <v-form @submit.prevent="handleLoginForm">
-          <v-text-field
-            v-model="username"
-            label="Username"
-            variant="outlined"
-            prepend-inner-icon="mdi-account-star-outline"
-            color="secondary"
-            clearable
-            icon-color="primary"
-            glow
-            rounded
-          />
+      <v-col cols="12">
+        <login-form />
+      </v-col>
+    </v-row>
 
-          <v-divider>
-            OR
-          </v-divider>
-
-          <v-text-field 
-            v-model="email"
-            label="Email"
-            variant="outlined"
-            color="secondary"
-            prepend-inner-icon="mdi-email-outline"
-            clearable
-            icon-color="primary"
-            glow
-            rounded
-            type="email"
-          />
-        
-          <v-text-field 
-            v-model="password"
-            label="Password"
-            variant="solo"
-            prepend-inner-icon="mdi-onepassword"
-            clearable
-            color="secondary"
-            glow
-            icon-color="primary"
-            rounded
-            type="password"
-          />
-
-          <div class="d-flex justify-center">
-            <v-btn
-              append-icon="mdi-login"
-              color="secondary"
-              variant="tonal"
-            >Login</v-btn>
-          </div>
-        </v-form>
+    <v-row>
+      <v-col cols="12">
+        <register-card />
       </v-col>
     </v-row>
   </v-container>
@@ -79,11 +34,5 @@
 
 <script setup>
 
-const username = ref('')
-const email = ref('')
-const password = ref('')
 
-const handleLoginForm = () => {
-  console.log("FORMMMM")
-}
 </script>

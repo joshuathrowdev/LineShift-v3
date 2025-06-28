@@ -15,10 +15,12 @@ declare module 'vue' {
     AccoutSection: typeof import('./src/components/navigation/account/AccountSection.vue')['default']
     AnnouncementBanner: typeof import('./src/components/home/AnnouncementBanner.vue')['default']
     AppBar: typeof import('./src/components/navigation/AppBar.vue')['default']
+    LoginForm: typeof import('./src/components/authentication/LoginForm.vue')['default']
     NavLinkItem: typeof import('./src/components/navigation/NavLinkItem.vue')['default']
     NavLinks: typeof import('./src/components/navigation/NavLinks.vue')['default']
     NavLogo: typeof import('./src/components/navigation/NavLogo.vue')['default']
     RailBar: typeof import('./src/components/navigation/RailBar.vue')['default']
+    RegisterCard: typeof import('./src/components/authentication/RegisterCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
