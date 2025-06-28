@@ -10,6 +10,6 @@
 </template>
 
 <script setup>
-  import NavigationLayout from './layouts/NavigationLayout.vue';
+  import NavigationLayout from './layouts/navigationLayout.vue';
   
 </script>
