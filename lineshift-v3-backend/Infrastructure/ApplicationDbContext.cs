@@ -1,4 +1,5 @@
 ﻿using lineshift_v3_backend.Models;
+using lineshift_v3_backend.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

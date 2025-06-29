@@ -5,11 +5,11 @@ using lineshift_v3_backend.Services;
 using lineshift_v3_backend.DataAccess.Repository;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using lineshift_v3_backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using lineshift_v3_backend.Models.Identity;
 
 namespace lineshift_v3_backend
 {

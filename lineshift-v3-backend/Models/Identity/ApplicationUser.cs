@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace lineshift_v3_backend.Models
+namespace lineshift_v3_backend.Models.Identity
 {
     // Custome User Model for out 
     
