@@ -1,4 +1,11 @@
 {
+  // IDE (VS or VSCode specific configuration file that defined how the app is
+  // launched for debugging and development
+  // WHY: to define different "launch profiles" each with its own env vars
+  // CLA, and AppURL
+
+  // Program.cs consumes this files and the env vars to determine which appsetttings.json
+  // file to load and how to behave
   "profiles": {
     "http": {
       "commandName": "Project",
