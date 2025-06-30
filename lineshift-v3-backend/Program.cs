@@ -127,7 +127,7 @@ namespace lineshift_v3_backend
                         // Provides the secret key used to verify the token's signature (read from appsettings.json and converted to bytes)
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
-                            ?? throw new InvalidOperationException("JWT Key not found"));
+                            ?? throw new InvalidOperationException("JWT Key not found")))
                     };
                 });
 
