@@ -18,6 +18,7 @@ namespace lineshift_v3_backend.Models.Identity
 
         public string? LastName { get; set; }
 
+
         /// <summary>
         /// The date and time when the user registered.
         /// Stored in UTC 
