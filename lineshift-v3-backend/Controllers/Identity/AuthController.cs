@@ -91,7 +91,7 @@ namespace lineshift_v3_backend.Controllers.Identity
                 {
                     Token = token,
                     UserId = user.Id,
-                    Username = user.UserName ?? string.Empty,
+                    //Username = user.UserName ?? string.Empty,
                     Email = user.Email ?? string.Empty,
                     FirstName = user.FirstName ?? string.Empty,
                     LastName = user.LastName ?? string.Empty,

@@ -31,12 +31,12 @@ namespace lineshift_v3_backend.Models.Identity
         /// <summary>
         ///  Represents the user's membership level (e.g., Free, Bronze, Silver, Gold, etc).
         /// </summary>
-        public string? MembershipLevel { get; set; }
+        public string? SubscriptionTier { get; set; }
 
         /// <summary>
         /// A flag indicating if the user's account is currently active or not.
         /// Allows for diabling accounts withiout deleting them.
-        /// Indicated whether the use is currently operational and permitted to interact with the system.
+        /// Indicated whether the user is currently operational and permitted to interact with the system.
         /// Temporary Suspenions and Deactivations
         /// </summary>
         public bool IsActive { get; set; } = true;
