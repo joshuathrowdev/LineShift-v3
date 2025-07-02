@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-const proxyTrigger = '/api';
+const clientProxyTrigger = '/api'; // client side proxy server trigger
+const backendApiPrefix = '/api/v3'; // backend api prefix (incase backend is service multiple applications)
+
 
 const axiosInstance = axios.create({
-  baseURL: `${proxyTrigger}`,
+  baseURL: `${clientProxyTrigger + backendApiPrefix}`,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
