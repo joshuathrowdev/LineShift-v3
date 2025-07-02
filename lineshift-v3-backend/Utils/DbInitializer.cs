@@ -4,8 +4,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
+
 namespace lineshift_v3_backend.Utils
 {
+    // Dummy class for logger category
+    public class DbInitializerLoggerCategory { }
+
+
     /// <summary>
     /// Static class responsible for initializing the database with essential
     /// Identity roles, user, and claims during application startup
@@ -19,7 +24,7 @@ namespace lineshift_v3_backend.Utils
         /// <param name="serviceProvider">The application's service provider</param>
         /// <param name="logger">Logger instance for loggin messages and errors during seeding</param>
         public static async Task Initialize(
-            IServiceProvider serviceProvider, ILogger<DbInitializer> logger
+            IServiceProvider serviceProvider, ILogger<DbInitializerLoggerCategory> logger
         )
         {
             // Resolving necessary services from service provider
@@ -29,7 +34,7 @@ namespace lineshift_v3_backend.Utils
 
             logger.LogInformation("Stating database initialization...");
 
-            
+
             // Attempt to seed database
             try
             {
@@ -47,7 +52,8 @@ namespace lineshift_v3_backend.Utils
                     "Moderator",
                     "Free",
                     "Basic",
-                    "Pro"
+                    "Pro",
+                    "Edge"
                 };
 
                 foreach (var roleName in roleNames)
@@ -74,6 +80,105 @@ namespace lineshift_v3_backend.Utils
 
                 // --- 2. Seed Users and Assign Roles/Claims
                 // Define test users for each tier with their specific roles and claims
+
+                #region Seeding Users
+                // Admin User: Full access, top tier subscription implicitly
+                await SeedUser(
+                    userManager,
+                    roleManager,
+                    logger,
+                    "adminTest@lineshift.com",
+                    "AdminPassword123$",
+                    "AdminTest",
+                    "Admin",
+                    "User",
+                    "Admin",
+                    new List<Claim>
+                    {
+                        new Claim("CanManageUsers", "true"),
+                        new Claim("CanManageContent", "true"),
+                        new Claim("CanAccessAdminPanel", "true"),
+                        new Claim("CanManageSubscriptions", "true"),
+                        new Claim("SubscriptionTier", "Edge"), // Admin implicitly has highest tier features
+                    }
+                );
+
+                // Basic User: Basic access, entry-level subscription
+                await SeedUser(
+                    userManager,
+                    roleManager,
+                    logger,
+                    "basicTest@lineshift.com",
+                    "BasicPassword123$",
+                    "BasicTest",
+                    "Basic",
+                    "User",
+                    "Basic",
+                    new List<Claim>
+                    {
+                        new Claim("SubscriptionTier", "Bsic")
+                    }
+                );
+
+                // Pro User: Mid-tier access, endhanced subscription
+                await SeedUser(
+                    userManager,
+                    roleManager,
+                    logger,
+                    "proTest@lineshift.com",
+                    "ProPassword123$",
+                    "ProTest",
+                    "Pro",
+                    "User",
+                    "Pro",
+                    new List<Claim>
+                    {
+                        new Claim("SubscriptionTier", "Pro")
+                    }
+                );
+
+                // Edge User: Premium access, elite subscription
+                await SeedUser(
+                    userManager,
+                    roleManager,
+                    logger,
+                    "edgeTest@lineshift.com",
+                    "EdgePassword123$",
+                    "EdgeTest",
+                    "Edge",
+                    "User",
+                    "Edge",
+                    new List<Claim>
+                    {
+                        new Claim("SubscriptionTier", "Edge")
+                    }
+                );
+
+                // Free User: Authenticated but no paid subscription
+                await SeedUser(
+                    userManager,
+                    roleManager,
+                    logger,
+                    "freeTest@lineshift.com",
+                    "FreePassword123$",
+                    "FreeTest",
+                    "Free",
+                    "User",
+                    "Free",
+                    new List<Claim>
+                    {
+                        new Claim("SubscriptionTier", "Free")
+                    }
+                );
+                #endregion
+
+                // End of seeding
+                logger.LogInformation("Database initialization comeplete.");
+            }
+            catch (Exception ex)
+            {
+                // Loggin unhandled exceptions during seeding process
+                logger.LogError(ex, "An error occured while seeding databae.");
             }
         }
 
@@ -88,6 +193,7 @@ namespace lineshift_v3_backend.Utils
             ILogger logger,
             string email, 
             string password,
+            string username,
             string firstName,
             string lastName,
             string roleName,
@@ -101,6 +207,7 @@ namespace lineshift_v3_backend.Utils
                     Email = email,
                     FirstName = firstName,
                     LastName = lastName,
+                    UserName = username,
                     RegisteredDate = DateTimeOffset.UtcNow,
                 };
 
@@ -133,7 +240,7 @@ namespace lineshift_v3_backend.Utils
                         }
                         else
                         {
-                            logger.LogInformation($"Claim '{claim.Type}': '{claim.Value}' already exist for user '{email}'. Skipping claim assignment.")
+                            logger.LogInformation($"Claim '{claim.Type}': '{claim.Value}' already exist for user '{email}'. Skipping claim assignment.");
                         }
                     }
                 }

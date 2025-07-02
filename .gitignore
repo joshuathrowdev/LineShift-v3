@@ -92,6 +92,7 @@ Thumbs.db
 # Project Specific
 task.txt
 logs/
+Migrations/
 
 # ===================================================
 # ✅ ALLOW TRACKING OF TEMPLATE CONFIG FILES

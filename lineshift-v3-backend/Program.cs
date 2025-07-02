@@ -10,12 +10,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using lineshift_v3_backend.Models.Identity;
+using lineshift_v3_backend.Utils;
+using System.Threading.Tasks;
 
 namespace lineshift_v3_backend
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -217,6 +219,16 @@ namespace lineshift_v3_backend
 
 
             app.MapControllers();
+
+            // Calling DbInitializer to seed the database idempotendly 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                // Resolve logger for DbInitializer to ensure messages are captured
+                var logger = services.GetRequiredService<ILogger<DbInitializerLoggerCategory>>();
+                // Call static method to initialize
+                await DbInitializer.Initialize(services, logger);
+            }
 
             app.Run();
         }

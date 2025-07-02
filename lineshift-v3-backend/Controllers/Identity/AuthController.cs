@@ -11,7 +11,7 @@ using System.Text;
 namespace lineshift_v3_backend.Controllers.Identity
 {
     [ApiController]
-    [Route("api/v3/[Contoller]")]
+    [Route("api/v3/[controller]")]
     [Produces(MediaTypeNames.Application.Json)] // Specifies that the controller actions produce JSON responses
     [Consumes(MediaTypeNames.Application.Json)] // Specifies that the controller actions consume JSON requests
     public class AuthController : ControllerBase
@@ -91,7 +91,7 @@ namespace lineshift_v3_backend.Controllers.Identity
                 {
                     Token = token,
                     UserId = user.Id,
-                    //Username = user.UserName ?? string.Empty,
+                    UserName = user.UserName ?? string.Empty,
                     Email = user.Email ?? string.Empty,
                     FirstName = user.FirstName ?? string.Empty,
                     LastName = user.LastName ?? string.Empty,

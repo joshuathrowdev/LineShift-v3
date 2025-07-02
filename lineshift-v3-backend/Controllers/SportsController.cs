@@ -6,7 +6,7 @@ namespace lineshift_v3_backend.Controllers
 {
     // Controller Layer for Resource
     // Return Type: ICollection (for extended collection methods)
-    [Route("api/v3/[Controller]")]
+    [Route("api/v3/[controller]")]
     [ApiController]
     public class SportsController : ControllerBase
     {

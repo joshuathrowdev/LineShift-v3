@@ -7,7 +7,7 @@ namespace lineshift_v3_backend.Models.Identity
     {
         public string Token { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
-        //public string Username {  get; set; } = string.Empty;
+        public string UserName {  get; set; } = string.Empty;
         public string Email {  get; set; } = string.Empty;
 
         // Additional information related to our implementation of ApplicationUser

@@ -25,7 +25,6 @@ namespace lineshift_v3_backend.Models.Identity
         /// </summary>
         public DateTimeOffset? RegisteredDate { get; set; } = DateTimeOffset.UtcNow;
 
-        // Display Name (Future)
 
         // --- Application Specific Data ---
         

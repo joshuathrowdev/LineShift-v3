@@ -158,7 +158,7 @@ namespace lineshift_v3_backend.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("lineshift_v3_backend.Models.ApplicationUser", b =>
+            modelBuilder.Entity("lineshift_v3_backend.Models.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -204,9 +204,6 @@ namespace lineshift_v3_backend.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("MembershipLevel")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -228,6 +225,9 @@ namespace lineshift_v3_backend.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SubscriptionTier")
                         .HasColumnType("longtext");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -281,7 +281,7 @@ namespace lineshift_v3_backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -290,7 +290,7 @@ namespace lineshift_v3_backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -305,7 +305,7 @@ namespace lineshift_v3_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -314,7 +314,7 @@ namespace lineshift_v3_backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
