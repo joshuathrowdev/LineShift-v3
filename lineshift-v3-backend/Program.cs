@@ -135,7 +135,13 @@ namespace lineshift_v3_backend
 
 
 
-
+            // Configuring Global Route Options
+            builder.Services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                // Also have the option to make query strings lower case
+                //options.LowercaseQueryStrings = true;
+            });
 
 
             builder.Services.AddControllers();

@@ -50,7 +50,7 @@ namespace lineshift_v3_backend.Models.Identity
         /// <summary>
         /// The date and time the user's profile was last updated
         /// </summary>
-        public DateTimeOffset LastUpdatedDate { get; set; }
+        public DateTimeOffset? LastUpdatedDate { get; set; }
 
         // --- Optional: Profile Picture / Avatar ---
 

@@ -18,17 +18,21 @@ namespace lineshift_v3_backend.Controllers.Identity
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<AuthController> _logger;
         // Interface that provides access to application's configuration settings
         // readonly from appsettings.json, enviroment vars, etc
         private readonly IConfiguration _configuration;
 
+
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            ILogger<AuthController> logger,
             IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
             _configuration = configuration;
         }
 
@@ -50,8 +54,9 @@ namespace lineshift_v3_backend.Controllers.Identity
             // This helps when receiving complex data from the clients request body
 
             // 1. Input Validation
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                _logger.LogInformation($"Model State was invalid: {ModelState}.");
                 return BadRequest(ModelState);
                 // ModelState (inherited by ControllerBase) is a dict like object that represents the state of 
                 // model binding and model validation for the current HTTP request
@@ -62,8 +67,10 @@ namespace lineshift_v3_backend.Controllers.Identity
 
             // 2 Find User
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
+            _logger.LogInformation($"Attempting to find user '{loginModel.Email}'.");
             if (user == null)
             {
+                _logger.LogInformation($"User '{loginModel.Email}' could not be found due to incorrect password or email.");
                 return Unauthorized(new { Message = "Invalid credentials." }); // 401 Unauthorized
 
             }
@@ -75,7 +82,7 @@ namespace lineshift_v3_backend.Controllers.Identity
             }
 
             // 4. Check Password
-            var result = await _signInManager.CheckPasswordSignInAsync(user, user.PasswordHash, lockoutOnFailure: true);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginModel.Password, lockoutOnFailure: true);
             // lockout: true -> enables lockout after a predetermined amount of failures
 
             if (result.Succeeded)
@@ -95,8 +102,11 @@ namespace lineshift_v3_backend.Controllers.Identity
                     Email = user.Email ?? string.Empty,
                     FirstName = user.FirstName ?? string.Empty,
                     LastName = user.LastName ?? string.Empty,
-                    Roles = (await _userManager.GetRolesAsync(user)).ToList()
-
+                    RegisteredDate = user.RegisteredDate ?? null,
+                    SubscriptionTier = user.SubscriptionTier ?? null,
+                    LastLoginDate = user.LastLoginDate ?? null,
+                    LastUpdatedDate = user.LastUpdatedDate ?? null,
+                    Roles = (await _userManager.GetRolesAsync(user)).ToList(),
                 });
             }
 
