@@ -4,12 +4,12 @@
     @submit.prevent="handleLoginForm"
   >
     <v-text-field
-      v-model="user.username"
       label="Username"
       variant="outlined"
       prepend-inner-icon="mdi-account-star-outline"
       color="secondary"
       clearable
+      disabled
       icon-color="primary"
       glow
       rounded
@@ -21,7 +21,7 @@
     </v-divider>
 
     <v-text-field 
-      v-model="user.email"
+      v-model="credentials.email"
       label="Email"
       variant="outlined"
       color="secondary"
@@ -37,7 +37,7 @@
     />
         
     <v-text-field 
-      v-model="user.password"
+      v-model="credentials.password"
       label="Password"
       variant="solo"
       prepend-inner-icon="mdi-onepassword"
@@ -63,7 +63,7 @@
       </v-btn>
     </div>
   </v-form>
-  {{ user }}
+  {{ credentials }}
 </template>
 
 <script setup>
@@ -71,8 +71,7 @@ const emit = defineEmits(['loginAttempt'])
 
 const form = ref(null)
 
-const user = ref({
-  username: '',
+const credentials = ref({
   email: '',
   password: '',
 })
@@ -81,15 +80,15 @@ const handleLoginForm = async () => {
   const {valid} = await form.value.validate()
 
   if(valid) {
-    emit('loginAttempt', user)
+    emit('loginAttempt', credentials)
+    resetLoginUtils()
   }
-  resetLoginUtils()
 }
 
 const resetLoginUtils = () => {
-  for (const key in user.value) {
-    if (user.value.hasOwnProperty(key)) {
-      user.value[key] = '' 
+  for (const key in credentials.value) {
+    if (credentials.value.hasOwnProperty(key)) {
+      credentials.value[key] = '' 
     }
   }
 }
@@ -105,15 +104,4 @@ const passwordRules = [
   // Add more later
 ];
 
-
-
-// Test Helpers
-const displayUser = () => {
-  for(const key in user.value) {
-    if (user.value.hasOwnProperty(key)) {
-      const value = user.value[key]
-      console.log(`${key}: ${value}`)
-    }
-  }
-}
 </script>

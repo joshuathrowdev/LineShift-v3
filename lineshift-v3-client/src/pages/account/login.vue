@@ -20,7 +20,7 @@
 
     <v-row>
       <v-col cols="12">
-        <login-form />
+        <login-form @login-attempt="handleLoginAttempt" />
       </v-col>
     </v-row>
 
@@ -33,6 +33,26 @@
 </template>
 
 <script setup>
+import { useAuth } from '@/composables/useAuth'
+
+// de-packing Auth composable
+const {performLogin} = useAuth()
 
 
+const handleLoginAttempt = async (credentials) => {
+  displayCredentials(credentials)
+  // have to de-wrap the ref object to get the dictionary object
+  performLogin(credentials.value)
+}
+
+
+// Test Helpers
+const displayCredentials = (user) => {
+  for(const key in user.value) {
+    if (user.value.hasOwnProperty(key)) {
+      const value = user.value[key]
+      console.log(`${key}: ${value}`)
+    }
+  }
+}
 </script>
