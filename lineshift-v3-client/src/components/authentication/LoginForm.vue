@@ -1,5 +1,8 @@
 <template>
-  <v-form @submit.prevent="handleLoginForm">
+  <v-form
+    ref="form"
+    @submit.prevent="handleLoginForm"
+  >
     <v-text-field
       v-model="user.username"
       label="Username"
@@ -25,7 +28,9 @@
       prepend-inner-icon="mdi-email-outline"
       clearable
       icon-color="primary"
+      :rules="emailRules"
       glow
+      required
       rounded
       type="email"
       autocomplete="email"
@@ -37,7 +42,9 @@
       variant="solo"
       prepend-inner-icon="mdi-onepassword"
       clearable
+      required
       color="secondary"
+      :rules="passwordRules"
       glow
       icon-color="primary"
       rounded
@@ -50,7 +57,7 @@
         append-icon="mdi-login"
         color="secondary"
         variant="tonal"
-        @click="displayUser"
+        type="submit"
       >
         Login
       </v-btn>
@@ -60,6 +67,9 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['loginAttempt'])
+
+const form = ref(null)
 
 const user = ref({
   username: '',
@@ -67,10 +77,37 @@ const user = ref({
   password: '',
 })
 
-const handleLoginForm = () => {
-  console.log(user)
+const handleLoginForm = async () => {
+  const {valid} = await form.value.validate()
+
+  if(valid) {
+    emit('loginAttempt', user)
+  }
+  resetLoginUtils()
 }
 
+const resetLoginUtils = () => {
+  for (const key in user.value) {
+    if (user.value.hasOwnProperty(key)) {
+      user.value[key] = '' 
+    }
+  }
+}
+
+// Rules
+const emailRules = [
+  v => !!v || 'E-mail is required',
+  v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+];
+
+const passwordRules = [
+  v => !!v || 'Password is required',
+  // Add more later
+];
+
+
+
+// Test Helpers
 const displayUser = () => {
   for(const key in user.value) {
     if (user.value.hasOwnProperty(key)) {
