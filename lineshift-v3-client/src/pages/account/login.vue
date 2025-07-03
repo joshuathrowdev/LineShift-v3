@@ -18,6 +18,11 @@
       </v-col>
     </v-row>
 
+    <!-- Testing User Store -->
+    <v-card>
+      {{ authStore.sessionUser }}
+    </v-card>
+
     <v-row>
       <v-col cols="12">
         <login-form @login-attempt="handleLoginAttempt" />
@@ -38,11 +43,22 @@ import { useAuth } from '@/composables/useAuth'
 // de-packing Auth composable
 const {performLogin} = useAuth()
 
-
 const handleLoginAttempt = async (credentials) => {
   displayCredentials(credentials)
   // have to de-wrap the ref object to get the dictionary object
-  performLogin(credentials.value)
+  await performLogin(credentials.value)
+}
+
+// Testing Auth Store 
+import { useAuthStore } from '@/stores/auth.store'
+const authStore = useAuthStore()
+if (authStore.sessionUser) {
+  for (const key in authStore.sessionUser.value) {
+  if (authStore.sessionUser.value.hasOwnProperty(key)) {
+    const value = authStore.sessionUser.value[key]
+    console.log(`${key}: ${value}`)
+  }
+}
 }
 
 
