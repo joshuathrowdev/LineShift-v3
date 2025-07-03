@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleLoginForm">
     <v-text-field
-      v-model="username"
+      v-model="user.username"
       label="Username"
       variant="outlined"
       prepend-inner-icon="mdi-account-star-outline"
@@ -18,7 +18,7 @@
     </v-divider>
 
     <v-text-field 
-      v-model="email"
+      v-model="user.email"
       label="Email"
       variant="outlined"
       color="secondary"
@@ -32,7 +32,7 @@
     />
         
     <v-text-field 
-      v-model="password"
+      v-model="user.password"
       label="Password"
       variant="solo"
       prepend-inner-icon="mdi-onepassword"
@@ -50,20 +50,33 @@
         append-icon="mdi-login"
         color="secondary"
         variant="tonal"
+        @click="displayUser"
       >
         Login
       </v-btn>
     </div>
   </v-form>
+  {{ user }}
 </template>
 
 <script setup>
 
-const username = ref('')
-const email = ref('')
-const password = ref('')
+const user = ref({
+  username: '',
+  email: '',
+  password: '',
+})
 
 const handleLoginForm = () => {
-  console.log("FORMMMM")
+  console.log(user)
+}
+
+const displayUser = () => {
+  for(const key in user.value) {
+    if (user.value.hasOwnProperty(key)) {
+      const value = user.value[key]
+      console.log(`${key}: ${value}`)
+    }
+  }
 }
 </script>
