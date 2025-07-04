@@ -13,6 +13,27 @@ const axiosInstance = axios.create({
   }
 });
 
+
+// Auth Token Bearer Dynamic Configuration
+import { useAuthStore } from '@/stores/auth.store';
+
+// intercepts all request and conditionally adds auth token if present
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Initializing local instance of Auth Store
+    const authStore = useAuthStore();
+
+    const token = authStore.authToken;
+
+    // if a token is present from local storage, the auth store will auto grab it
+    // if not present this if statement is skipped
+    if (token) { config.headers.Authorization = `Bearer ${token}`; }
+
+    return config;
+  }, (error) => {
+    return Promise.reject(error);
+  });
+
 export default axiosInstance;
 
 // For the Proxy server to work, axios needs to point to the relative path of our frontend
