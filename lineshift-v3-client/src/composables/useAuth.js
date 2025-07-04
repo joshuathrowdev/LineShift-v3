@@ -9,10 +9,10 @@ export const useAuth = () => {
   // Login Method
   const performLogin = async (credentials) => {
     try {
-      const user = await authApi.login(credentials);
+      const authResponseUser = await authApi.login(credentials);
       // store setup for user (global point)
-      if (user) {
-        authStore.setSessionUser(user);
+      if (authResponseUser) {
+        authStore.setAuthData(authResponseUser.token, authResponseUser);
       }
     }
     catch (error) {
