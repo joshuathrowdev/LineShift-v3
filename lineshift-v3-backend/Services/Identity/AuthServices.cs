@@ -50,9 +50,9 @@ namespace lineshift_v3_backend.Services.Identity
 
                 var sessionUser = new SessionUser
                 {
-                    Id = userEntity.Id,
+                    UserId = userEntity.Id,
                     Email = userEntity.Email ?? string.Empty,
-                    Username = userEntity.UserName ?? string.Empty,
+                    UserName = userEntity.UserName ?? string.Empty,
                     FirstName = userEntity.FirstName ?? string.Empty,
                     LastName = userEntity.LastName ?? string.Empty,
                     IsActive = userEntity.IsActive,

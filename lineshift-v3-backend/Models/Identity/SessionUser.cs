@@ -4,12 +4,12 @@
     {
 
         // Basic User Information
-        public string Id {  get; set; }
-        public string Email { get; set; }
-        public string? Username { get; set; }
+        public string UserId {  get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string? UserName { get; set; } = string.Empty;
 
-        public string? FirstName{ get; set; }
-        public string? LastName { get; set; }
+        public string? FirstName { get; set; } = string.Empty;
+        public string? LastName { get; set; } = string.Empty;
         public bool? IsActive { get; set; }
 
         // Date and Time Information
@@ -19,7 +19,7 @@
 
         // Role and Claim Information
         public List<string>? Roles { get; set; }
-        public string? SubscriptionTier { get; set; }
+        public string? SubscriptionTier { get; set; } = string.Empty;
 
 
     }

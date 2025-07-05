@@ -75,9 +75,9 @@ namespace lineshift_v3_backend.Controllers.Identity
             }
 
             // 2 Find User
-            var user = await _userManager.FindByEmailAsync(loginModel.Email);
+            var userEntity = await _userManager.FindByEmailAsync(loginModel.Email);
             _logger.LogInformation($"Attempting to find user '{loginModel.Email}'.");
-            if (user == null)
+            if (userEntity == null)
             {
                 _logger.LogInformation($"User '{loginModel.Email}' could not be found due to incorrect password or email.");
                 return Unauthorized(new { Message = "Invalid credentials." }); // 401 Unauthorized
@@ -85,37 +85,44 @@ namespace lineshift_v3_backend.Controllers.Identity
             }
 
             // 3. Check Acccount Status: Ensure the user is active (not suspended or soft deleted)
-            if (!user.IsActive || user.IsDeleted)
+            if (!userEntity.IsActive || userEntity.IsDeleted)
             {
                 return Unauthorized(new { Message = "Account is inactive or deleted" });
             }
 
             // 4. Check Password
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginModel.Password, lockoutOnFailure: true);
+            var result = await _signInManager.CheckPasswordSignInAsync(userEntity, loginModel.Password, lockoutOnFailure: true);
             // lockout: true -> enables lockout after a predetermined amount of failures
 
             if (result.Succeeded)
             {
                 // Update LastLoginDate
-                user.LastLoginDate = DateTimeOffset.UtcNow;
-                await _userManager.UpdateAsync(user); // updates the user in the persistence store (database) based on what attributes changed
+                userEntity.LastLoginDate = DateTimeOffset.UtcNow;
+                await _userManager.UpdateAsync(userEntity); // updates the user in the persistence store (database) based on what attributes changed
 
                 // 6. Generate JWT and Return Success
-                var token = await GenerateJwtToken(user);
+                var token = await GenerateJwtToken(userEntity);
+
+                // Making Session User
+                var sessionUser = new SessionUser
+                {
+                    UserId = userEntity.Id,
+                    UserName = userEntity.UserName ?? string.Empty,
+                    Email = userEntity.Email ?? string.Empty,
+                    FirstName = userEntity.FirstName ?? string.Empty,
+                    LastName = userEntity.LastName ?? string.Empty,
+                    RegisteredDate = userEntity.RegisteredDate ?? null,
+                    SubscriptionTier = userEntity.SubscriptionTier ?? null,
+                    LastLoginDate = userEntity.LastLoginDate ?? null,
+                    LastUpdatedDate = userEntity.LastUpdatedDate ?? null,
+                    Roles = (await _userManager.GetRolesAsync(userEntity)).ToList(),
+                };
 
                 return Ok(new AuthResponse
                 {
                     Token = token,
-                    UserId = user.Id,
-                    UserName = user.UserName ?? string.Empty,
-                    Email = user.Email ?? string.Empty,
-                    FirstName = user.FirstName ?? string.Empty,
-                    LastName = user.LastName ?? string.Empty,
-                    RegisteredDate = user.RegisteredDate ?? null,
-                    SubscriptionTier = user.SubscriptionTier ?? null,
-                    LastLoginDate = user.LastLoginDate ?? null,
-                    LastUpdatedDate = user.LastUpdatedDate ?? null,
-                    Roles = (await _userManager.GetRolesAsync(user)).ToList(),
+                    sessionUser = sessionUser
+                    
                 });
             }
 

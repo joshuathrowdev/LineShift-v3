@@ -35,9 +35,9 @@ export const useAuthStore = defineStore('auth', () => {
   // Core Actions
   const login = async (credentials) => {
     try {
-      const authResponseUser = await authApi.login(credentials);
-      if (authResponseUser) {
-        setAuthData(authResponseUser.token, authResponseUser);
+      const authResponse = await authApi.login(credentials);
+      if (authResponse) {
+        setAuthData(authResponse.token, authResponse.sessionUser);
       }
     } catch (error) {
       console.warn('Error while attempting to login', error);
