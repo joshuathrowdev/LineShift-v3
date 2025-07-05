@@ -7,6 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
+using lineshift_v3_backend.Models.Database;
+using lineshift_v3_backend.Services.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace lineshift_v3_backend.Controllers.Identity
 {
@@ -14,10 +17,12 @@ namespace lineshift_v3_backend.Controllers.Identity
     [Route("api/v3/[controller]")]
     [Produces(MediaTypeNames.Application.Json)] // Specifies that the controller actions produce JSON responses
     [Consumes(MediaTypeNames.Application.Json)] // Specifies that the controller actions consume JSON requests
+    [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IAuthServices _authServices;
         private readonly ILogger<AuthController> _logger;
         // Interface that provides access to application's configuration settings
         // readonly from appsettings.json, enviroment vars, etc
@@ -27,11 +32,15 @@ namespace lineshift_v3_backend.Controllers.Identity
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+
+            IAuthServices authServices,
+
             ILogger<AuthController> logger,
             IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authServices = authServices;
             _logger = logger;
             _configuration = configuration;
         }
@@ -135,6 +144,42 @@ namespace lineshift_v3_backend.Controllers.Identity
 
         // Fetch detaills of the currently authenticated user
         // Require a valid JWT in Authirization header
+        // EX: If client refreshes but a token is in local storage, grab user info based on that token
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<ActionResult> GetMe()
+        { 
+            try
+            {
+                // LOCAL/CLIENT JWT is passed in request headers under the Bearer key
+
+                // 1. Extract User ID from the JWT (ClaimsPrincipal)
+                // The ClaimTypes.NameIdentifier claim (often 'sub') typically holds the user's unique ID
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    // this should theoretically not happen 
+                    return Unauthorized(); // Token valid, but no Id claim found
+                }
+
+                // Extracting UserProfile from Auth Services
+                var sessionUser = await _authServices.GetUserByIdAsync(userId);
+
+                if (sessionUser == null)
+                {
+                    return NotFound(); // valid token but the user could not be found
+                }
+
+                // If session user found from claim id and is active
+                return Ok(sessionUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occured while attempting to access the Auth services.");
+                throw;
+            }
+        }
 
 
 

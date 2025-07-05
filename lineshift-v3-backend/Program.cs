@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using lineshift_v3_backend.Models.Identity;
 using lineshift_v3_backend.Utils;
 using System.Threading.Tasks;
+using lineshift_v3_backend.Models.Database;
 
 namespace lineshift_v3_backend
 {
