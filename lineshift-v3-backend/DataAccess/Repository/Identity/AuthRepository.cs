@@ -2,15 +2,24 @@
 using lineshift_v3_backend.Models.Database;
 using lineshift_v3_backend.Models.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace lineshift_v3_backend.DataAccess.Repository.Identity
 {
+    #region Auth Repository Interface
+    public interface IAuthRepository
+    {
+        Task<ApplicationUser> GetUserByIdAsync(string id);
+    }
+    #endregion
+
+
     public class AuthRepository : IAuthRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger _logger;
+        private readonly ILogger<AuthRepository> _logger;
 
-        public AuthRepository(ApplicationDbContext dbContext, ILogger logger)
+        public AuthRepository(ApplicationDbContext dbContext, ILogger<AuthRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -32,13 +41,12 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
             }
         }
         #endregion
-    }
 
-
-    #region Auth Repository Interface
-    public interface IAuthRepository
-    {
-        Task<ApplicationUser> GetUserByIdAsync(string id);
+        #region Interface Implementation
+        Task<ApplicationUser> IAuthRepository.GetUserByIdAsync(string id)
+        {
+            return GetUserByIdAsync(id);
+        }
+        #endregion
     }
-    #endregion
 }

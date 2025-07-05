@@ -1,5 +1,5 @@
-import axiosInstance from './api';
-import { sportsEndpoint } from './endpoints';
+import axiosInstance from './instance/api';
+import { sportsEndpoint } from './instance/endpoints';
 
 
 const sportsService = {

@@ -30,16 +30,45 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <!-- Testing Session User and Auth Store -->
+  <v-card>
+    <v-card-title>
+      Testing For User Assignment and Data Mapping
+    </v-card-title>
+
+  
+    <v-card>
+      <v-card-title>Raw Session User from Response</v-card-title>
+      
+      <v-card-text>
+        Session User: {{ authStore.sessionUser }}
+        <br><br><br>
+
+        Auth Token: {{ authStore.authToken }}
+        <br><br><br>
+
+        Is Authenticated: {{ authStore.isAuthenticated }}
+        <br><br><br>
+
+        Loading: {{ authStore.isLoading }}
+        <br><br><br>
+
+        Error: {{ authStore.error }}
+        <br><br>
+      </v-card-text>
+    </v-card>
+  </v-card>
 </template>
 
 <script setup>
-import { useAuth } from '@/composables/useAuth'
+import { useAuthStore } from '@/stores/auth.store';
 
-// de-packing Auth composable
-const {performLogin} = useAuth()
+
+const {login} = useAuthStore()
+const authStore = useAuthStore()
 
 const handleLoginAttempt = async (credentials) => {
-  // have to de-wrap the ref object to get the dictionary object
-  await performLogin(credentials.value)
+  await login(credentials.value)
 }
 </script>

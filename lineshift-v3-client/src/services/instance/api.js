@@ -14,13 +14,13 @@ const axiosInstance = axios.create({
 });
 
 
-// Auth Token Bearer Dynamic Configuration
-import { useAuthStore } from '@/stores/auth.store';
+
 
 // intercepts all request and conditionally adds auth token if present
 axiosInstance.interceptors.request.use(
-  (config) => {
+  async (config) => {
     // Initializing local instance of Auth Store
+    const { useAuthStore } = await import('@/stores/auth.store');
     const authStore = useAuthStore();
 
     const token = authStore.authToken;

@@ -12,6 +12,8 @@ using System.Text;
 using lineshift_v3_backend.Utils;
 using System.Threading.Tasks;
 using lineshift_v3_backend.Models.Database;
+using lineshift_v3_backend.Services.Identity;
+using lineshift_v3_backend.DataAccess.Repository.Identity;
 
 namespace lineshift_v3_backend
 {
@@ -25,6 +27,9 @@ namespace lineshift_v3_backend
 
             // Add services to the container.
             // Any dependencies or transative dependencies to controller (services and repos)
+            builder.Services.AddScoped<IAuthServices, AuthServices>();
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
             builder.Services.AddScoped<ISportsService, SportsService>();
             builder.Services.AddScoped<ISportsRepository,  SportsRepository>();
  

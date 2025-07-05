@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
+import { authApi } from '@/services/auth.api';
+
+// Store is responsible for managing its own state
+// (includes api calls to get data, mapping, etc)
+
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -26,17 +31,28 @@ export const useAuthStore = defineStore('auth', () => {
 
 
   // Actions / Mutators (reg functions)
+
+  // Core Actions
+  const login = async (credentials) => {
+    try {
+      const authResponseUser = await authApi.login(credentials);
+      if (authResponseUser) {
+        setAuthData(authResponseUser.token, authResponseUser);
+      }
+    } catch (error) {
+      console.warn('Error while attempting to login', error);
+    }
+  };
+
   const initializeAuth = async () => {
     // initialize the Auth Store on app/page mount 
 
     // if we have a token but not a _sessionUser
     if (_token.value && !isAuthenticated.value) {
-      _isLoading.value = true // setting loading state
-      _error.value = null
+      _isLoading.value = true; // setting loading state
+      _error.value = null;
 
-      try {
-        
-      }
+
     }
   };
 
@@ -66,6 +82,8 @@ export const useAuthStore = defineStore('auth', () => {
     avatarContent,
 
     // Actions
-    setAuthData
+    login,
+    setAuthData,
+    initializeAuth
   };
 });

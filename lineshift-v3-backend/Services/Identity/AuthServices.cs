@@ -2,16 +2,25 @@
 using lineshift_v3_backend.Models.Database;
 using lineshift_v3_backend.Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace lineshift_v3_backend.Services.Identity
 {
+    #region Auth Service Interface
+    public interface IAuthServices
+    {
+        Task<SessionUser> GetUserByIdAsync(string id);
+    }
+    #endregion
+
+
     public class AuthServices : IAuthServices
     {
         private readonly IAuthRepository _authRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<AuthServices> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AuthServices(IAuthRepository authRepository, ILogger logger, UserManager<ApplicationUser> userManager)
+        public AuthServices(IAuthRepository authRepository, ILogger<AuthServices> logger, UserManager<ApplicationUser> userManager)
         {
             _authRepository = authRepository;
             _logger = logger;
@@ -64,14 +73,14 @@ namespace lineshift_v3_backend.Services.Identity
                 throw;
             }
         }
+        #endregion
 
+
+        #region Interface Implementaion
+        Task<SessionUser> IAuthServices.GetUserByIdAsync(string id)
+        {
+            return GetUserByIdAsync(id);
+        }
         #endregion
     }
-
-    #region Auth Service Interface
-    public interface IAuthServices
-    {
-        Task<SessionUser> GetUserByIdAsync(string id);
-    }
-    #endregion
 }
