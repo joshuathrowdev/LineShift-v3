@@ -167,6 +167,7 @@ namespace lineshift_v3_backend.Controllers.Identity
                 if (string.IsNullOrEmpty(userId))
                 {
                     // this should theoretically not happen 
+                    _logger.LogWarning("UserId could not be found from Claim Types.", userId)
                     return Unauthorized(); // Token valid, but no Id claim found
                 }
 

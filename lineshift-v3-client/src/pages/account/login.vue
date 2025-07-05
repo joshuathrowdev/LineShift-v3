@@ -45,10 +45,13 @@
         Session User: {{ authStore.sessionUser }}
         <br><br><br>
 
-        Auth Token: {{ authStore.authToken }}
+        Auth Token: {{ authStore.token }}
         <br><br><br>
 
         Is Authenticated: {{ authStore.isAuthenticated }}
+        <br><br><br>
+
+        Ready For Initialization: {{ authStore.token && !authStore.isAuthenticated }}
         <br><br><br>
 
         Loading: {{ authStore.isLoading }}

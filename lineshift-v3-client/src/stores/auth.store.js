@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Getters (computed functions)
   const sessionUser = computed(() => _sessionUser.value);
-  const authToken = computed(() => _token.value);
+  const token = computed(() => _token.value);
   const isLoading = computed(() => _isLoading.value);
   const error = computed(() => _error.value);
   const isAuthenticated = computed(() => !!_token.value && !!_sessionUser.value);
@@ -52,7 +52,14 @@ export const useAuthStore = defineStore('auth', () => {
       _isLoading.value = true; // setting loading state
       _error.value = null;
 
-
+      try {
+        const initializationUserData = await authApi.initializeMe();
+        console.log(initializationUserData);
+        setAuthData(_token.value, initializationUserData);
+      }
+      catch (error) {
+        console.warn('Error occurred while trying to initialize session user', error);
+      }
     }
   };
 
@@ -75,7 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // Getters
     sessionUser,
-    authToken,
+    token,
     isLoading,
     error,
     isAuthenticated,

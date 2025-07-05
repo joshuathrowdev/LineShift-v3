@@ -17,13 +17,16 @@ const axiosInstance = axios.create({
 
 
 // intercepts all request and conditionally adds auth token if present
+
+
 axiosInstance.interceptors.request.use(
   async (config) => {
     // Initializing local instance of Auth Store
     const { useAuthStore } = await import('@/stores/auth.store');
-    const authStore = useAuthStore();
+    const { token: storeToken } = useAuthStore();
 
-    const token = authStore.authToken;
+
+    const token = storeToken;
 
     // if a token is present from local storage, the auth store will auto grab it
     // if not present this if statement is skipped
