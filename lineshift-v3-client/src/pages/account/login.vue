@@ -42,22 +42,22 @@
       <v-card-title>Raw Session User from Response</v-card-title>
       
       <v-card-text>
-        Session User: {{ authStore.sessionUser }}
+        Session User: {{ sessionUser }}
         <br><br><br>
 
-        Auth Token: {{ authStore.token }}
+        Auth Token: {{ token }}
         <br><br><br>
 
-        Is Authenticated: {{ authStore.isAuthenticated }}
+        Is Authenticated: {{ isLoggedIn }}
         <br><br><br>
 
-        Ready For Initialization: {{ authStore.token && !authStore.isAuthenticated }}
+        Ready For Initialization: {{ !!token && !isLoggedIn }}
         <br><br><br>
 
-        Loading: {{ authStore.isLoading }}
+        Loading: {{ isLoading }}
         <br><br><br>
 
-        Error: {{ authStore.error }}
+        Error: {{ error }}
         <br><br>
       </v-card-text>
     </v-card>
@@ -67,8 +67,9 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuth } from '@/composables/useAuth';
 
-import { useAuthStore } from '@/stores/auth.store';
+const {sessionUser, error, isLoading, isLoggedIn, token, login} = useAuth()
 
 const router = useRouter()
 
@@ -79,24 +80,17 @@ onMounted(() => {
 
 
 const checkForAuthenticatedSessionUser = () => {
-  authStore.setIsLoadingTrue
-
-  if (authStore.isAuthenticated) {
+  if (isLoggedIn.value) {
     router.push({name: '/'}) // home page
-    authStore.setIsLoadingFalse
     return
   }
-
-  authStore.setIsLoadingFalse
 }
 
 
-const {login} = useAuthStore()
-const authStore = useAuthStore()
 
 const handleLoginAttempt = async (credentials) => {
   await login(credentials.value)
-  if (authStore.isAuthenticated) {
+  if (isLoggedIn.value) {
     router.push({name: '/'})
   }
 }
