@@ -65,6 +65,23 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const logout = async () => {
+    const storageToken = localStorage.getItem('jwt_token');
+
+    if (!storageToken) {
+      console.warn('No JWT token currently in local storage memory');
+      return;
+    }
+    if (!_token.value) {
+      console.warn('No token stored in auth store session user');
+      return;
+    }
+
+    _token.value = null;
+    _sessionUser.value = null;
+    localStorage.removeItem('jwt_token');
+  };
+
 
   const setAuthData = (newToken, authResponseUser) => {
     _token.value = newToken; // sets new token
@@ -79,13 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const setIsLoadingFalse = () => {
-    _isLoading.value = false;
-  };
 
-  const setIsLoadingTrue = () => {
-    _isLoading.value = true;
-  };
 
 
 
@@ -103,9 +114,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     // Actions
     login,
+    logout,
     setAuthData,
     initializeAuth,
-    setIsLoadingTrue,
-    setIsLoadingFalse,
   };
 });

@@ -42,6 +42,7 @@ export const useAuth = () => {
 
   // Exposed Actions
   const login = authStore.login;
+  const logout = authStore.logout;
 
 
   return {
@@ -55,6 +56,7 @@ export const useAuth = () => {
     formattedRegisteredDate,
 
     login,
+    logout,
 
   };
 };

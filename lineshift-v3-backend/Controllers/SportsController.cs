@@ -1,12 +1,17 @@
 ﻿using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace lineshift_v3_backend.Controllers
 {
     // Controller Layer for Resource
     // Return Type: ICollection (for extended collection methods)
     [Route("api/v3/[controller]")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Authorize]
     [ApiController]
     public class SportsController : ControllerBase
     {

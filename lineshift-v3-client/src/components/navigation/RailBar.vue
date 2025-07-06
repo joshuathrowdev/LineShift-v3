@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    v-if="isLoggedIn"
     :rail="rail"
     rail-width="75"
     expand-on-hover
@@ -35,36 +36,11 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useAuth } from '@/composables/useAuth';
+
+const {isLoggedIn} = useAuth()
 
 const rail = ref(true)
 
 const isRailExpanded = ref(false)
 </script>
-
-
-
-<!-- <v-list>
-      <v-list-item>
-        <template #prepend>
-          <v-avatar
-            color="ternary"
-            size="45"
-          >
-            ADM
-          </v-avatar>
-        </template>
-
-        <template #title>
-          <v-chip
-            color="primary"
-            variant="flat"
-          > 
-            <span class="font-weight-bold">admin (username)</span>
-          </v-chip>
-        </template>
-
-        <template #subtitle> 
-          admin@lineshift.com
-        </template>
-      </v-list-item>
-    </v-list> -->

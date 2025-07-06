@@ -55,6 +55,7 @@
             rounded
             variant="flat"
             color="red-darken-2"
+            @click="handleLogout"
           >
             Logout
           </v-btn>
@@ -66,15 +67,23 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/useAuth';
 
 
-const {sessionUser, isLoggedIn, formattedRegisteredDate} = useAuth()
+const router = useRouter()
+
+const {sessionUser, isLoggedIn, formattedRegisteredDate, logout} = useAuth()
 
 const showAccountInformation = ref(false)
 
 
 const handleShowAccountInformation = () => {
   showAccountInformation.value === false ? showAccountInformation.value = true : showAccountInformation.value = false
+}
+
+const handleLogout = async () => {
+  await logout()
+  router.push({name: '/account/login'})
 }
 </script>
