@@ -60,15 +60,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const formatDate = (isoDateTimeOffsetObject) => {
-    const dateObject = new Date(isoDateTimeOffsetObject);
-    const formattedDate = dateObject.toLocaleString('en-Us', {
-      year: 'numeric',
-      month: 'long',
-      day: '2-digit'
-    });
-    return formattedDate;
-  };
   const login = async (credentials) => {
     try {
       const authResponse = await authApi.login(credentials);
@@ -94,6 +85,28 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const formatDate = (isoDateTimeOffsetObject) => {
+    const dateObject = new Date(isoDateTimeOffsetObject);
+    const formattedDate = dateObject.toLocaleString('en-Us', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    });
+    return formattedDate;
+  };
+
+  const setIsLoadingFalse = () => {
+    _isLoading.value = false;
+  };
+
+  const setIsLoadingTrue = () => {
+    _isLoading.value = true;
+  };
+
+
+
+
+
   return {
     // State
 
@@ -109,6 +122,8 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     setAuthData,
     initializeAuth,
-    formatDate
+    formatDate,
+    setIsLoadingTrue,
+    setIsLoadingFalse,
   };
 });

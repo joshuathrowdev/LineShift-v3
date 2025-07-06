@@ -65,7 +65,30 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { useAuthStore } from '@/stores/auth.store';
+
+const router = useRouter()
+
+// Checking if a current session user has already been initialized
+onMounted(() => {
+  checkForAuthenticatedSessionUser()
+})
+
+
+const checkForAuthenticatedSessionUser = () => {
+  authStore.setIsLoadingTrue
+
+  if (authStore.isAuthenticated) {
+    router.push({name: '/'}) // home page
+    authStore.setIsLoadingFalse
+    return
+  }
+
+  authStore.setIsLoadingFalse
+}
 
 
 const {login} = useAuthStore()
@@ -73,5 +96,8 @@ const authStore = useAuthStore()
 
 const handleLoginAttempt = async (credentials) => {
   await login(credentials.value)
+  if (authStore.isAuthenticated) {
+    router.push({name: '/'})
+  }
 }
 </script>
