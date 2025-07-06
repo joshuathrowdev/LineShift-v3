@@ -8,7 +8,9 @@
     @mouseleave="isRailExpanded = false"
   >
     <v-list>
-      <div class="d-flex justify-center">
+      <div
+        class="d-flex justify-center"
+      >
         <account-avatar v-if="!isRailExpanded" />
       </div>
 
@@ -34,6 +36,8 @@
 <script setup>
 import { ref } from 'vue';
 
+import { useAuthStore } from '@/stores/auth.store';
+const {isAuthenticated} = useAuthStore()
 
 const rail = ref(true)
 

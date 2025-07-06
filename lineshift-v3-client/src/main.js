@@ -27,7 +27,7 @@ import { useAuthStore } from './stores/auth.store';
 const { initializeAuth } = useAuthStore();
 // attempts to initialize session user based on local 
 // stored jwt token if available
-initializeAuth(); 
+await initializeAuth(); 
 
 
 app.mount('#app');

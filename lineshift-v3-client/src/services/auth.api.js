@@ -15,7 +15,6 @@ export const authApi = {
   async initializeMe() {
     try {
       const response = await axiosInstance.get(initializeMeEndpoint);
-      console.log(response.data);
       return response.data;
     }
     catch (error) {

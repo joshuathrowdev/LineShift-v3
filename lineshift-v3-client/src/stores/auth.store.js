@@ -20,19 +20,55 @@ export const useAuthStore = defineStore('auth', () => {
   // Getters (computed functions)
   const sessionUser = computed(() => _sessionUser.value);
   const token = computed(() => _token.value);
+
   const isLoading = computed(() => _isLoading.value);
   const error = computed(() => _error.value);
   const isAuthenticated = computed(() => !!_token.value && !!_sessionUser.value);
 
   const avatarContent = computed(() => {
-    // return _sessionUser.value.email.slice(0, 3);
-    return 'ADM';
+    if (isAuthenticated.value) {
+      return _sessionUser.value.userName.slice(0, 3).toUpperCase();
+    }
+
+    return '';
   });
+
+
 
 
   // Actions / Mutators (reg functions)
 
   // Core Actions
+  const initializeAuth = async () => {
+    // initialize the Auth Store on app/page mount 
+
+    // if we have a token but not a _sessionUser
+    if (_token.value && !isAuthenticated.value) {
+      _isLoading.value = true; // setting loading state
+      _error.value = null;
+
+      try {
+        const initializationUserData = await authApi.initializeMe();
+        setAuthData(_token.value, initializationUserData);
+
+        // resetting loading value
+        _isLoading.value = false;
+      }
+      catch (error) {
+        console.warn('Error occurred while trying to initialize session user', error);
+      }
+    }
+  };
+
+  const formatDate = (isoDateTimeOffsetObject) => {
+    const dateObject = new Date(isoDateTimeOffsetObject);
+    const formattedDate = dateObject.toLocaleString('en-Us', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    });
+    return formattedDate;
+  };
   const login = async (credentials) => {
     try {
       const authResponse = await authApi.login(credentials);
@@ -44,24 +80,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const initializeAuth = async () => {
-    // initialize the Auth Store on app/page mount 
-
-    // if we have a token but not a _sessionUser
-    if (_token.value && !isAuthenticated.value) {
-      _isLoading.value = true; // setting loading state
-      _error.value = null;
-
-      try {
-        const initializationUserData = await authApi.initializeMe();
-        console.log(initializationUserData);
-        setAuthData(_token.value, initializationUserData);
-      }
-      catch (error) {
-        console.warn('Error occurred while trying to initialize session user', error);
-      }
-    }
-  };
 
   const setAuthData = (newToken, authResponseUser) => {
     _token.value = newToken; // sets new token
@@ -70,7 +88,6 @@ export const useAuthStore = defineStore('auth', () => {
     if (newToken) {
       // Set new _token to local storage
       localStorage.setItem('jwt_token', newToken);
-      console.log(isAuthenticated.value);
     }
     else {
       localStorage.removeItem('jwt_token');
@@ -91,6 +108,7 @@ export const useAuthStore = defineStore('auth', () => {
     // Actions
     login,
     setAuthData,
-    initializeAuth
+    initializeAuth,
+    formatDate
   };
 });

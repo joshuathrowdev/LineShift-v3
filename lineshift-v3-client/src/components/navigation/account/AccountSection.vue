@@ -6,6 +6,7 @@
       <v-btn 
         icon
         variant="text"      
+        :disabled="!isAuthenticated"
         @click="handleShowAccountInformation"
       >
         <account-avatar />
@@ -16,22 +17,22 @@
       v-if="showAccountInformation"
     >
       <template #title>
-        <span class="font-weight-bold text-primary">Admin (username)</span>
+        <span class="font-weight-bold text-primary">{{ sessionUser.userName }}</span>
       </template>
 
       <template #subtitle>
-        admin@lineshift.com
+        {{ sessionUser.email }}
       </template>
 
       <template #text> 
         <account-information-chip
           title="Joined"
-          information="June 28, 2025"
+          :information="formatDate(sessionUser.registeredDate)"
         />
 
         <account-information-chip 
           title="Role"
-          information="ADMIN"
+          :information="sessionUser.roles"
         />
 
         <account-information-chip 
@@ -41,7 +42,7 @@
             <v-chip
               color="blue-lighten-2"
               class="mx-2"
-              text="PLT"
+              :text="sessionUser.subscriptionTier"
             />
           </template>
         </account-information-chip>
@@ -65,6 +66,9 @@
 
 <script setup>
 import { ref } from 'vue';
+
+import { useAuthStore } from '@/stores/auth.store';
+const {sessionUser, formatDate, isAuthenticated } = useAuthStore()
 
 
 const showAccountInformation = ref(false)
