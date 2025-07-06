@@ -1,25 +1,46 @@
 <template>
   <v-navigation-drawer
-    rail
+    v-if="isLoggedIn"
+    :rail="rail"
     rail-width="75"
     expand-on-hover
     permanent
+    @mouseenter="isRailExpanded = true"
+    @mouseleave="isRailExpanded = false"
   >
-    <template #prepend>
-      <nav-logo />
-    </template>
-
-    
-    <template #default>
+    <v-list>
       <div
-        class="py-10"
+        class="d-flex justify-center"
       >
-        <nav-links />
+        <account-avatar v-if="!isRailExpanded" />
       </div>
-    </template>
+
+      <account-section v-if="isRailExpanded" />
+    </v-list>
+
+    <v-divider />
+    
+    <v-list
+      class="d-flex flex-column justify-center"
+    >
+      <nav-links />
+    </v-list>
 
     <template #append>
-      <account-section />
+      <v-list-item>
+        Logo
+      </v-list-item>
     </template>
   </v-navigation-drawer>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { useAuth } from '@/composables/useAuth';
+
+const {isLoggedIn} = useAuth()
+
+const rail = ref(true)
+
+const isRailExpanded = ref(false)
+</script>

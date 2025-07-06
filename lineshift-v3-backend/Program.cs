@@ -4,27 +4,37 @@ using Microsoft.EntityFrameworkCore;
 using lineshift_v3_backend.Services;
 using lineshift_v3_backend.DataAccess.Repository;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Options;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Runtime.CompilerServices;
 using Serilog;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using lineshift_v3_backend.Utils;
+using System.Threading.Tasks;
+using lineshift_v3_backend.Models.Database;
+using lineshift_v3_backend.Services.Identity;
+using lineshift_v3_backend.DataAccess.Repository.Identity;
 
 namespace lineshift_v3_backend
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // --- Services and DbContext ---
+
             // Add services to the container.
             // Any dependencies or transative dependencies to controller (services and repos)
+            builder.Services.AddScoped<IAuthServices, AuthServices>();
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
             builder.Services.AddScoped<ISportsService, SportsService>();
             builder.Services.AddScoped<ISportsRepository,  SportsRepository>();
-
+ 
 
             // Add the DBContext (Connection/Connection String) to MariaDB
-
                 // 1. Get the connection String from appsettings.json
             var connectionString = builder.Configuration.GetConnectionString("MariaDbConnection")
                 ?? throw new InvalidOperationException("Connection string 'MariaDbConnection' not found ");
@@ -34,7 +44,6 @@ namespace lineshift_v3_backend
             {
                 // 3. Specify the server version of our MariaDB instance
                 // we could explicity state the server version if we know (better for prod env)
-                // EX: var serverVersion = new MariaDbServerVersion(new Version(10, 11, 2))
                 var serverVersion = new MariaDbServerVersion(new Version(11, 8, 2));
                 options.UseMySql(connectionString, serverVersion, mySqlOptions =>
                 {
@@ -54,6 +63,9 @@ namespace lineshift_v3_backend
                 });
             });
 
+            
+            // --- Logging and Debugging ---
+
             // Add other services (Authentication, Authorization, logger, etc.)
             builder.Host.UseSerilog((context, loggerConfig) =>
             {
@@ -64,7 +76,78 @@ namespace lineshift_v3_backend
                                   rollingInterval: RollingInterval.Day, // New File Daily
                                   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}");
             });
-            // ...
+
+
+
+            // --- Authentication and Authorization with Identity EFCore Framwork ---
+
+            // Identity (through Identity.EFCore for authentication and authorization) Services 
+            // Registers the two default services: UserManager and SignInManager and cast them
+            // to the ApplicationUser Model
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                // Email Verification for traffic/account regitering integrity and controll
+                // If this was a prod level applcation, we would NEED some way to verify users and that would
+                // go here
+                // The value would need to be set to: true
+                options.SignIn.RequireConfirmedEmail = false;
+
+                // We would also define other configuration setting such as 
+                // - password requirements
+                // - lockout settings
+                // - user settings
+                // - sign in settings
+            })
+                .AddRoles<IdentityRole>() // registers the role portion of user management with Identity Framework
+                                          // Database Integration Part
+                                          // Tells ASP.NEXT Core to use EFCore and our applicationDbContext as the persistence mechanism for
+                                          // storing all Identity-related data
+                                          // Go through out applicationDbContext to make these tables and all related meta data
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            builder.Services.AddAuthentication(options => // registers authentication services with DI container
+            {
+                // Sets the default scheme to use when authenticating request (EX: checking if a user is logged in)
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                // Sets the default cheme to use when an unauthorized request is made 
+                // (EX: to redirect to a login page or return a 401 Unauthorized)
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options => // Configs the JWT Bearer authentication handler
+                {
+                    // Defines the parameters the server uses to validate incoming JWT
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        // Ensures the token's 'iss' (issuer) claim matches a valid issuer
+                        ValidateIssuer = true,
+                        // Ensures the token's 'aud' (audience) claim matches a valid audience for this API
+                        ValidateAudience = true,
+                        // Ensures the token's 'exp' (expiration) and 'nbf' (not before) claims are valid (token is not expired or used too early)
+                        ValidateLifetime = true,
+                        // Ensures the token's signature is valid, preventing tampering
+                        ValidateIssuerSigningKey = true,
+                        // Specifies the valid issuer(s) for tokens (read from appsettings.json)
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        // Specifies the valid audience(s) for tokens (read from appsettings.json)
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        // Provides the secret key used to verify the token's signature (read from appsettings.json and converted to bytes)
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
+                            ?? throw new InvalidOperationException("JWT Key not found")))
+                    };
+                });
+
+
+
+            // Configuring Global Route Options
+            builder.Services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                // Also have the option to make query strings lower case
+                //options.LowercaseQueryStrings = true;
+            });
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -116,14 +199,47 @@ namespace lineshift_v3_backend
                 // then, the .Database.Migrate() will automatically compare out migrations folder to the databases histoty of migration
                 // and applly the local migration folder changes in order (if any)
                 // then the scope is resolved and the app is ran normally
+
+                // IMPORTANT MIGRATION REMINDER:
+                // ---------------------------------------------------------------------------------------------------------
+                // When you make changes to your ApplicationDbContext or any entity models (ApplicationUser, Product, etc.):
+                // 1. CREATE A NEW MIGRATION:
+                //    Open Terminal/PMC in your project directory and run:
+                //    dotnet ef migrations add YourMigrationNameHere
+                //    (e.g., dotnet ef migrations add AddFirstNameToUsers)
+                //
+                // 2. APPLY MIGRATIONS:
+                //    a) During local development, this code (dbContext.Database.Migrate()) will apply pending migrations
+                //       on app startup.
+                //    b) FOR PRODUCTION DEPLOYMENTS: It's best practice to apply migrations as a separate step
+                //       BEFORE starting your application. Use the command:
+                //       dotnet ef database update --project YourProjectName.csproj
+                // ---------------------------------------------------------------------------------------------------------
             }
 
-                app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication(); // handles authentication the user based on credentiasl
+                                     // like cookies, JWT Tokens, API Keys, etc
+                                     // Establishes the ClaimsPrinciple for the current request
+                                     // Must be called to actually perform the JWT Auth checked described above
+            
+            app.UseAuthorization(); // uses the authenticated user's identity to determine if they
+                                    // are authorized to access a resource
+                                    // must be called to perform authorization checks based on authenticated user
 
 
             app.MapControllers();
+
+            // Calling DbInitializer to seed the database idempotendly 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                // Resolve logger for DbInitializer to ensure messages are captured
+                var logger = services.GetRequiredService<ILogger<DbInitializerLoggerCategory>>();
+                // Call static method to initialize
+                await DbInitializer.Initialize(services, logger);
+            }
 
             app.Run();
         }

@@ -20,11 +20,10 @@
 
 <script setup>
   import { useSports } from '@/composables/useSports';
-  import { VRow } from 'vuetify/components';
 
   const {sports, getAllSports} = useSports()
 
   onMounted(async () => {
-    getAllSports()
+    await getAllSports()
   })
 </script>

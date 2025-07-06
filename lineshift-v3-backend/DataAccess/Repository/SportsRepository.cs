@@ -17,12 +17,12 @@ namespace lineshift_v3_backend.DataAccess.Repository
     {
         // we have to pass the repository layer the DbContext so the Query Layer
         // can interact and query the database
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<SportsRepository> _logger;
 
         public SportsRepository(ApplicationDbContext context, ILogger<SportsRepository> logger)
         {
-            _context = context;
+            _dbContext = context;
             _logger = logger;
         }
 
@@ -31,8 +31,8 @@ namespace lineshift_v3_backend.DataAccess.Repository
         {
             try
             {
-                var result = await _context.Sports.GetSportsAsync().AsNoTracking().ToListAsync();
                 _logger.LogInformation("Accessing the sport queries from the sport repo layer");
+                var result = await _dbContext.Sports.GetSportsAsync().AsNoTracking().ToListAsync();
                 return result;
             }
             catch (Exception ex) 

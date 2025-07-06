@@ -13,11 +13,21 @@ import App from './App.vue';
 // Composables
 import { createApp } from 'vue';
 
+
 // Styles
 import 'unfonts.css';
 
 const app = createApp(App);
 
+
 registerPlugins(app);
+
+// Initialization of Auth Store
+import { useAuthStore } from './stores/auth.store';
+const { initializeAuth } = useAuthStore();
+// attempts to initialize session user based on local 
+// stored jwt token if available
+await initializeAuth(); 
+
 
 app.mount('#app');

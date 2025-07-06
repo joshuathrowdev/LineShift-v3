@@ -1,9 +1,15 @@
 ﻿using lineshift_v3_backend.Models;
+using lineshift_v3_backend.Models.Database;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace lineshift_v3_backend.Infrastructure
 {
-    public class ApplicationDbContext : DbContext
+    // we must to inherit from IdentityDbContext
+    // specialized version of DbContext that automatically comes with the tables
+    // and DBSets associated with Identity data models
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         // Constructor: This is where DbContextOptions are passed, typically via Dependency Injection
         // in ASP.NET Core applications. These options contain configuration like the database connection string.
@@ -44,6 +50,24 @@ namespace lineshift_v3_backend.Infrastructure
                 // Define Relationships and how navigating those relationships work
                 // Have to have the model for relating models(tables) defined
             });
+
+
+            // Identity.EFCore Tables (For user management and authentication)
+            // Renaming the default tables for claririty
+            modelBuilder.Entity<ApplicationUser>().ToTable("Users");
+            modelBuilder.Entity<IdentityRole>().ToTable("Roles");
+            // claims specifically associated with the users
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            // External login provides (like Google, Facebook, etc) linked to user
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            // many to many relationship between users and roles
+            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            // Stores auth tokens for users (refresh tokens, 2FA provider tokens, etc)
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+            // claims specifically associated with roles (any user with that role gets these claims)
+            modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+
+
         }
     }
 }

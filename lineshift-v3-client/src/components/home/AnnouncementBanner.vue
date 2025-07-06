@@ -10,7 +10,7 @@
         <v-card-title 
           class="font-weight-bold text-h3"
         >
-          LineSift Version-3
+          LineShift Version-3
         </v-card-title>
         <v-card-subtitle class="text-h5">
           A Daily Fantasy Partner
