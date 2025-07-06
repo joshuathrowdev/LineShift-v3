@@ -36,9 +36,6 @@
 <script setup>
 import { ref } from 'vue';
 
-import { useAuthStore } from '@/stores/auth.store';
-const {isAuthenticated} = useAuthStore()
-
 const rail = ref(true)
 
 const isRailExpanded = ref(false)

@@ -6,7 +6,7 @@
       <v-btn 
         icon
         variant="text"      
-        :disabled="!isAuthenticated"
+        :disabled="!isLoggedIn"
         @click="handleShowAccountInformation"
       >
         <account-avatar />
@@ -27,7 +27,7 @@
       <template #text> 
         <account-information-chip
           title="Joined"
-          :information="formatDate(sessionUser.registeredDate)"
+          :information="formattedRegisteredDate"
         />
 
         <account-information-chip 
@@ -66,10 +66,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useAuth } from '@/composables/useAuth';
 
-import { useAuthStore } from '@/stores/auth.store';
-const {sessionUser, formatDate, isAuthenticated } = useAuthStore()
 
+const {sessionUser, isLoggedIn, formattedRegisteredDate} = useAuth()
 
 const showAccountInformation = ref(false)
 

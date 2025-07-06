@@ -25,13 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
   const error = computed(() => _error.value);
   const isAuthenticated = computed(() => !!_token.value && !!_sessionUser.value);
 
-  const avatarContent = computed(() => {
-    if (isAuthenticated.value) {
-      return _sessionUser.value.userName.slice(0, 3).toUpperCase();
-    }
 
-    return '';
-  });
 
 
 
@@ -85,16 +79,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const formatDate = (isoDateTimeOffsetObject) => {
-    const dateObject = new Date(isoDateTimeOffsetObject);
-    const formattedDate = dateObject.toLocaleString('en-Us', {
-      year: 'numeric',
-      month: 'long',
-      day: '2-digit'
-    });
-    return formattedDate;
-  };
-
   const setIsLoadingFalse = () => {
     _isLoading.value = false;
   };
@@ -116,13 +100,11 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading,
     error,
     isAuthenticated,
-    avatarContent,
 
     // Actions
     login,
     setAuthData,
     initializeAuth,
-    formatDate,
     setIsLoadingTrue,
     setIsLoadingFalse,
   };

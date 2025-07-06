@@ -167,7 +167,7 @@ namespace lineshift_v3_backend.Controllers.Identity
                 if (string.IsNullOrEmpty(userId))
                 {
                     // this should theoretically not happen 
-                    _logger.LogWarning("UserId could not be found from Claim Types.", userId)
+                    _logger.LogError($"A valid token is present for '{userId}', but no claim id found.");
                     return Unauthorized(); // Token valid, but no Id claim found
                 }
 
@@ -176,6 +176,7 @@ namespace lineshift_v3_backend.Controllers.Identity
 
                 if (sessionUser == null)
                 {
+                    _logger.LogWarning($"UserId '{userId}' could not be found from Claim Types.");
                     return NotFound(); // valid token but the user could not be found
                 }
 
@@ -200,7 +201,7 @@ namespace lineshift_v3_backend.Controllers.Identity
                 // that asserts something about a subject 
                 // For JWT, they are statements about the authenticated user that are securly
                 // encoded within the token
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? user.Email ?? user.Id),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique ID for the token
                 new Claim(ClaimTypes.NameIdentifier, user.Id), // Standard Claim for user ID
                 new Claim(ClaimTypes.Name, user.UserName ?? user.Email ?? ""), // Standard claim for username
