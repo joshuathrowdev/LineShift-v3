@@ -10,6 +10,7 @@ namespace lineshift_v3_backend.Services.Identity
     public interface IAuthServices
     {
         Task<SessionUser> GetUserByIdAsync(string id);
+        Task<SessionUser> LoginAsync(LoginModel loginModel);
     }
     #endregion
 
@@ -28,6 +29,11 @@ namespace lineshift_v3_backend.Services.Identity
         }
 
         #region Service Methods
+        public async Task<SessionUser> LoginAsync(LoginModel loginModel)
+        {
+
+        }
+
         public async Task<SessionUser> GetUserByIdAsync(string id)
         {
             try
