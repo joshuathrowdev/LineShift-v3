@@ -86,6 +86,8 @@ namespace lineshift_v3_backend.Controllers.Identity
                     if (result.ErrorCode == "INACTIVE_ACCOUNT")
                     {
                         return Unauthorized(new { Message = result.Error });
+                        // Technically, a 403 Forbid / Forbidden would be right be add a slight security risk
+                        // attackers could index what usernames and passwords are valid 
                     }
 
                     if (result.ErrorCode == "LOCKEDOUT_ACCOUNT")

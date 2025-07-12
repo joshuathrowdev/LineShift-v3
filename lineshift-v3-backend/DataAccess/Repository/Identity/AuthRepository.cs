@@ -46,7 +46,7 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
                 if (applicationUser == null)
                 {
                     _logger.LogWarning($"Application user '{loginModel.Email}' cout not be found due to invalid email crendentials");
-                    return null;
+                    return applicationUser; // this would be null
                 }
 
                 return applicationUser;
@@ -73,34 +73,10 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
         }
         #endregion
 
-        #region Helper Methods
-        //internal SessionUser MapSessionUser(ApplicationUser applicationUser)
-        //{
-        //   try
-        //    {
-        //        return new SessionUser
-        //        {
-                    
-        //            UserId = applicationUser.Id,
-        //            UserName = applicationUser.UserName,
-        //            Email = applicationUser.Email ?? string.Empty,
-        //            FirstName = applicationUser.FirstName,
-        //            LastName = applicationUser.LastName,
-        //            IsActive = applicationUser.IsActive,
-        //            RegisteredDate = applicationUser.RegisteredDate,
-        //            LastLoginDate = applicationUser.LastLoginDate,
-        //            LastUpdatedDate = applicationUser.LastUpdatedDate,
-        //            SubscriptionTier = applicationUser.SubscriptionTier,
-        //            Roles = null
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogWarning(exception: ex, message: "An error occured while attempting to map an application user to session user.");
-        //        throw;
-        //    }
 
-        //}
+        #region Helper Methods
+
+        #endregion
 
 
         #region Interface Implementation
@@ -108,8 +84,6 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
         {
             return LoginAsync(loginModel);
         }
-        #endregion
-
         Task<ApplicationUser> IAuthRepository.GetUserByIdAsync(string id)
         {
             return GetUserByIdAsync(id);

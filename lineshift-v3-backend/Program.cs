@@ -27,6 +27,7 @@ namespace lineshift_v3_backend
 
             // Add services to the container.
             // Any dependencies or transative dependencies to controller (services and repos)
+            builder.Services.AddScoped<ITokenServices, TokenServices>();
             builder.Services.AddScoped<IAuthServices, AuthServices>();
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
