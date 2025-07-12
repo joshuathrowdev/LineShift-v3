@@ -1,6 +1,6 @@
-﻿using lineshift_v3_backend.Infrastructure;
-using lineshift_v3_backend.Models.Database;
-using lineshift_v3_backend.Models.Identity;
+﻿using lineshift_v3_backend.Dtos;
+using lineshift_v3_backend.Infrastructure;
+using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

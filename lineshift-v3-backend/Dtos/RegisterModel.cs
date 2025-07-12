@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace lineshift_v3_backend.Models.Identity
+namespace lineshift_v3_backend.Dtos
 {
     // Registration Model for capturing information related to registering a 
     // new user 
@@ -25,6 +25,7 @@ namespace lineshift_v3_backend.Models.Identity
         [MaxLength(50)]
         public string FirstName { get; set; } = string.Empty;
 
+        [MaxLength(50)]
         public string? LastName { get; set; }
 
 

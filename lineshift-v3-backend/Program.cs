@@ -1,19 +1,21 @@
 
-using lineshift_v3_backend.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using lineshift_v3_backend.Services;
 using lineshift_v3_backend.DataAccess.Repository;
+using lineshift_v3_backend.DataAccess.Repository.Identity;
+using lineshift_v3_backend.Infrastructure;
+using lineshift_v3_backend.MappingProfiles;
+using lineshift_v3_backend.Models;
+using lineshift_v3_backend.Services;
+using lineshift_v3_backend.Services.Identity;
+using lineshift_v3_backend.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using lineshift_v3_backend.Utils;
-using System.Threading.Tasks;
-using lineshift_v3_backend.Models.Database;
-using lineshift_v3_backend.Services.Identity;
-using lineshift_v3_backend.DataAccess.Repository.Identity;
+using AutoMapper;
+using System.Reflection;
 
 namespace lineshift_v3_backend
 {
@@ -33,10 +35,18 @@ namespace lineshift_v3_backend
 
             builder.Services.AddScoped<ISportsService, SportsService>();
             builder.Services.AddScoped<ISportsRepository,  SportsRepository>();
- 
+
+
+            // Configuring Auto Mapper for UserProfile
+            // Source: ApplicationUser, Dest: SessionUser
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<UserProfil>();
+            });
+
 
             // Add the DBContext (Connection/Connection String) to MariaDB
-                // 1. Get the connection String from appsettings.json
+            // 1. Get the connection String from appsettings.json
             var connectionString = builder.Configuration.GetConnectionString("MariaDbConnection")
                 ?? throw new InvalidOperationException("Connection string 'MariaDbConnection' not found ");
 

@@ -1,6 +1,7 @@
-﻿using lineshift_v3_backend.DataAccess.Repository.Identity;
-using lineshift_v3_backend.Models.Database;
-using lineshift_v3_backend.Models.Identity;
+﻿using AutoMapper;
+using lineshift_v3_backend.DataAccess.Repository.Identity;
+using lineshift_v3_backend.Dtos;
+using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -28,20 +29,22 @@ namespace lineshift_v3_backend.Services.Identity
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenServices _tokenServices;
+        private readonly IMapper _mapper;
 
         public AuthServices(
             IAuthRepository authRepository, 
             ILogger<AuthServices> logger, 
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ITokenServices tokenServices)
+            ITokenServices tokenServices,
+            IMapper mapper)
         {
             _authRepository = authRepository;
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenServices = tokenServices;
-
+            _mapper = mapper;
         }
 
 
@@ -83,7 +86,7 @@ namespace lineshift_v3_backend.Services.Identity
             var jwt_token = await _tokenServices.GenerateJwtToken(userEntity);
 
             // Making Session User
-            var sessionUser = await MapSessionUser(userEntity);
+            var sessionUser = _mapper.Map<SessionUser>(userEntity);
 
             var authResponse = new AuthResponse
             {

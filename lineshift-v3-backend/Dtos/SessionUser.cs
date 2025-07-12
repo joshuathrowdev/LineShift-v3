@@ -1,4 +1,4 @@
-﻿namespace lineshift_v3_backend.Models.Identity
+﻿namespace lineshift_v3_backend.Dtos
 {
     public class SessionUser
     {
