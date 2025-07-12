@@ -7,6 +7,6 @@ namespace lineshift_v3_backend.Models.Identity
     {
         public string Token { get; set; } = string.Empty;
         
-        public SessionUser? sessionUser { get; set; }
+        public SessionUser? SessionUser { get; set; }
     }
 }

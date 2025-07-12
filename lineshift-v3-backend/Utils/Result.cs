@@ -6,7 +6,7 @@
         // general response ops success 
         public bool IsSuccess { get; protected set; } 
  
-        // general, human-readable message describing the overal reason for the failure
+        // general, human-readable message describing the overall reason for the failure
         // Concise sentence or phrase
         // EX: "Invalid Credentials"
         public string? Error { get; protected set; } // General error message
