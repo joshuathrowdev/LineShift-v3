@@ -15,7 +15,10 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('jwt_token') || null);
   const isLoading = ref(false); // for async ops
   const isAuthReady = ref(false); // for definitive authentication value
-  const error = ref(null); // global error messages 
+  const error = ref({
+    message: '',
+    code: null
+  }); // global error messages 
 
 
   // Getters (computed functions)
@@ -79,8 +82,16 @@ export const useAuthStore = defineStore('auth', () => {
       if (authResponse) {
         setAuthData(authResponse.token, authResponse.sessionUser);
       }
-    } catch (error) {
-      console.warn('Error while attempting to login', error);
+    } catch (caughtError) {
+      console.log(caughtError.response);
+      console.log(caughtError.request);
+      console.log(caughtError);
+
+      if (caughtError.response) {
+        error.value.message = caughtError.response.data.message;
+        error.value.code = caughtError.response.status;
+        console.log(error.value)
+      }
     }
     finally {
       isLoading.value = false;

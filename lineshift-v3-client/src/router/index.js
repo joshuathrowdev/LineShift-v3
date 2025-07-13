@@ -52,7 +52,7 @@ router.beforeEach(async (to, from, next) => {
   if (token.value && !isAuthReady.value && !isLoading.value) {
     await initializeAuth();
   }
-  
+
 
   // waiting until auth stats is definitely ready (via isAuthReady)
   if (token.value && !isAuthReady.value && isLoading.value) {

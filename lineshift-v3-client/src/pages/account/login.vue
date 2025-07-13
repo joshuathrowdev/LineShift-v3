@@ -33,13 +33,12 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth.store';
 
 
 const authStore = useAuthStore()
-const {isAuthenticated} = storeToRefs(authStore)
+const {isAuthenticated, error} = storeToRefs(authStore)
 const {login} = authStore
 
 const router = useRouter()
