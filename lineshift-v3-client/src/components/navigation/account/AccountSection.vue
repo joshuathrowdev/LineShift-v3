@@ -86,6 +86,6 @@ const handleShowAccountInformation = () => {
 
 const handleLogout = async () => {
   await logout()
-  router.push({name: '/account/login'})
+  router.push({name: 'login'})
 }
 </script>

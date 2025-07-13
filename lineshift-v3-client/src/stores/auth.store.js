@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
   // if a token already exist, it grabs that one
   const token = ref(localStorage.getItem('jwt_token') || null);
   const isLoading = ref(false); // for async ops
+  const isAuthReady = ref(false); // for definitive authentication value
   const error = ref(null); // global error messages 
 
 
@@ -43,13 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
     return formattedDate;
   });
 
-
-
-
-
-
   // Actions / Mutators (reg functions)
-
   // Core Actions
   const initializeAuth = async () => {
     // initialize the Auth Store on app/page mount 
@@ -57,29 +52,39 @@ export const useAuthStore = defineStore('auth', () => {
     // if we have a token but not a _sessionUser
     if (token.value && !isAuthenticated.value) {
       isLoading.value = true; // setting loading state
+      isAuthReady.value = false;
       error.value = null;
 
       try {
         const sessionUserData = await authApi.initializeMe();
         setAuthData(token.value, sessionUserData);
-
-        // resetting loading value
-        isLoading.value = false;
       }
       catch (error) {
         console.warn('Error occurred while trying to initialize session user', error);
+      }
+      finally {
+        // resetting loading value
+        isLoading.value = false;
+        isAuthReady.value = true;
       }
     }
   };
 
   const login = async (credentials) => {
     try {
+      isLoading.value = true;
+      isAuthReady.value = false;
+
       const authResponse = await authApi.login(credentials);
       if (authResponse) {
         setAuthData(authResponse.token, authResponse.sessionUser);
       }
     } catch (error) {
       console.warn('Error while attempting to login', error);
+    }
+    finally {
+      isLoading.value = false;
+      isAuthReady.value = true;
     }
   };
 
@@ -95,9 +100,8 @@ export const useAuthStore = defineStore('auth', () => {
       return;
     }
 
-    token.value = null;
-    sessionUser.value = null;
-    localStorage.removeItem('jwt_token');
+    setAuthData(null, null);
+    isAuthReady.value = true;
   };
 
   const setAuthData = (newToken, authResponseUser) => {
@@ -119,6 +123,7 @@ export const useAuthStore = defineStore('auth', () => {
     sessionUser,
     token,
     isLoading,
+    isAuthReady,
     error,
 
     // Getters
@@ -133,3 +138,10 @@ export const useAuthStore = defineStore('auth', () => {
     initializeAuth,
   };
 });
+
+
+
+
+// isLoading indicates an asynchronous operation is currently active (e.g., fetching data, logging in).
+// isAuthReady signifies that the authentication state has been definitively evaluated and settled, meaning isAuthenticated now holds its final, reliable value.
+// We need isAuthReady to prevent race conditions in navigation guards, ensuring they only make redirection decisions after the authentication status is fully known, especially on page load or refresh.

@@ -44,22 +44,18 @@ const {login} = authStore
 
 const router = useRouter()
 
-// Checking if a current session user has already been initialized
-onMounted(() => {
-  checkForAuthenticatedSessionUser()
-})
-
-const checkForAuthenticatedSessionUser = () => {
-  if (isAuthenticated.value) {
-    router.push({name: '/'}) // home page
-    return
-  }
-}
-
 const handleLoginAttempt = async (credentials) => {
   await login(credentials.value)
-  if (isLoggedIn.value) {
-    router.push({name: '/'})
+  if (isAuthenticated.value) {
+    router.push({name: 'home'})
   }
 }
 </script>
+
+<route lang="yaml">
+name: 'login'
+meta:
+  requiresAuth: false
+  redirectIfAuthenticated: true 
+  # redirect authenticated users away from this route
+</route>
