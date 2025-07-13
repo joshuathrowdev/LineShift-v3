@@ -6,7 +6,7 @@
       <v-btn 
         icon
         variant="text"      
-        :disabled="!isLoggedIn"
+        :disabled="!isAuthenticated"
         @click="handleShowAccountInformation"
       >
         <account-avatar />
@@ -68,15 +68,17 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuth } from '@/composables/useAuth';
+import { useAuthStore } from '@/stores/auth.store';
+
+
+const authStore = useAuthStore()
+const {sessionUser, isAuthenticated, formattedRegisteredDate} = storeToRefs(authStore)
+const {logout} = authStore
 
 
 const router = useRouter()
 
-const {sessionUser, isLoggedIn, formattedRegisteredDate, logout} = useAuth()
-
 const showAccountInformation = ref(false)
-
 
 const handleShowAccountInformation = () => {
   showAccountInformation.value === false ? showAccountInformation.value = true : showAccountInformation.value = false
@@ -84,6 +86,6 @@ const handleShowAccountInformation = () => {
 
 const handleLogout = async () => {
   await logout()
-  router.push({name: '/account/login'})
+  router.push({name: 'login'})
 }
 </script>

@@ -8,7 +8,18 @@ export const authApi = {
       const response = await axiosInstance.post(loginEndpoint, credentials);
       return response.data;
     } catch (error) {
-      console.warn('Error attempting to login user: ', error, credentials);
+      if (error.response) {
+        // backend responded with code outside 2xx
+        throw error;
+      }
+      else if (error.request) {
+        // request was made but no response was received (network error)
+        throw error;
+      }
+      else {
+        // something happened in setting up the request that triggered an error
+        throw error;
+      }
     }
   },
 

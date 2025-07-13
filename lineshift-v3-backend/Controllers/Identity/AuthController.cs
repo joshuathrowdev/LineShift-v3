@@ -1,5 +1,4 @@
-﻿using lineshift_v3_backend.Models.Identity;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,9 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
-using lineshift_v3_backend.Models.Database;
 using lineshift_v3_backend.Services.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using lineshift_v3_backend.Dtos;
+using lineshift_v3_backend.Models;
 
 namespace lineshift_v3_backend.Controllers.Identity
 {
@@ -54,15 +54,8 @@ namespace lineshift_v3_backend.Controllers.Identity
         // localhost:port/api/v3/auth/login
         [HttpPost("login")]
         [AllowAnonymous] // Allows unaithenticated acccess to this endpoint
-        public async Task<ActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            // [FromBody] ->Instructinng ASP.NET model binding system to
-            // 1. Read the request from body: look for data for this param within the HTTP request body
-            // 2. Attempt to deserialize the content of the request body into the type of the param
-            // 3. Primary use Content-Type header of the incoming request to determine which input formatter to use
-            // This helps when receiving complex data from the clients request body
-
-            // 1. Input Validation
             if (!ModelState.IsValid)
             {
                 _logger.LogInformation($"Model State was invalid: {ModelState}.");
@@ -74,73 +67,47 @@ namespace lineshift_v3_backend.Controllers.Identity
                 // in action method parameters 
             }
 
-            // 2 Find User
-            var userEntity = await _userManager.FindByEmailAsync(loginModel.Email);
-            _logger.LogInformation($"Attempting to find user '{loginModel.Email}'.");
-            if (userEntity == null)
+
+            try
             {
-                _logger.LogInformation($"User '{loginModel.Email}' could not be found due to incorrect password or email.");
-                return Unauthorized(new { Message = "Invalid credentials." }); // 401 Unauthorized
+                var result = await _authServices.LoginAsync(loginModel);
 
-            }
-
-            // 3. Check Acccount Status: Ensure the user is active (not suspended or soft deleted)
-            if (!userEntity.IsActive || userEntity.IsDeleted)
-            {
-                return Unauthorized(new { Message = "Account is inactive or deleted" });
-            }
-
-            // 4. Check Password
-            var result = await _signInManager.CheckPasswordSignInAsync(userEntity, loginModel.Password, lockoutOnFailure: true);
-            // lockout: true -> enables lockout after a predetermined amount of failures
-
-            if (result.Succeeded)
-            {
-                // Update LastLoginDate
-                userEntity.LastLoginDate = DateTimeOffset.UtcNow;
-                await _userManager.UpdateAsync(userEntity); // updates the user in the persistence store (database) based on what attributes changed
-
-                // 6. Generate JWT and Return Success
-                var token = await GenerateJwtToken(userEntity);
-
-                // Making Session User
-                var sessionUser = new SessionUser
+                if (result.IsSuccess)
                 {
-                    UserId = userEntity.Id,
-                    UserName = userEntity.UserName ?? string.Empty,
-                    Email = userEntity.Email ?? string.Empty,
-                    FirstName = userEntity.FirstName ?? string.Empty,
-                    LastName = userEntity.LastName ?? string.Empty,
-                    RegisteredDate = userEntity.RegisteredDate ?? null,
-                    SubscriptionTier = userEntity.SubscriptionTier ?? null,
-                    LastLoginDate = userEntity.LastLoginDate ?? null,
-                    LastUpdatedDate = userEntity.LastUpdatedDate ?? null,
-                    Roles = (await _userManager.GetRolesAsync(userEntity)).ToList(),
-                };
-
-                return Ok(new AuthResponse
+                    return Ok(result.Value);
+                }
+                else
                 {
-                    Token = token,
-                    sessionUser = sessionUser
-                    
-                });
-            }
+                    if (result.ErrorCode == "INVALID_CREDENTIALS")
+                    {
+                        return Unauthorized(new { Message = result.Error });
+                    }
 
-            // 7. Handle Specific Failure Casses
-            if (result.IsLockedOut)
+                    if (result.ErrorCode == "INACTIVE_ACCOUNT")
+                    {
+                        return Unauthorized(new { Message = result.Error });
+                        // Technically, a 403 Forbid / Forbidden would be right be add a slight security risk
+                        // attackers could index what usernames and passwords are valid 
+                    }
+
+                    if (result.ErrorCode == "LOCKEDOUT_ACCOUNT")
+                    {
+                        return Unauthorized(new { Message = result.Error });
+                    }
+
+                    if (result.ErrorCode == "NOT_ALLOWED_ACCOUNT")
+                    {
+                        return Unauthorized(new { Message = result.Error });
+                    }
+
+                    return StatusCode(500, "An unexpected server error occurred during login.");
+                }
+            } 
+            catch (Exception ex)
             {
-                return Unauthorized(new { Message = "User account locked out." });
+                _logger.LogWarning(exception: ex, message: "An error occured while accessing the auth services.");
+                throw;
             }
-            if (result.IsNotAllowed)
-            {
-                return Unauthorized(new { Message = "User not allowed to sign in." });
-            }
-            // if user account requires 2FA, etc
-
-
-            // 8. Generic Failure (EX: incorrect password)
-            return Unauthorized(new { Message = "Invalid credentials." });
-
         }
 
 
@@ -191,55 +158,9 @@ namespace lineshift_v3_backend.Controllers.Identity
         }
 
 
-
-        // Helper Method that generate JWT for a given ApplicationUser
-        private async Task<string> GenerateJwtToken(ApplicationUser user)
-        {
-            var claims = new List<Claim>
-            { 
-                // A Claim is a piece of information, expressed as a name-value pair
-                // that asserts something about a subject 
-                // For JWT, they are statements about the authenticated user that are securly
-                // encoded within the token
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique ID for the token
-                new Claim(ClaimTypes.NameIdentifier, user.Id), // Standard Claim for user ID
-                new Claim(ClaimTypes.Name, user.UserName ?? user.Email ?? ""), // Standard claim for username
-                new Claim(ClaimTypes.Email, user.Email ?? "") // Standard claim for user email
-
-            };
-
-            var roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role)); // add each roles to claim
-            }
-
-            // Any Additional custom claims for ApplicationUser Model 
-            // EX: if we wanted the users FirstName and LastName for display purposes
-
-            // Get JWT config from appsetting.json
-            var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not found in configuration.");
-            var jwtIssuer = _configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer not found in configuration.");
-            var jwtAudience = _configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience not found in configuration.");
-            var expireDays = Convert.ToDouble(_configuration["Jwt:ExpireDays"] ?? "7");
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(expireDays);
-
-            var token = new JwtSecurityToken(
-                issuer: jwtIssuer,
-                audience: jwtAudience,
-                claims: claims,
-                expires: expires,
-                signingCredentials: creds
-            );
-
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
+        #region Helper Methods
+        
+        #endregion
     }
 }
 

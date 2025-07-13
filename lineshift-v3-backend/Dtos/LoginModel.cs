@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace lineshift_v3_backend.Models.Identity
+namespace lineshift_v3_backend.Dtos
 {
     // Login Model for capturing information related to an already
     // existing user 

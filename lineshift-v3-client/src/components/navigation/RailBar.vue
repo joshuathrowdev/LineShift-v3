@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    v-if="isLoggedIn"
+    v-if="isAuthenticated"
     :rail="rail"
     rail-width="75"
     expand-on-hover
@@ -36,9 +36,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useAuth } from '@/composables/useAuth';
+import { useAuthStore } from '@/stores/auth.store';
 
-const {isLoggedIn} = useAuth()
+const { isAuthenticated } = storeToRefs(useAuthStore())
 
 const rail = ref(true)
 

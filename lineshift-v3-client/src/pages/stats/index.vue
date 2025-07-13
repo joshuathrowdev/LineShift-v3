@@ -27,3 +27,8 @@
     await getAllSports()
   })
 </script>
+
+<route lang="yaml">
+meta:
+  requiresAuth: true
+</route>

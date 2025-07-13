@@ -2,7 +2,7 @@
   <nav-link-item
     title="Home"
     icon="mdi-home-outline"
-    :to="{name: '/'}"
+    :to="{name: 'home'}"
     color="secondary"
     link
     exact

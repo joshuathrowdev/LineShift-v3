@@ -1,5 +1,4 @@
-﻿
-namespace lineshift_v3_backend.Models.Identity
+﻿namespace lineshift_v3_backend.Dtos
 {
     // Model for sending ApplicationUser and JWT meta data
     // For successful login/registration response
@@ -7,6 +6,6 @@ namespace lineshift_v3_backend.Models.Identity
     {
         public string Token { get; set; } = string.Empty;
         
-        public SessionUser? sessionUser { get; set; }
+        public SessionUser? SessionUser { get; set; }
     }
 }

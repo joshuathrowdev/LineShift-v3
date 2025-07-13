@@ -1,5 +1,5 @@
 ﻿using lineshift_v3_backend.Infrastructure;
-using lineshift_v3_backend.Models.Database;
+using lineshift_v3_backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
