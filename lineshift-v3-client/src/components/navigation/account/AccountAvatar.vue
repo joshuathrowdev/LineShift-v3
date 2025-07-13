@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { useAuth } from '@/composables/useAuth';
+import { useAuthStore } from '@/stores/auth.store';
 
-const {avatarContent} = useAuth()
+const {avatarContent} = storeToRefs(useAuthStore())
 </script>

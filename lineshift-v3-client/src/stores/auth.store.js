@@ -9,21 +9,39 @@ import { authApi } from '@/services/auth.api';
 
 export const useAuthStore = defineStore('auth', () => {
   // State
-  const _sessionUser = ref(null);
+  const sessionUser = ref(null);
   // Initialize token from localStorage when store is is first created
   // if a token already exist, it grabs that one
-  const _token = ref(localStorage.getItem('jwt_token') || null);
-  const _isLoading = ref(false); // for async ops
-  const _error = ref(null); // global error messages 
+  const token = ref(localStorage.getItem('jwt_token') || null);
+  const isLoading = ref(false); // for async ops
+  const error = ref(null); // global error messages 
 
 
   // Getters (computed functions)
-  const sessionUser = computed(() => _sessionUser.value);
-  const token = computed(() => _token.value);
+  const isAuthenticated = computed(() => !!token.value && !!sessionUser.value);
 
-  const isLoading = computed(() => _isLoading.value);
-  const error = computed(() => _error.value);
-  const isAuthenticated = computed(() => !!_token.value && !!_sessionUser.value);
+  const avatarContent = computed(() => {
+    if (!isAuthenticated.value) {
+      return '';
+    }
+
+    const userName = sessionUser.value.userName;
+    const email = sessionUser.value.email;
+
+    return userName ? userName.slice(0, 3).toUpperCase() : email.slice(0, 3).toUpperCase();
+  });
+
+  const formattedRegisteredDate = computed(() => {
+    const isoDateTimeOffset = sessionUser.value.registeredDate;
+    const dateObject = new Date(isoDateTimeOffset);
+    const formattedDate = dateObject.toLocaleString('en-Us', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    });
+
+    return formattedDate;
+  });
 
 
 
@@ -37,16 +55,16 @@ export const useAuthStore = defineStore('auth', () => {
     // initialize the Auth Store on app/page mount 
 
     // if we have a token but not a _sessionUser
-    if (_token.value && !isAuthenticated.value) {
-      _isLoading.value = true; // setting loading state
-      _error.value = null;
+    if (token.value && !isAuthenticated.value) {
+      isLoading.value = true; // setting loading state
+      error.value = null;
 
       try {
-        const initializationUserData = await authApi.initializeMe();
-        setAuthData(_token.value, initializationUserData);
+        const sessionUserData = await authApi.initializeMe();
+        setAuthData(token.value, sessionUserData);
 
         // resetting loading value
-        _isLoading.value = false;
+        isLoading.value = false;
       }
       catch (error) {
         console.warn('Error occurred while trying to initialize session user', error);
@@ -72,20 +90,19 @@ export const useAuthStore = defineStore('auth', () => {
       console.warn('No JWT token currently in local storage memory');
       return;
     }
-    if (!_token.value) {
+    if (!token.value) {
       console.warn('No token stored in auth store session user');
       return;
     }
 
-    _token.value = null;
-    _sessionUser.value = null;
+    token.value = null;
+    sessionUser.value = null;
     localStorage.removeItem('jwt_token');
   };
 
-
   const setAuthData = (newToken, authResponseUser) => {
-    _token.value = newToken; // sets new token
-    _sessionUser.value = authResponseUser;
+    token.value = newToken; // sets new token
+    sessionUser.value = authResponseUser;
 
     if (newToken) {
       // Set new _token to local storage
@@ -97,20 +114,17 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
 
-
-
-
-
-
   return {
     // State
-
-    // Getters
     sessionUser,
     token,
     isLoading,
     error,
+
+    // Getters
     isAuthenticated,
+    avatarContent,
+    formattedRegisteredDate,
 
     // Actions
     login,
