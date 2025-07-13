@@ -9,9 +9,10 @@ namespace lineshift_v3_backend.MappingProfiles
        public UserProfil()
         {
             // Configure mapping from Application User to SessionUser(Dto)
-            CreateMap<ApplicationUser, SessionUser>();
+            CreateMap<ApplicationUser, SessionUser>()
             // Example: If a property name is different or needs custom logic
             // .ForMember(dest => dest.SomeClientProperty, opt => opt.MapFrom(src => src.SomeInternalProperty))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
 
             // Example: If you want to ignore a property from the source that exists in destination
             // .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) // Not needed if dest doesn't have it

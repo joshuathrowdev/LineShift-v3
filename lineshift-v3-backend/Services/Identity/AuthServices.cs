@@ -87,6 +87,8 @@ namespace lineshift_v3_backend.Services.Identity
 
             // Making Session User
             var sessionUser = _mapper.Map<SessionUser>(userEntity);
+            sessionUser.Roles = (await _userManager.GetRolesAsync(userEntity)).ToList();
+
 
             var authResponse = new AuthResponse
             {
@@ -117,7 +119,8 @@ namespace lineshift_v3_backend.Services.Identity
                     return null;
                 }
 
-                var sessionUser = await MapSessionUser(userEntity);
+                var sessionUser = _mapper.Map<SessionUser>(userEntity);
+                sessionUser.Roles = (await _userManager.GetRolesAsync(userEntity)).ToList();
 
                 return sessionUser;
             }
@@ -129,30 +132,7 @@ namespace lineshift_v3_backend.Services.Identity
         }
 
         #region Helper Methods
-        internal async Task<SessionUser> MapSessionUser(ApplicationUser userEntity)
-        {
-            try
-            {
-                return new SessionUser
-                {
-                    UserId = userEntity.Id,
-                    Email = userEntity.Email ?? string.Empty,
-                    UserName = userEntity.UserName ?? string.Empty,
-                    FirstName = userEntity.FirstName ?? string.Empty,
-                    LastName = userEntity.LastName ?? string.Empty,
-                    IsActive = userEntity.IsActive,
-                    RegisteredDate = userEntity.RegisteredDate,
-                    LastLoginDate = userEntity.LastLoginDate,
-                    LastUpdatedDate = userEntity.LastUpdatedDate,
-                    SubscriptionTier = userEntity.SubscriptionTier,
-                    Roles = (await _userManager.GetRolesAsync(userEntity)).ToList(),
-                };
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+
         #endregion
     }
 }
