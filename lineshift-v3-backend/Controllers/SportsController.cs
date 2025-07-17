@@ -1,4 +1,5 @@
-﻿using lineshift_v3_backend.Models;
+﻿using lineshift_v3_backend.Dtos;
+using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace lineshift_v3_backend.Controllers
 
         #region Resource Routes
         [HttpGet("")]
-        public async Task<ActionResult<ICollection<Sport>>> GetSports()
+        public async Task<ActionResult<ICollection<SportDto>>> GetSports()
         {
             try
             {

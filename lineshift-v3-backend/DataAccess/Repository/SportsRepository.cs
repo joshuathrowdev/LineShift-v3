@@ -31,13 +31,12 @@ namespace lineshift_v3_backend.DataAccess.Repository
         {
             try
             {
-                _logger.LogInformation("Accessing the sport queries from the sport repo layer");
                 var result = await _dbContext.Sports.GetSportsAsync().AsNoTracking().ToListAsync();
                 return result;
             }
             catch (Exception ex) 
             {
-                _logger.LogError(ex, "An occured has occured when accessing the sports queries layer");
+                _logger.LogError(ex, "An error occurred when accessing the sports queries layer");
                 throw; 
             }
         }

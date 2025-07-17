@@ -4,7 +4,7 @@ namespace lineshift_v3_backend.Dtos
 {
     // Login Model for capturing information related to an already
     // existing user 
-    public class LoginModel
+    public class LoginDto
     {
         [Required]
         [EmailAddress]

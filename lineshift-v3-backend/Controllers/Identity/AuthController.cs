@@ -54,7 +54,7 @@ namespace lineshift_v3_backend.Controllers.Identity
         // localhost:port/api/v3/auth/login
         [HttpPost("login")]
         [AllowAnonymous] // Allows unauthenticated access to this endpoint
-        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +70,7 @@ namespace lineshift_v3_backend.Controllers.Identity
 
             try
             {
-                var result = await _authServices.LoginAsync(loginModel);
+                var result = await _authServices.LoginAsync(loginDto);
 
                 if (result.IsSuccess)
                 {

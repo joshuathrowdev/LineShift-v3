@@ -4,7 +4,7 @@ namespace lineshift_v3_backend.Dtos
 {
     // Registration Model for capturing information related to registering a 
     // new user 
-    public class RegisterModel
+    public class RegisterDto
     {
         [Required]
         [EmailAddress]

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using lineshift_v3_backend.DataAccess.Repository.Identity;
 using lineshift_v3_backend.Dtos;
+using lineshift_v3_backend.Dtos.Identity;
 using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Utils;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,7 @@ namespace lineshift_v3_backend.Services.Identity
     public interface IAuthServices
     {
         Task<SessionUser> GetUserByIdAsync(string id);
-        Task<Result<AuthResponse>> LoginAsync(LoginModel loginModel);
+        Task<Result<AuthResponse>> LoginAsync(LoginDto loginDto);
     }
     #endregion
 
@@ -48,9 +49,9 @@ namespace lineshift_v3_backend.Services.Identity
         }
 
 
-        public async Task<Result<AuthResponse>> LoginAsync(LoginModel loginModel)
+        public async Task<Result<AuthResponse>> LoginAsync(LoginDto loginDto)
         {
-            var userEntity = await _authRepository.LoginAsync(loginModel);
+            var userEntity = await _authRepository.LoginAsync(loginDto);
             if (userEntity == null) // email doesnt exist
             {
 
@@ -62,7 +63,7 @@ namespace lineshift_v3_backend.Services.Identity
                 return Result<AuthResponse>.Failure("Inactive or Deleted Account", "INACTIVE_ACCOUNT");
             }
 
-            var isPasswordValid = await _signInManager.CheckPasswordSignInAsync(userEntity, loginModel.Password, lockoutOnFailure: true);
+            var isPasswordValid = await _signInManager.CheckPasswordSignInAsync(userEntity, loginDto.Password, lockoutOnFailure: true);
             if(!isPasswordValid.Succeeded)
             {
                 return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
