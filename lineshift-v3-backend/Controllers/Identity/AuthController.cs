@@ -25,7 +25,7 @@ namespace lineshift_v3_backend.Controllers.Identity
         private readonly IAuthServices _authServices;
         private readonly ILogger<AuthController> _logger;
         // Interface that provides access to application's configuration settings
-        // readonly from appsettings.json, enviroment vars, etc
+        // readonly from appsettings.json, environment vars, etc
         private readonly IConfiguration _configuration;
 
 
@@ -50,10 +50,10 @@ namespace lineshift_v3_backend.Controllers.Identity
 
 
         // Authenticate a user and issue a JWT
-        // (loggin a existing user)
+        // (logging in a existing user)
         // localhost:port/api/v3/auth/login
         [HttpPost("login")]
-        [AllowAnonymous] // Allows unaithenticated acccess to this endpoint
+        [AllowAnonymous] // Allows unauthenticated access to this endpoint
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
@@ -63,7 +63,7 @@ namespace lineshift_v3_backend.Controllers.Identity
                 // ModelState (inherited by ControllerBase) is a dict like object that represents the state of 
                 // model binding and model validation for the current HTTP request
                 // Stores Validation Errors (EX: if a [Required] attribute was missing) and Model Binding Errors
-                // that occured during the process of mapping incoming request data (from body, route, or query string)
+                // that occurred during the process of mapping incoming request data (from body, route, or query string)
                 // in action method parameters 
             }
 

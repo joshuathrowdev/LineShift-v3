@@ -158,7 +158,7 @@ namespace lineshift_v3_backend.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("lineshift_v3_backend.Models.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("lineshift_v3_backend.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -195,7 +195,7 @@ namespace lineshift_v3_backend.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTimeOffset>("LastUpdatedDate")
+                    b.Property<DateTimeOffset?>("LastUpdatedDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -257,10 +257,27 @@ namespace lineshift_v3_backend.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("SportId"));
 
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
                     b.Property<string>("SportName")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("SportId");
 
@@ -281,7 +298,7 @@ namespace lineshift_v3_backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -290,7 +307,7 @@ namespace lineshift_v3_backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -305,7 +322,7 @@ namespace lineshift_v3_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -314,7 +331,7 @@ namespace lineshift_v3_backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("lineshift_v3_backend.Models.Identity.ApplicationUser", null)
+                    b.HasOne("lineshift_v3_backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
