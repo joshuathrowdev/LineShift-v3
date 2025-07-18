@@ -168,6 +168,34 @@ namespace lineshift_v3_backend
             // inspect our api endpoints and build out the UI
             builder.Services.AddSwaggerGen(options =>
             {
+                // SwaggerGen Security Services Schema
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer", // authentication schema
+                    BearerFormat = "JWT", // format of bearer token
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT token in the text input below." +
+                    "Example: 'eyJhbGciOiJIUzI1Ni...' (just the token, no 'Bearer ' prefix)"
+                });
+
+                // Defining which endpoint require "Bearer" schema
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+
                 options.SwaggerDoc("v3", new OpenApiInfo
                 {
                     Version = "3.0",
