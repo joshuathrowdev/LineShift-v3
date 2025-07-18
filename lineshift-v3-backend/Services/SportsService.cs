@@ -1,4 +1,5 @@
-﻿using lineshift_v3_backend.DataAccess.Repository;
+﻿using AutoMapper;
+using lineshift_v3_backend.DataAccess.Repository;
 using lineshift_v3_backend.Dtos;
 using lineshift_v3_backend.Models;
 
@@ -17,12 +18,17 @@ namespace lineshift_v3_backend.Services
         // Layer Vars
         private readonly ISportsRepository _sportsRepository;
         private readonly ILogger<SportsService> _logger;
+        private readonly IMapper _mapper;
 
         // DI constructor for vars
-        public SportsService(ISportsRepository sportsRepository, ILogger<SportsService> logger)
+        public SportsService(
+            ISportsRepository sportsRepository, 
+            ILogger<SportsService> logger,
+            IMapper mapper)
         {
             _sportsRepository = sportsRepository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         #region Methods
@@ -31,7 +37,15 @@ namespace lineshift_v3_backend.Services
             try
             {
                 var result = await _sportsRepository.GetSportsAsync();
-                return MapSportDto(result);
+
+                // Mapping Sport Model
+                List<SportDto> sports = new List<SportDto>();
+                foreach (var sport in result)
+                { 
+                    sports.Add(_mapper.Map<SportDto>(sport));
+                }
+
+                return sports;
             }
             catch (Exception ex)
             {

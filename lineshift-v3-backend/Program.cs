@@ -28,7 +28,7 @@ namespace lineshift_v3_backend
             // --- Services and DbContext ---
 
             // Add services to the container.
-            // Any dependencies or transative dependencies to controller (services and repos)
+            // Any dependencies or transitive dependencies to controller (services and repos)
             builder.Services.AddScoped<ITokenServices, TokenServices>();
             builder.Services.AddScoped<IAuthServices, AuthServices>();
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -42,6 +42,7 @@ namespace lineshift_v3_backend
             builder.Services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<UserProfil>();
+                cfg.AddProfile<SportProfile>();
             });
 
 
