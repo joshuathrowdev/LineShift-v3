@@ -52,7 +52,7 @@ namespace lineshift_v3_backend.Services.Identity
         public async Task<Result<AuthResponse>> LoginAsync(LoginDto loginDto)
         {
             var userEntity = await _authRepository.LoginAsync(loginDto);
-            if (userEntity == null) // email doesnt exist
+            if (userEntity == null) // email doesn't exist
             {
 
                 return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");

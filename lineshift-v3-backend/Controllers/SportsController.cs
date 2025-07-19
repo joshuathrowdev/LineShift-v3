@@ -1,4 +1,4 @@
-﻿using lineshift_v3_backend.Dtos;
+﻿using lineshift_v3_backend.Dtos.Sport;
 using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +36,30 @@ namespace lineshift_v3_backend.Controllers
                 return Ok(sports);
             }
             catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        [HttpPost("")]
+        public async Task<ActionResult> CreateSportAsync([FromBody] CreateSportDto createSportDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _sportsService.CreateSportAsync(createSportDto);
+
+                if (result.ErrorCode == "INVALID_OPERATION")
+                {
+                    return BadRequest(result.Error);
+                }
+
+                return Ok(result.Value);
+
+            }
+            catch(Exception ex)
             {
                 throw;
             }

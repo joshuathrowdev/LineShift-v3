@@ -72,11 +72,7 @@ namespace lineshift_v3_backend.Controllers.Identity
             {
                 var result = await _authServices.LoginAsync(loginDto);
 
-                if (result.IsSuccess)
-                {
-                    return Ok(result.Value);
-                }
-                else
+                if (!result.IsSuccess)
                 {
                     if (result.ErrorCode == "INVALID_CREDENTIALS")
                     {
@@ -102,6 +98,8 @@ namespace lineshift_v3_backend.Controllers.Identity
 
                     return StatusCode(500, "An unexpected server error occurred during login.");
                 }
+
+                return Ok(result.Value);
             } 
             catch (Exception ex)
             {
@@ -116,8 +114,8 @@ namespace lineshift_v3_backend.Controllers.Identity
 
 
 
-        // Fetch detaills of the currently authenticated user
-        // Require a valid JWT in Authirization header
+        // Fetch details of the currently authenticated user
+        // Require a valid JWT in Authorization header
         // EX: If client refreshes but a token is in local storage, grab user info based on that token
         [HttpGet("me")]
         [Authorize]
@@ -152,7 +150,7 @@ namespace lineshift_v3_backend.Controllers.Identity
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occured while attempting to access the Auth services.");
+                _logger.LogError(ex, "An error occurred while attempting to access the Auth services.");
                 throw;
             }
         }

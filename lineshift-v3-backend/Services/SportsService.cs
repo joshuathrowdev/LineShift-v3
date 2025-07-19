@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using lineshift_v3_backend.DataAccess.Repository;
-using lineshift_v3_backend.Dtos;
+using lineshift_v3_backend.Dtos.Sport;
 using lineshift_v3_backend.Models;
+using lineshift_v3_backend.Utils;
 
 namespace lineshift_v3_backend.Services
 {
@@ -11,6 +12,7 @@ namespace lineshift_v3_backend.Services
     public interface ISportsService
     {
         Task<ICollection<SportDto>> GetSportsAsync();
+        Task<Result<Sport>> CreateSportAsync(CreateSportDto createSportDto);
     }
     #endregion
     public class SportsService : ISportsService
@@ -49,29 +51,31 @@ namespace lineshift_v3_backend.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while accessing sport repository");
+                _logger.LogError(ex, "An error occurred while accessing sport repository.");
                 throw;
             }
         }
-        #endregion
 
-        #region Helper Methods
-        private ICollection<SportDto> MapSportDto(ICollection<Sport> sports)
+        public async Task<Result<Sport>> CreateSportAsync(CreateSportDto createSportDto)
         {
-            List<SportDto> mappedSports = new List<SportDto>();
-
-            foreach (var sport in sports)
+            try
             {
-                mappedSports.Add(new SportDto
-                {
-                    SportId = sport.SportId,
-                    SportName = sport.SportName,
-                    Description = sport.Description,
-                    Type = sport.Type
-                });
-            }
+                var sport = _mapper.Map<Sport>(createSportDto);
+                var recordsAffected = await _sportsRepository.CreateSportAsync(sport);
 
-            return mappedSports;
+                if (recordsAffected < 1)
+                {
+                    return Result<Sport>.Failure("INVALID_OPERATION");
+                }
+
+                return Result<Sport>.Success(sport);
+
+
+            } catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while trying to access the sport repository.");
+                throw;
+            }
         }
         #endregion
 
@@ -80,6 +84,11 @@ namespace lineshift_v3_backend.Services
         Task<ICollection<SportDto>> ISportsService.GetSportsAsync()
         {
             return GetSportsAsync();
+        }
+
+        Task<Result<Sport>> ISportsService.CreateSportAsync(CreateSportDto createSportDto)
+        {
+            return CreateSportAsync(createSportDto);
         }
         #endregion
     }

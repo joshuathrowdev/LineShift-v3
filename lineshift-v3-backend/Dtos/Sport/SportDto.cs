@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace lineshift_v3_backend.Dtos
+namespace lineshift_v3_backend.Dtos.Sport
 {
     public class SportDto
     {

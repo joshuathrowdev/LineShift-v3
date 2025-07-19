@@ -1,4 +1,5 @@
 ﻿using lineshift_v3_backend.DataAccess.Queries;
+using lineshift_v3_backend.Dtos.Sport;
 using lineshift_v3_backend.Infrastructure;
 using lineshift_v3_backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace lineshift_v3_backend.DataAccess.Repository
     public interface ISportsRepository
     {
         Task<ICollection<Sport>> GetSportsAsync();
+        Task<int> CreateSportAsync(Sport sport);
     }
     #endregion
     public class SportsRepository : ISportsRepository
@@ -40,6 +42,14 @@ namespace lineshift_v3_backend.DataAccess.Repository
                 throw; 
             }
         }
+
+        public async Task<int> CreateSportAsync(Sport sport)
+        {
+            await _dbContext.Sports.AddAsync(sport);
+            var recordSaved = await _dbContext.SaveChangesAsync();
+
+            return recordSaved;
+        }
         #endregion
 
 
@@ -47,6 +57,11 @@ namespace lineshift_v3_backend.DataAccess.Repository
         Task<ICollection<Sport>> ISportsRepository.GetSportsAsync()
         {
             return GetSportsAsync();
+        }
+
+        Task<int> ISportsRepository.CreateSportAsync(Sport sport)
+        {
+            return CreateSportAsync(sport);
         }
         #endregion
     }

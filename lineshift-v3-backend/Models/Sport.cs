@@ -19,10 +19,8 @@ namespace lineshift_v3_backend.Models
         [StringLength(20)]
         public string? Type { get; set; }
 
-        [Required]
         public DateTimeOffset? CreatedAt { get; set; }
 
-        [Required]
         public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

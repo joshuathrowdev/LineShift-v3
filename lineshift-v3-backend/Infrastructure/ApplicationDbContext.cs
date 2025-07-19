@@ -34,6 +34,9 @@ namespace lineshift_v3_backend.Infrastructure
             {
                 // Explicitly defining the PK for the Sport Entity
                 entity.HasKey(e => e.SportId);
+                entity.Property(e => e.SportId)
+                    .IsRequired()
+                    .ValueGeneratedOnAdd();
 
                 // Configure other properties (validation, constraints, Indexes)
                 entity.Property(entity => entity.SportName)
