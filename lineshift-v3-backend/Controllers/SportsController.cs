@@ -56,6 +56,18 @@ namespace lineshift_v3_backend.Controllers
                     return BadRequest(result.Error);
                 }
 
+                if (result.ErrorCode == "DATABASE_CONSTRAINT_VIOLATION")
+                {
+                    return Conflict(result.Error);
+                }
+
+                if (result.ErrorCode == "REQUEST_CANCELLED")
+                {
+                    return StatusCode(408, result.Error);
+                }
+
+                if (result.ErrorCode == "SERVER_ERROR") return StatusCode(500, result.Error);
+
                 return Ok(result.Value);
 
             }

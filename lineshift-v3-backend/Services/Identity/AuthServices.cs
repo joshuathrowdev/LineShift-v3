@@ -54,7 +54,6 @@ namespace lineshift_v3_backend.Services.Identity
             var userEntity = await _authRepository.LoginAsync(loginDto);
             if (userEntity == null) // email doesn't exist
             {
-
                 return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
             }
 
