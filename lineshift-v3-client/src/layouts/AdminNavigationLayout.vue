@@ -7,6 +7,7 @@
     <template #prepend>
       <v-app-bar-nav-icon
         :icon="navMenuIcon"
+        variant="text"
         @click="navMenu = !navMenu"
       />
     </template>
@@ -15,6 +16,8 @@
       Welcome <span class="font-italic">{{ sessionUser.userName }}</span>
     </v-app-bar-title>
   </v-app-bar>
+
+  <admin-nav-links v-model="navMenu" />
 </template>
 
 <script setup>
@@ -24,6 +27,6 @@ const {sessionUser} = storeToRefs(useAuthStore())
 
 const navMenu = ref(false)
 const navMenuIcon = computed(() => {
-  return navMenu.value === false ? 'mdi-menu-open' : 'mdi-menu-close'
+  return navMenu.value === false ? 'mdi-menu-right-outline' : 'mdi-menu-left-outline'
 })
 </script>
