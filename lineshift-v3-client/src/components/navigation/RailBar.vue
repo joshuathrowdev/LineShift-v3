@@ -26,11 +26,12 @@
       <nav-links />
     </v-list>
 
-    <div>
+    <div v-if="isAdmin">
       <v-divider color="primary" />
       <v-list-item
         class="py-5"
         rounded
+        :to="{name: '/admin/hub'}"
       >
         <template #prepend>
           <v-icon
@@ -59,7 +60,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
 
-const { isAuthenticated } = storeToRefs(useAuthStore())
+const { isAuthenticated, sessionUser, isAdmin } = storeToRefs(useAuthStore())
 
 const rail = ref(true)
 

@@ -24,6 +24,8 @@ export const useAuthStore = defineStore('auth', () => {
   // Getters (computed functions)
   const isAuthenticated = computed(() => !!token.value && !!sessionUser.value);
 
+  const isAdmin = computed(() => sessionUser.value.roles.find(role => role == 'Admin'));
+
   const avatarContent = computed(() => {
     if (!isAuthenticated.value) {
       return '';
@@ -90,7 +92,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (caughtError.response) {
         error.value.message = caughtError.response.data.message;
         error.value.code = caughtError.response.status;
-        console.log(error.value)
+        console.log(error.value);
       }
     }
     finally {
@@ -139,6 +141,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // Getters
     isAuthenticated,
+    isAdmin,
     avatarContent,
     formattedRegisteredDate,
 
