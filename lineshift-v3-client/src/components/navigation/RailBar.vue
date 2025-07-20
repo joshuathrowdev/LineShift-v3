@@ -26,6 +26,27 @@
       <nav-links />
     </v-list>
 
+    <div>
+      <v-divider color="primary" />
+      <v-list-item
+        class="py-5"
+        rounded
+      >
+        <template #prepend>
+          <v-icon
+            icon="mdi-shield-account-variant-outline"
+            color="secondary"
+            size="35"
+          />
+        </template>
+        <v-list-item-title
+          class="font-weight-bold text-h6"
+        >
+          Admin Panel
+        </v-list-item-title>
+      </v-list-item>
+    </div>
+
     <template #append>
       <v-list-item>
         Logo
