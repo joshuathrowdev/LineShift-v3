@@ -2,7 +2,7 @@ import axiosInstance from './instance/api';
 import { sportsEndpoint } from './instance/endpoints';
 
 
-const sportsService = {
+const sportsApi = {
 
   async getAllSports() {
     try {
@@ -15,4 +15,4 @@ const sportsService = {
   }
 };
 
-export default sportsService;
+export default sportsApi;

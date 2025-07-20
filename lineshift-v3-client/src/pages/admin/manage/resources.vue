@@ -16,7 +16,7 @@
     <v-row class="d-flex flex-row justify-space-around">
       <v-col cols="4">
         <v-card
-          :to="{name: '/admin/manage/resources.[ResourceName]', params: {'ResourceName': 'sports'}}"
+          :to="{name: '/admin/manage/resources.[Keyword]', params: {'Keyword': 'sports'}}"
         >
           <v-card-title>Sports</v-card-title>
         </v-card>

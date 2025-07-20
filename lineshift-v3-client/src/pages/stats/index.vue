@@ -19,9 +19,11 @@
 </template>
 
 <script setup>
-  import { useSports } from '@/composables/useSports';
+  import { useSportsStore } from '@/stores/sports.store';
 
-  const {sports, getAllSports} = useSports()
+  const sportsStore = useSportsStore()
+  const {sports} = storeToRefs(sportsStore)
+  const {getAllSports} = sportsStore
 
   onMounted(async () => {
     await getAllSports()
