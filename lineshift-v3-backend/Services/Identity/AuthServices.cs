@@ -103,6 +103,7 @@ namespace lineshift_v3_backend.Services.Identity
             } catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error attempting to access the user repository.");
+                throw;
             }
         }
 
