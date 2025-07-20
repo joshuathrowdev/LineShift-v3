@@ -5,6 +5,7 @@
       <admin-nav-link
         text="Resources"
         icon="mdi-chart-bubble"
+        :to="{name: '/admin/manage/resources'}"
       />
 
       <admin-nav-link 
@@ -30,6 +31,12 @@
       />
 
       <v-divider color="primary" />
+      <admin-nav-link 
+        text="Back To Hub"
+        icon="mdi-hubspot"
+        :to="{name: '/admin/hub'}"
+      />
+
       <admin-nav-link 
         text="Back To Lineshift"
         icon="mdi-arrow-left-circle"

@@ -1,7 +1,7 @@
 <template>
   <v-card
     variant="flat"
-    color="secondary"
+    color="secondary-lighten-1"
   >
     <v-card-title>{{ title }}</v-card-title>
   </v-card>
