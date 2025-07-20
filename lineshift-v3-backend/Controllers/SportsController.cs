@@ -1,4 +1,5 @@
-﻿using lineshift_v3_backend.Models;
+﻿using lineshift_v3_backend.Dtos.Sport;
+using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace lineshift_v3_backend.Controllers
 
         #region Resource Routes
         [HttpGet("")]
-        public async Task<ActionResult<ICollection<Sport>>> GetSports()
+        public async Task<ActionResult<ICollection<SportDto>>> GetSports()
         {
             try
             {
@@ -35,6 +36,42 @@ namespace lineshift_v3_backend.Controllers
                 return Ok(sports);
             }
             catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        [HttpPost("")]
+        public async Task<ActionResult> CreateSportAsync([FromBody] CreateSportDto createSportDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _sportsService.CreateSportAsync(createSportDto);
+
+                if (result.ErrorCode == "INVALID_OPERATION")
+                {
+                    return BadRequest(result.Error);
+                }
+
+                if (result.ErrorCode == "DATABASE_CONSTRAINT_VIOLATION")
+                {
+                    return Conflict(result.Error);
+                }
+
+                if (result.ErrorCode == "REQUEST_CANCELLED")
+                {
+                    return StatusCode(408, result.Error);
+                }
+
+                if (result.ErrorCode == "SERVER_ERROR") return StatusCode(500, result.Error);
+
+                return Ok(result.Value);
+
+            }
+            catch(Exception ex)
             {
                 throw;
             }

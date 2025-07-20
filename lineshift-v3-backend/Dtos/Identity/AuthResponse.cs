@@ -1,4 +1,4 @@
-﻿namespace lineshift_v3_backend.Dtos
+﻿namespace lineshift_v3_backend.Dtos.Identity
 {
     // Model for sending ApplicationUser and JWT meta data
     // For successful login/registration response

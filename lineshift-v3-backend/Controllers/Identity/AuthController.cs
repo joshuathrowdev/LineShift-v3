@@ -25,7 +25,7 @@ namespace lineshift_v3_backend.Controllers.Identity
         private readonly IAuthServices _authServices;
         private readonly ILogger<AuthController> _logger;
         // Interface that provides access to application's configuration settings
-        // readonly from appsettings.json, enviroment vars, etc
+        // readonly from appsettings.json, environment vars, etc
         private readonly IConfiguration _configuration;
 
 
@@ -50,11 +50,11 @@ namespace lineshift_v3_backend.Controllers.Identity
 
 
         // Authenticate a user and issue a JWT
-        // (loggin a existing user)
+        // (logging in a existing user)
         // localhost:port/api/v3/auth/login
         [HttpPost("login")]
-        [AllowAnonymous] // Allows unaithenticated acccess to this endpoint
-        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        [AllowAnonymous] // Allows unauthenticated access to this endpoint
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             {
@@ -63,20 +63,16 @@ namespace lineshift_v3_backend.Controllers.Identity
                 // ModelState (inherited by ControllerBase) is a dict like object that represents the state of 
                 // model binding and model validation for the current HTTP request
                 // Stores Validation Errors (EX: if a [Required] attribute was missing) and Model Binding Errors
-                // that occured during the process of mapping incoming request data (from body, route, or query string)
+                // that occurred during the process of mapping incoming request data (from body, route, or query string)
                 // in action method parameters 
             }
 
 
             try
             {
-                var result = await _authServices.LoginAsync(loginModel);
+                var result = await _authServices.LoginAsync(loginDto);
 
-                if (result.IsSuccess)
-                {
-                    return Ok(result.Value);
-                }
-                else
+                if (!result.IsSuccess)
                 {
                     if (result.ErrorCode == "INVALID_CREDENTIALS")
                     {
@@ -102,10 +98,12 @@ namespace lineshift_v3_backend.Controllers.Identity
 
                     return StatusCode(500, "An unexpected server error occurred during login.");
                 }
+
+                return Ok(result.Value);
             } 
             catch (Exception ex)
             {
-                _logger.LogWarning(exception: ex, message: "An error occured while accessing the auth services.");
+                _logger.LogWarning(exception: ex, message: "An error occurred while accessing the auth services.");
                 throw;
             }
         }
@@ -116,8 +114,8 @@ namespace lineshift_v3_backend.Controllers.Identity
 
 
 
-        // Fetch detaills of the currently authenticated user
-        // Require a valid JWT in Authirization header
+        // Fetch details of the currently authenticated user
+        // Require a valid JWT in Authorization header
         // EX: If client refreshes but a token is in local storage, grab user info based on that token
         [HttpGet("me")]
         [Authorize]
@@ -152,7 +150,7 @@ namespace lineshift_v3_backend.Controllers.Identity
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occured while attempting to access the Auth services.");
+                _logger.LogError(ex, "An error occurred while attempting to access the Auth services.");
                 throw;
             }
         }

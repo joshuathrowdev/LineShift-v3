@@ -11,7 +11,7 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
     #region Auth Repository Interface
     public interface IAuthRepository
     {
-        Task<ApplicationUser?> LoginAsync(LoginModel loginModel);
+        Task<ApplicationUser?> LoginAsync(LoginDto loginDto);
         Task<ApplicationUser> GetUserByIdAsync(string id);
     }
     #endregion
@@ -38,14 +38,14 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
 
 
         #region Repository Methods
-        public async Task<ApplicationUser?> LoginAsync(LoginModel loginModel)
+        public async Task<ApplicationUser?> LoginAsync(LoginDto loginDto)
         {
             try
             {
-                var applicationUser = await _userManager.FindByEmailAsync(loginModel.Email);
+                var applicationUser = await _userManager.FindByEmailAsync(loginDto.Email);
                 if (applicationUser == null)
                 {
-                    _logger.LogWarning($"Application user '{loginModel.Email}' cout not be found due to invalid email crendentials");
+                    _logger.LogWarning($"Application user '{loginDto.Email}' cout not be found due to invalid email crendentials");
                     return applicationUser; // this would be null
                 }
 
@@ -53,7 +53,7 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
             }
             catch (Exception ex)
             {
-                _logger.LogError($"There was an exception while attempting to find '{loginModel.Email}: {ex}.'");
+                _logger.LogError($"There was an exception while attempting to find '{loginDto.Email}: {ex}.'");
                 throw;
             }
         }
@@ -80,9 +80,9 @@ namespace lineshift_v3_backend.DataAccess.Repository.Identity
 
 
         #region Interface Implementation
-        Task<ApplicationUser?> IAuthRepository.LoginAsync(LoginModel loginModel)
+        Task<ApplicationUser?> IAuthRepository.LoginAsync(LoginDto loginDto)
         {
-            return LoginAsync(loginModel);
+            return LoginAsync(loginDto);
         }
         Task<ApplicationUser> IAuthRepository.GetUserByIdAsync(string id)
         {

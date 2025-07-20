@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace lineshift_v3_backend.Models
+namespace lineshift_v3_backend.Dtos.Sport
 {
-    public class Sport
+    public class SportDto
     {
         [Key]
         public int? SportId { get; set; }
@@ -18,9 +17,5 @@ namespace lineshift_v3_backend.Models
         [Required]
         [StringLength(20)]
         public string? Type { get; set; }
-
-        public DateTimeOffset? CreatedAt { get; set; }
-
-        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

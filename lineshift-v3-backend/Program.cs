@@ -28,7 +28,7 @@ namespace lineshift_v3_backend
             // --- Services and DbContext ---
 
             // Add services to the container.
-            // Any dependencies or transative dependencies to controller (services and repos)
+            // Any dependencies or transitive dependencies to controller (services and repos)
             builder.Services.AddScoped<ITokenServices, TokenServices>();
             builder.Services.AddScoped<IAuthServices, AuthServices>();
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -42,6 +42,7 @@ namespace lineshift_v3_backend
             builder.Services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<UserProfil>();
+                cfg.AddProfile<SportProfile>();
             });
 
 
@@ -90,15 +91,15 @@ namespace lineshift_v3_backend
 
 
 
-            // --- Authentication and Authorization with Identity EFCore Framwork ---
+            // --- Authentication and Authorization with Identity EFCore Framework ---
 
             // Identity (through Identity.EFCore for authentication and authorization) Services 
             // Registers the two default services: UserManager and SignInManager and cast them
             // to the ApplicationUser Model
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
-                // Email Verification for traffic/account regitering integrity and controll
-                // If this was a prod level applcation, we would NEED some way to verify users and that would
+                // Email Verification for traffic/account registering integrity and control
+                // If this was a prod level application, we would NEED some way to verify users and that would
                 // go here
                 // The value would need to be set to: true
                 options.SignIn.RequireConfirmedEmail = false;
@@ -121,7 +122,7 @@ namespace lineshift_v3_backend
             {
                 // Sets the default scheme to use when authenticating request (EX: checking if a user is logged in)
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                // Sets the default cheme to use when an unauthorized request is made 
+                // Sets the default scheme to use when an unauthorized request is made 
                 // (EX: to redirect to a login page or return a 401 Unauthorized)
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
@@ -168,6 +169,34 @@ namespace lineshift_v3_backend
             // inspect our api endpoints and build out the UI
             builder.Services.AddSwaggerGen(options =>
             {
+                // SwaggerGen Security Services Schema
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer", // authentication schema
+                    BearerFormat = "JWT", // format of bearer token
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT token in the text input below." +
+                    "Example: 'eyJhbGciOiJIUzI1Ni...' (just the token, no 'Bearer ' prefix)"
+                });
+
+                // Defining which endpoint require "Bearer" schema
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+
                 options.SwaggerDoc("v3", new OpenApiInfo
                 {
                     Version = "3.0",
@@ -200,15 +229,15 @@ namespace lineshift_v3_backend
             }
 
 
-            // Automatically Applying Migrations on applcation start up (In Dev Env)
+            // Automatically Applying Migrations on application start up (In Dev Env)
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 dbContext.Database.Migrate();
-                // everytime the application is ran locally (through VSCode) or deployed to a server (on application startup)
-                // we will create a new scipe of the app services and pull the DbContext related to our connection 
-                // then, the .Database.Migrate() will automatically compare out migrations folder to the databases histoty of migration
-                // and applly the local migration folder changes in order (if any)
+                // every time the application is ran locally (through VSCode) or deployed to a server (on application startup)
+                // we will create a new scope of the app services and pull the DbContext related to our connection 
+                // then, the .Database.Migrate() will automatically compare out migrations folder to the databases history of migration
+                // and apply the local migration folder changes in order (if any)
                 // then the scope is resolved and the app is ran normally
 
                 // IMPORTANT MIGRATION REMINDER:
@@ -230,7 +259,7 @@ namespace lineshift_v3_backend
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication(); // handles authentication the user based on credentiasl
+            app.UseAuthentication(); // handles authentication the user based on credentials
                                      // like cookies, JWT Tokens, API Keys, etc
                                      // Establishes the ClaimsPrinciple for the current request
                                      // Must be called to actually perform the JWT Auth checked described above

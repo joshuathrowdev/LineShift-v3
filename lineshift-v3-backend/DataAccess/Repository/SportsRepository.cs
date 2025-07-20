@@ -1,4 +1,5 @@
 ﻿using lineshift_v3_backend.DataAccess.Queries;
+using lineshift_v3_backend.Dtos.Sport;
 using lineshift_v3_backend.Infrastructure;
 using lineshift_v3_backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace lineshift_v3_backend.DataAccess.Repository
     public interface ISportsRepository
     {
         Task<ICollection<Sport>> GetSportsAsync();
+        Task<int> CreateSportAsync(Sport sport);
     }
     #endregion
     public class SportsRepository : ISportsRepository
@@ -31,15 +33,22 @@ namespace lineshift_v3_backend.DataAccess.Repository
         {
             try
             {
-                _logger.LogInformation("Accessing the sport queries from the sport repo layer");
                 var result = await _dbContext.Sports.GetSportsAsync().AsNoTracking().ToListAsync();
                 return result;
             }
             catch (Exception ex) 
             {
-                _logger.LogError(ex, "An occured has occured when accessing the sports queries layer");
+                _logger.LogError(ex, "An error occurred when accessing the sports queries layer");
                 throw; 
             }
+        }
+
+        public async Task<int> CreateSportAsync(Sport sport)
+        {
+            await _dbContext.Sports.AddAsync(sport);
+            var recordSaved = await _dbContext.SaveChangesAsync();
+
+            return recordSaved;
         }
         #endregion
 
@@ -48,6 +57,11 @@ namespace lineshift_v3_backend.DataAccess.Repository
         Task<ICollection<Sport>> ISportsRepository.GetSportsAsync()
         {
             return GetSportsAsync();
+        }
+
+        Task<int> ISportsRepository.CreateSportAsync(Sport sport)
+        {
+            return CreateSportAsync(sport);
         }
         #endregion
     }

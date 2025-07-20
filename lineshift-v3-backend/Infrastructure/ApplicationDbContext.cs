@@ -27,21 +27,34 @@ namespace lineshift_v3_backend.Infrastructure
         // what can be expressed with data annotations on the entity classes.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // Call the base implementatioon
+            base.OnModelCreating(modelBuilder); // Call the base implementation
 
             // Configure each Model more specifically if you need to
             modelBuilder.Entity<Sport>(entity =>
             {
                 // Explicitly defining the PK for the Sport Entity
                 entity.HasKey(e => e.SportId);
+                entity.Property(e => e.SportId)
+                    .IsRequired()
+                    .ValueGeneratedOnAdd();
 
-                // Configute other properties (validation, contraints, Indexes)
+                // Configure other properties (validation, constraints, Indexes)
                 entity.Property(entity => entity.SportName)
                     .IsRequired()
-                    .HasMaxLength(255);
+                    .HasMaxLength(50);
 
-                    // Index Contraint
-                entity.HasIndex(entity => new {entity.SportName}).IsUnique();
+                entity.HasIndex(entity => new {entity.SportName})
+                    .IsUnique();
+
+                entity.Property(entity => entity.Description)
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.CreatedAt).IsRequired();
+                entity.Property(e => e.UpdatedAt).IsRequired();
 
                 
 
@@ -52,7 +65,7 @@ namespace lineshift_v3_backend.Infrastructure
 
 
             // Identity.EFCore Tables (For user management and authentication)
-            // Renaming the default tables for claririty
+            // Renaming the default tables for clarity
             modelBuilder.Entity<ApplicationUser>().ToTable("Users");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles");
             // claims specifically associated with the users
@@ -65,8 +78,6 @@ namespace lineshift_v3_backend.Infrastructure
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
             // claims specifically associated with roles (any user with that role gets these claims)
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
-
-
         }
     }
 }
