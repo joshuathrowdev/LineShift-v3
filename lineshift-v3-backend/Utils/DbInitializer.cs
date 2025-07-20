@@ -22,7 +22,7 @@ namespace lineshift_v3_backend.Utils
         /// Designed to be idempotent
         /// </summary>
         /// <param name="serviceProvider">The application's service provider</param>
-        /// <param name="logger">Logger instance for loggin messages and errors during seeding</param>
+        /// <param name="logger">Logger instance for logging messages and errors during seeding</param>
         public static async Task Initialize(
             IServiceProvider serviceProvider, ILogger<DbInitializerLoggerCategory> logger
         )
@@ -173,12 +173,12 @@ namespace lineshift_v3_backend.Utils
                 #endregion
 
                 // End of seeding
-                logger.LogInformation("Database initialization comeplete.");
+                logger.LogInformation("Database initialization complete.");
             }
             catch (Exception ex)
             {
-                // Loggin unhandled exceptions during seeding process
-                logger.LogError(ex, "An error occured while seeding databae.");
+                // Log unhandled exceptions during seeding process
+                logger.LogError(ex, "An error occurred while seeding database.");
             }
         }
 
@@ -217,7 +217,7 @@ namespace lineshift_v3_backend.Utils
                 {
                     logger.LogInformation($"User '{email}' created successfully.");
 
-                    // Asign the user to the specific role (if it exist)
+                    // Assign the user to the specific role (if it exist)
                     if (await roleManager.RoleExistsAsync(roleName))
                     {
                         await userManager.AddToRoleAsync(user, roleName);
@@ -246,7 +246,7 @@ namespace lineshift_v3_backend.Utils
                 }
                 else
                 {
-                    // Log erros if user creation failed
+                    // Log errors if user creation failed
                     logger.LogError($"Failed to create user '{email}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
                 }
             }

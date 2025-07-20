@@ -51,52 +51,59 @@ namespace lineshift_v3_backend.Services.Identity
 
         public async Task<Result<AuthResponse>> LoginAsync(LoginDto loginDto)
         {
-            var userEntity = await _authRepository.LoginAsync(loginDto);
-            if (userEntity == null) // email doesn't exist
+            try
             {
-                return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
+                var userEntity = await _authRepository.LoginAsync(loginDto);
+                if (userEntity == null) // email doesn't exist
+                {
+                    return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
+                }
+
+                if (!userEntity.IsActive || userEntity.IsDeleted)
+                {
+                    return Result<AuthResponse>.Failure("Inactive or Deleted Account", "INACTIVE_ACCOUNT");
+                }
+
+                var isPasswordValid = await _signInManager.CheckPasswordSignInAsync(userEntity, loginDto.Password, lockoutOnFailure: true);
+                if (!isPasswordValid.Succeeded)
+                {
+                    return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
+                }
+
+                if (isPasswordValid.IsLockedOut)
+                {
+                    return Result<AuthResponse>.Failure("Locked Out Account", "LOCKEDOUT_ACCOUNT");
+                }
+
+                if (isPasswordValid.IsNotAllowed)
+                {
+                    return Result<AuthResponse>.Failure("Not Allowed to Sign IN", "NOT_ALLOWED_ACCOUNT");
+                }
+
+                // Update Last Login Dater
+                userEntity.LastLoginDate = DateTimeOffset.UtcNow;
+                await _userManager.UpdateAsync(userEntity);
+
+                // Generate JWT Token
+                var jwt_token = await _tokenServices.GenerateJwtToken(userEntity);
+
+                // Making Session User
+                var sessionUser = _mapper.Map<SessionUser>(userEntity);
+                sessionUser.Roles = (await _userManager.GetRolesAsync(userEntity)).ToList();
+
+
+                var authResponse = new AuthResponse
+                {
+                    Token = jwt_token,
+                    SessionUser = sessionUser
+                };
+
+                return Result<AuthResponse>.Success(authResponse);
+            
+            } catch (Exception ex)
+            {
+                _logger.LogError(ex, "There was an error attempting to access the user repository.");
             }
-
-            if (!userEntity.IsActive || userEntity.IsDeleted)
-            {
-                return Result<AuthResponse>.Failure("Inactive or Deleted Account", "INACTIVE_ACCOUNT");
-            }
-
-            var isPasswordValid = await _signInManager.CheckPasswordSignInAsync(userEntity, loginDto.Password, lockoutOnFailure: true);
-            if(!isPasswordValid.Succeeded)
-            {
-                return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
-            }
-
-            if (isPasswordValid.IsLockedOut)
-            {
-                return Result<AuthResponse>.Failure("Locked Out Account", "LOCKEDOUT_ACCOUNT");
-            }
-
-            if (isPasswordValid.IsNotAllowed)
-            {
-                return Result<AuthResponse>.Failure("Not Allowed to Sign IN", "NOT_ALLOWED_ACCOUNT");
-            }
-
-            // Update Last Login Dater
-            userEntity.LastLoginDate = DateTimeOffset.UtcNow;
-            await _userManager.UpdateAsync(userEntity);
-
-            // Generate JWT Token
-            var jwt_token = await _tokenServices.GenerateJwtToken(userEntity);
-
-            // Making Session User
-            var sessionUser = _mapper.Map<SessionUser>(userEntity);
-            sessionUser.Roles = (await _userManager.GetRolesAsync(userEntity)).ToList();
-
-
-            var authResponse = new AuthResponse
-            {
-                Token = jwt_token,
-                SessionUser =  sessionUser
-            };
-
-            return Result<AuthResponse>.Success(authResponse);
         }
 
         public async Task<SessionUser> GetUserByIdAsync(string id)
@@ -108,7 +115,7 @@ namespace lineshift_v3_backend.Services.Identity
                 if (userEntity == null)
                 {
                     // This indicated a discrepancy where a valid token was issued but the user was not
-                    // found from this token (mayhe the token was issues and the user got deleted)
+                    // found from this token (maybe the token was issues and the user got deleted)
                     return null;
                 }
 
@@ -126,7 +133,7 @@ namespace lineshift_v3_backend.Services.Identity
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Thee was an error while attempting to access the user repository.");
+                _logger.LogError(ex, "There was an error while attempting to access the user repository.");
                 throw;
             }
         }

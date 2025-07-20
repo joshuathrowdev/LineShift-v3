@@ -103,7 +103,7 @@ namespace lineshift_v3_backend.Controllers.Identity
             } 
             catch (Exception ex)
             {
-                _logger.LogWarning(exception: ex, message: "An error occured while accessing the auth services.");
+                _logger.LogWarning(exception: ex, message: "An error occurred while accessing the auth services.");
                 throw;
             }
         }
