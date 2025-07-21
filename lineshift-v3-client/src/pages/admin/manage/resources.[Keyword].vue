@@ -71,6 +71,7 @@
                 <component
                   :is="resourceForm"
                   :key="keyword"
+                  :keyword="singularNounResourceKeyword"
                 />
               </v-card-text>
             </v-card>
