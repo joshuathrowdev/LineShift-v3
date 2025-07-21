@@ -15,6 +15,7 @@ declare module 'vue' {
     AdminNavLinkBanner: typeof import('./src/components/navigation/admin/AdminNavLinkBanner.vue')['default']
     AdminNavLinks: typeof import('./src/components/navigation/admin/AdminNavLinks.vue')['default']
     AnnouncementBanner: typeof import('./src/components/home/AnnouncementBanner.vue')['default']
+    LeagueForm: typeof import('./src/components/admin/forms/LeagueForm.vue')['default']
     LoginForm: typeof import('./src/components/authentication/LoginForm.vue')['default']
     NavLinkItem: typeof import('./src/components/navigation/NavLinkItem.vue')['default']
     NavLinks: typeof import('./src/components/navigation/NavLinks.vue')['default']
@@ -24,5 +25,6 @@ declare module 'vue' {
     ResourceTable: typeof import('./src/components/admin/ResourceTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SportForm: typeof import('./src/components/admin/forms/SportForm.vue')['default']
   }
 }

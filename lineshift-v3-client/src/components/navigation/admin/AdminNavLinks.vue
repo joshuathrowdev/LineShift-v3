@@ -1,6 +1,14 @@
 <template>
-  <v-navigation-drawer>
+  <v-navigation-drawer
+    floating
+  >
     <v-list>
+      <admin-nav-link 
+        text="Hub"
+        icon="mdi-hubspot"
+        :to="{name: '/admin/hub'}"
+      />
+      
       <admin-nav-link-banner title="Manage" />
       <admin-nav-link
         text="Resources"
@@ -30,11 +38,9 @@
         :text="role"
       />
 
-      <v-divider color="primary" />
-      <admin-nav-link 
-        text="Back To Hub"
-        icon="mdi-hubspot"
-        :to="{name: '/admin/hub'}"
+      <v-divider
+        color="primary"
+        :thickness="6"
       />
 
       <admin-nav-link 

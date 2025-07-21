@@ -47,13 +47,35 @@
 
     <v-row>
       <v-col>
-        <div class="d-flex flex-row justify-end">
-          <v-btn
-            color="primary-darken-1"
-          >
-            Create A New {{ singularNounResourceKeyword }}
-          </v-btn>
-        </div>
+        <v-dialog>
+          <template #activator="{props}">
+            <div class="d-flex flex-row justify-end">
+              <v-btn
+                color="primary-darken-1"
+                v-bind="props"
+              >
+                Create A New {{ singularNounResourceKeyword }}
+              </v-btn>
+            </div>
+          </template>
+
+          <template #default="{isActive}">
+            <v-card
+              class="pa-3 text-center"
+              rounded
+            >
+              <v-card-title class="text-h5">
+                Create {{ singularNounResourceKeyword }} Form
+              </v-card-title>
+              <v-card-text>
+                <component
+                  :is="resourceForm"
+                  :key="keyword"
+                />
+              </v-card-text>
+            </v-card>
+          </template>
+        </v-dialog>
       </v-col>
     </v-row>
   </v-container>
@@ -62,6 +84,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { useResourceStore } from '@/stores/resources.store';
+import { ref, markRaw } from 'vue';
 
 
 const route = useRoute()
@@ -71,16 +94,25 @@ const resourceStore = useResourceStore()
 const {resourceItems, resourceKeyword, formattedResourceKeyword } = storeToRefs(resourceStore)
 const {getResourceByKeyword} = resourceStore
 
-const singularNounResourceKeyword = computed(() => resourceKeyword.value.slice(0, resourceKeyword.value.length - 1))
+const singularNounResourceKeyword = computed(() =>resourceKeyword.value.charAt(0).toUpperCase() + resourceKeyword.value.slice(1, resourceKeyword.value.length - 1))
 
-console.log(resourceItems.value)
 
 const tableSearch = ref('')
+
+import SportForm from '@/components/admin/forms/SportForm.vue';
+import LeagueForm from '@/components/admin/forms/LeagueForm.vue';
+
+const formComponentMap = markRaw({
+  'sports' : SportForm,
+  'leagues' : LeagueForm
+})
+
+const resourceForm = computed(() => formComponentMap[resourceKeyword.value])
+
 
 onMounted(async () => {
   resourceKeyword.value = keyword
   await getResourceByKeyword(keyword)
-  console.log(resourceItems.value)
 })
 </script>
 

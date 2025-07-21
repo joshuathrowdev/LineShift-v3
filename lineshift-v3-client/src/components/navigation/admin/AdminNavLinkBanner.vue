@@ -2,6 +2,7 @@
   <v-card
     variant="flat"
     color="secondary-lighten-1"
+    class="my-3"
   >
     <v-card-title>{{ title }}</v-card-title>
   </v-card>
