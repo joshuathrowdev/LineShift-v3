@@ -1,7 +1,7 @@
 <template>
   <v-form
     v-model="sportForm"
-    @submit.prevent="handleSportFormSubmit"
+    @submit.prevent
   > 
     <v-container>
       <v-row>
@@ -11,8 +11,7 @@
             label="Sport Name"
             variant="solo"
             :rules="sportNameRules"
-            color="primary-accent"
-            bg-color="primary-darken-1"
+            color="secondary-accent"
             clearable
             glow
             type="text"
@@ -27,7 +26,7 @@
             :items="sportTypes"
             variant="outlined"
             :rules="typeRules"
-            color="altOne-lighten-1"
+            color="altTwo"
             clearable
             required
           />
@@ -43,7 +42,7 @@
             clearable
             :rules="descriptionRules"
             type="text"
-            color="altOne-lighten-1"
+            color="altTwo"
             required
           />
         </v-col>
@@ -55,55 +54,62 @@
 
       <v-row>
         <v-col>
-          <v-dialog>
-            <template #activator="{props}">
-              <v-btn
-                v-bind="props"
-                class="w-100"
-                color="secondary-darken-1"
-                :disabled="!isSportFormValid"
-              >
-                <template #prepend>
-                  <v-icon
-                    icon="mdi-database-plus-outline"
-                    color="secondary-accent"
-                  />
-                </template>
-                Create
-              </v-btn>
-            </template> 
+          <div class="d-flex flex-row justify-space-around">
+            <slot name="resourceFormModalCloseBtn" />
 
-            <template #default="{isActive}">
-              <div
-                class="d-flex flex-row justify-center"
-              >
-                <v-card
-                  class="pa-5"
-                  rounded
+            <v-dialog>
+              <template #activator="{props}">
+                <v-btn
+                  v-bind="props"
+                  color="secondary"
+                  :disabled="!isSportFormValid"
                 >
-                  <v-card-title class="text-wrap">
-                    Are you sure you would like to create the {{keyword }}: "{{ sportDto.SportName }}"
-                  </v-card-title>
+                  <template #prepend>
+                    <v-icon
+                      icon="mdi-database-plus-outline"
+                      color="secondary-accent"
+                    />
+                  </template>
+                  Create
+                </v-btn>
+              </template> 
 
-                  <v-card-actions
-                    class="d-flex flex-row justify-space-around"
+              <template #default="{isActive}">
+                <div
+                  class="d-flex flex-row justify-center"
+                >
+                  <v-card
+                    class="pa-5"
+                    rounded
                   >
-                    <v-btn
-                      color="error-lighten-1"
-                      @click="isActive.value = false"
+                    <v-card-title class="text-wrap">
+                      Are you sure you would like to create the {{ keyword }}: "{{ sportDto.SportName }}"
+                    </v-card-title>
+
+                    <v-card-actions
+                      class="d-flex flex-row justify-space-around"
                     >
-                      No
-                    </v-btn>
-                    <v-btn
-                      color="secondary-darken-"
-                    >
-                      Yes
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </div>
-            </template>
-          </v-dialog>
+                      <v-btn
+                        color="primary"
+                        variant="flat"
+                        @click="isActive.value = false"
+                      >
+                        No
+                      </v-btn>
+                      <v-btn
+                        color="secondary"
+                        variant="flat"
+                        type="submit"
+                        @click="handleSportFormSubmit(); isActive.value=false"
+                      >
+                        Yes
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </div>
+              </template>
+            </v-dialog>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -112,6 +118,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useSportsStore } from '@/stores/sports.store';
 
 const props = defineProps(['keyword'])
 const {keyword} = props
@@ -139,9 +146,23 @@ const sportDto = ref ({
 })
 
 const sportForm = ref(null)
-const isSportFormValid = computed(() => sportForm.value && sportDto.value.SportName !== '' && sportDto.value.Type !== '' & sportDto.value.Description !== '')
+const isSportFormValid = computed(() => 
+  sportForm.value && sportDto.value.SportName !== '' && sportDto.value.Type !== '' & sportDto.value.Description !== ''
+)
+
+
+const sportsStore = useSportsStore()
+const {createSport} = sportsStore
+
+const resetSportDto = () => {
+  sportDto.value.SportName = ''
+  sportDto.value.Description = ''
+  sportDto.value.Type = ''
+}
 
 const handleSportFormSubmit = async() => {
-  console.log("Submitted")
+  await createSport(sportDto.value)
+
+  resetSportDto()
 }
 </script>

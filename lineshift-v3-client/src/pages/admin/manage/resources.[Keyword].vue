@@ -29,17 +29,31 @@
         <v-data-table
           :items="resourceItems"
           :search="tableSearch"
-          class="pa-3"
+          class="pa-4"
+          
           color="primary"
         >
           <template #top>
-            <v-text-field 
-              v-model="tableSearch"
-              variant="outlined"
-              label="Search"
-              color="primary-accent"
-              prepend-inner-icon="mdi-card-search-outline"
-            />
+            <div class="d-flex flex-row justify-space-between">
+              <v-btn
+                class="mr-3"
+                variant="flat"
+                icon="mdi-refresh"
+                color="primary"
+                @click="handleDataTableRefresh"
+                elevation="1"
+              />
+              
+
+              <v-text-field 
+                v-model="tableSearch"
+                variant="outlined"
+                label="Search"
+                color="primary-accent"
+                prepend-inner-icon="mdi-card-search-outline"
+                class="ml-3"
+              />
+            </div>
           </template>
         </v-data-table>
       </v-col>
@@ -47,11 +61,13 @@
 
     <v-row>
       <v-col>
-        <v-dialog>
+        <v-dialog
+          class="w-75"
+        >
           <template #activator="{props}">
             <div class="d-flex flex-row justify-end">
               <v-btn
-                color="primary-darken-1"
+                color="primary"
                 v-bind="props"
               >
                 Create A New {{ singularNounResourceKeyword }}
@@ -72,7 +88,16 @@
                   :is="resourceForm"
                   :key="keyword"
                   :keyword="singularNounResourceKeyword"
-                />
+                >
+                  <template #resourceFormModalCloseBtn>
+                    <v-btn
+                      color="primary"
+                      @click="isActive.value = false"
+                    >
+                      Close
+                    </v-btn>
+                  </template>
+                </component>
               </v-card-text>
             </v-card>
           </template>
@@ -109,6 +134,10 @@ const formComponentMap = markRaw({
 })
 
 const resourceForm = computed(() => formComponentMap[resourceKeyword.value])
+
+const handleDataTableRefresh = async () => {
+  await getResourceByKeyword(keyword)
+}
 
 
 onMounted(async () => {

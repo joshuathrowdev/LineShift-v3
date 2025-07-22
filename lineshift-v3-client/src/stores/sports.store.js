@@ -1,6 +1,6 @@
 import sportsApi from '@/services/sports.api';
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 export const useSportsStore = defineStore('sports', () => {
   // State
@@ -21,6 +21,18 @@ export const useSportsStore = defineStore('sports', () => {
   };
 
 
+  const createSport = async (sportDto) => {
+    try {
+      const response = await sportsApi.createSport(sportDto);
+      console.log(response);
+    } catch (error) {
+      // Snakbar pop
+      console.warn(error);
+      throw error;
+    }
+  };
+
+
   return {
     // State
     sports,
@@ -28,6 +40,7 @@ export const useSportsStore = defineStore('sports', () => {
     // Getters
 
     // Action
-    getAllSports
+    getAllSports,
+    createSport,
   };
 });

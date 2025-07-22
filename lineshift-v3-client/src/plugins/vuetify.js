@@ -33,10 +33,11 @@ const mainTheme = {
     'primary-darken-1': '#003554',  // Darker shade of primary
     'primary-accent': '#4FC3F7',    // A brighter, more vibrant primary-related accent
     secondary: '#57CC99',
-    'on-secondary': '#000000',  // Black text on secondary (as #57CC99 is relatively light)
+    'on-secondary': '#212529',  // Black text on secondary (as #57CC99 is relatively light)
     // --- Secondary Color Variants ---
     'secondary-lighten-1': '#80E0B8', // Lighter shade of secondary
     'secondary-darken-1': '#3EAC83',  // Darker shade of secondary
+    'on-secondary-darken-1': '#212529',
     'secondary-accent': '#90EE90',    // A brighter, more vibrant secondary-related accent
     ternary: '#80ED99',
     // --- Ternary Color Variants ---
@@ -54,6 +55,8 @@ const mainTheme = {
 
     error: '#B00020',
     'on-error': '#FFFFFF',
+    'error-lighten-1': '#FFA590',
+    'on-error-lighten-1': '#252525',
     info: '#2196F3',
     'on-info': '#FFFFFF',
     success: '#4CAF50',
