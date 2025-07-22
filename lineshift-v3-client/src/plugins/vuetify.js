@@ -41,8 +41,8 @@ const mainTheme = {
     'secondary-accent': '#90EE90',    // A brighter, more vibrant secondary-related accent
     ternary: '#80ED99',
     // --- Ternary Color Variants ---
+    'on-ternary': '#212529',    // Black text on ternary (as #80ED99 is light)
     'ternary-darken-1': '#5FCF7A', // Darker shade of ternary (useful for active states)
-    'on-ternary': '#000000',    // Black text on ternary (as #80ED99 is light)
     altOne: '#38A3A5',
     'on-altOne': '#FFFFFF',     // White text on altOne
     // --- AltOne Color Variants ---
@@ -55,14 +55,20 @@ const mainTheme = {
 
     error: '#B00020',
     'on-error': '#FFFFFF',
-    'error-lighten-1': '#FFA590',
+    'error-lighten-1': '#F2B2BD',
     'on-error-lighten-1': '#252525',
     info: '#2196F3',
     'on-info': '#FFFFFF',
+    'info-lighten-1': '#A7D9F8',
+    'on-info-lighten-1': '#252525',
     success: '#4CAF50',
     'on-success': '#FFFFFF',
+    'success-lighten-1': '#BDE1BF',
+    'on-success-lighten-1': '#252525',
     warning: '#FB8C00',
     'on-warning': '#FFFFFF',
+    'warning-lighten-1': '#FFD9A3',
+    'on-warning-lighten-1': '#252525',
 
     // --- Text/Icon Emphasis Variants (useful for specific text states) ---
     'text-high-emphasis': '#F5F5F5', // Typically on-surface

@@ -6,6 +6,8 @@
 
     <v-main> 
       <router-view /> <!-- the content of the page we are on -->
+
+      <snackbar />
     </v-main>
   </v-app>
 </template>

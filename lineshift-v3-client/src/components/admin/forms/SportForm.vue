@@ -48,10 +48,6 @@
         </v-col>
       </v-row>
 
-      
-      <!-- Testing -->
-      {{ sportDto }}
-
       <v-row>
         <v-col>
           <div class="d-flex flex-row justify-space-around">
