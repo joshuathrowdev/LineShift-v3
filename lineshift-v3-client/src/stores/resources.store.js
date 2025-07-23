@@ -1,6 +1,7 @@
 import sportsApi from '@/services/sports.api';
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { useSnackbarStore } from './snackbar.store';
 
 
 const resourceApisGetHttpMethod = {
@@ -9,6 +10,8 @@ const resourceApisGetHttpMethod = {
 
 
 export const useResourceStore = defineStore('resources', () => {
+  const { showError } = useSnackbarStore();
+
   // State
   const resourceKeyword = ref('');
   const resourceItems = ref([]);
@@ -26,7 +29,7 @@ export const useResourceStore = defineStore('resources', () => {
       resourceItems.value = await resourceApisGetHttpMethod[keyword]();
     }
     catch (error) {
-      console.log(error);
+      showError(error);
     }
     finally {
       loading.value = false;

@@ -16,29 +16,6 @@
       />
     </template>
   </v-snackbar>
-
-  <span>Color: {{ color }}</span>
-
-  <v-btn 
-    @click="showSuccess('Success')"
-  >
-    Snackbar Success
-  </v-btn>
-  <v-btn 
-    @click="showError('Error')"
-  >
-    Snackbar Error
-  </v-btn>
-  <v-btn 
-    @click="showWarning('Warning')"
-  >
-    Snackbar Warning
-  </v-btn>
-  <v-btn 
-    @click="showInfo('Info')"
-  >
-    Snackbar Info
-  </v-btn>
 </template>
 
 

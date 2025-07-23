@@ -14,7 +14,7 @@ export const useSnackbarStore = defineStore('snackbar', () => {
   // State
   const message = ref('');
   const color = ref('');
-  const timeout = ref(5000);
+  const timeout = ref(4250);
   const show = ref(false);
 
   // Action
@@ -35,7 +35,6 @@ export const useSnackbarStore = defineStore('snackbar', () => {
   };
 
   const showSuccess = snackBarMessage => {
-    console.log(utilityColorsResolver.success)
     showSnackbar(snackBarMessage, utilityColorsResolver.success);
   };
 

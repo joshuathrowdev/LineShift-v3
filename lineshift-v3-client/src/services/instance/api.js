@@ -20,6 +20,7 @@ const axiosInstance = axios.create({
 
 
 axiosInstance.interceptors.request.use(
+  // snackbar popup
   async (config) => {
     // Initializing local instance of Auth Store
     const { useAuthStore } = await import('@/stores/auth.store');
