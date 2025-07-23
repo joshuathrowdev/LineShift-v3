@@ -13,7 +13,7 @@
     </template>
 
     <v-app-bar-title class="text-h5">
-      Welcome <span class="font-italic">{{ sessionUser.userName }}</span>
+      Welcome <span class="font-italic">{{ sessionUser?.userName }}</span>
     </v-app-bar-title>
   </v-app-bar>
 

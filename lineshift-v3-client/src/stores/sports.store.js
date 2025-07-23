@@ -18,8 +18,7 @@ export const useSportsStore = defineStore('sports', () => {
       sports.value = await sportsApi.getAllSports();
     }
     catch (error) {
-      // Snackbar popup
-      console.log(error)
+      console.error(error);
       showError(error);
       throw error;
     }
@@ -30,7 +29,9 @@ export const useSportsStore = defineStore('sports', () => {
     try {
       const response = await sportsApi.createSport(sportDto);
       return response;
-    } catch (error) { }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
 

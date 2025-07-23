@@ -32,7 +32,7 @@
         icon="mdi-chat"
       />
       <admin-nav-link
-        v-for="role in sessionUser.roles"
+        v-for="role in sessionUser?.roles"
         :key="role"
         icon="mdi-chat-outline"
         :text="role"

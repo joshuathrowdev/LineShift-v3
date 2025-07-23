@@ -13,8 +13,8 @@
 </template>
 
 <script setup>
-  import AdminNavigationLayout from './layouts/AdminNavigationLayout.vue';
-  import NavigationLayout from './layouts/navigationLayout.vue';
+  import AdminNavigationLayout from './layouts/admin/AdminNavigationLayout.vue';
+  import NavigationLayout from './layouts/NavigationLayout.vue';
 
   import { useRoute } from 'vue-router';
 
