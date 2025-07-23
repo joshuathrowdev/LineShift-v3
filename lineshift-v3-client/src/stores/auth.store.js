@@ -24,6 +24,8 @@ export const useAuthStore = defineStore('auth', () => {
   // Getters (computed functions)
   const isAuthenticated = computed(() => !!token.value && !!sessionUser.value);
 
+  const isAdmin = computed(() => sessionUser.value.roles.find(role => role == 'Admin'));
+
   const avatarContent = computed(() => {
     if (!isAuthenticated.value) {
       return '';
@@ -50,8 +52,6 @@ export const useAuthStore = defineStore('auth', () => {
   // Actions / Mutators (reg functions)
   // Core Actions
   const initializeAuth = async () => {
-    // initialize the Auth Store on app/page mount 
-
     // if we have a token but not a _sessionUser
     if (token.value && !isAuthenticated.value) {
       isLoading.value = true; // setting loading state
@@ -63,7 +63,7 @@ export const useAuthStore = defineStore('auth', () => {
         setAuthData(token.value, sessionUserData);
       }
       catch (error) {
-        console.warn('Error occurred while trying to initialize session user', error);
+        console.error(error);
       }
       finally {
         // resetting loading value
@@ -82,16 +82,8 @@ export const useAuthStore = defineStore('auth', () => {
       if (authResponse) {
         setAuthData(authResponse.token, authResponse.sessionUser);
       }
-    } catch (caughtError) {
-      console.log(caughtError.response);
-      console.log(caughtError.request);
-      console.log(caughtError);
-
-      if (caughtError.response) {
-        error.value.message = caughtError.response.data.message;
-        error.value.code = caughtError.response.status;
-        console.log(error.value)
-      }
+    } catch (error) {
+      console.error(error);
     }
     finally {
       isLoading.value = false;
@@ -139,6 +131,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // Getters
     isAuthenticated,
+    isAdmin,
     avatarContent,
     formattedRegisteredDate,
 

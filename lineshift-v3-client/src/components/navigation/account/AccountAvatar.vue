@@ -1,10 +1,10 @@
 <template>
   <v-avatar
-    color="ternary"
+    color="primary"
     size="45"
-  >
-    {{ avatarContent }}
-  </v-avatar>
+    variant="flat"
+    icon="mdi-account-outline"
+  />
 </template>
 
 <script setup>

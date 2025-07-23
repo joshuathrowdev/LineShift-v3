@@ -26,6 +26,28 @@
       <nav-links />
     </v-list>
 
+    <div v-if="isAdmin">
+      <v-divider color="primary" />
+      <v-list-item
+        class="py-5"
+        rounded
+        :to="{name: '/admin/hub'}"
+      >
+        <template #prepend>
+          <v-icon
+            icon="mdi-shield-account-variant-outline"
+            color="secondary"
+            size="35"
+          />
+        </template>
+        <v-list-item-title
+          class="font-weight-bold text-h6"
+        >
+          Admin Panel
+        </v-list-item-title>
+      </v-list-item>
+    </div>
+
     <template #append>
       <v-list-item>
         Logo
@@ -38,7 +60,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
 
-const { isAuthenticated } = storeToRefs(useAuthStore())
+const { isAuthenticated, sessionUser, isAdmin } = storeToRefs(useAuthStore())
 
 const rail = ref(true)
 
