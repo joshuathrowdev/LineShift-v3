@@ -36,3 +36,9 @@
     </v-row>
   </v-container>
 </template>
+
+<route  lang="yaml">
+  meta:
+    requiredAuth: true
+    requiresAdmin: true
+</route>

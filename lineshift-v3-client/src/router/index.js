@@ -9,6 +9,8 @@ import { createRouter, createWebHistory } from 'vue-router/auto';
 import { setupLayouts } from 'virtual:generated-layouts';
 import { routes } from 'vue-router/auto-routes';
 import { useAuthStore } from '@/stores/auth.store';
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,7 +45,7 @@ router.beforeEach(async (to, from, next) => {
   // next is a function that resolves the hook and controls the navigation flow.
 
   const authStore = useAuthStore();
-  const { token, isLoading, isAuthReady, isAuthenticated } = storeToRefs(authStore);
+  const { token, isLoading, isAuthReady, isAuthenticated, sessionUser } = storeToRefs(authStore);
   const { initializeAuth } = authStore;
 
 
@@ -63,6 +65,8 @@ router.beforeEach(async (to, from, next) => {
 
   // Route Meta props
   const requiresAuth = to.meta.requiresAuth;
+  const requiresAdmin = to.meta.requiresAdmin;
+  const isAdmin = computed(() => sessionUser.value?.roles.find(role => role === 'Admin'));
   const redirectIfAuthenticated = to.meta.redirectIfAuthenticated;
 
   // Route Names
@@ -86,6 +90,9 @@ router.beforeEach(async (to, from, next) => {
     next({ name: loginRouteName });
   }
   else if (redirectIfAuthenticated && isAuthenticated.value) {
+    next({ name: homeRouteName });
+  }
+  else if (requiresAdmin && !isAdmin.value) {
     next({ name: homeRouteName });
   }
   else {

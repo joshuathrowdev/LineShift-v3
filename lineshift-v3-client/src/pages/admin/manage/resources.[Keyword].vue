@@ -112,3 +112,9 @@ onMounted(async () => {
 })
 </script>
 
+
+<route lang="yaml">
+  meta:
+    requiredAuth: true
+    requiresAdmin: true
+</route>
