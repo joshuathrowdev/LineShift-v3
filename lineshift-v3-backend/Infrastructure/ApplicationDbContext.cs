@@ -20,6 +20,7 @@ namespace lineshift_v3_backend.Infrastructure
         // DbSet properties: These represent the collections of your entities that map to database tables.
         // When you query ApplicationDbContext.Books, EF Core knows to interact with the 'Books' table.
         public DbSet<Sport> Sports { get; set; }
+        public DbSet<GoverningBody> GoverningBodies { get; set; }
 
 
         // OnModelCreating method: This is where you configure your database model using the Fluent API.
