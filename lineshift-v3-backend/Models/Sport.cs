@@ -19,6 +19,8 @@ namespace lineshift_v3_backend.Models
         [StringLength(20)]
         public string? Type { get; set; }
 
+
+        // Internal Flags
         public DateTimeOffset? CreatedAt { get; set; }
 
         public DateTimeOffset? UpdatedAt { get; set; }

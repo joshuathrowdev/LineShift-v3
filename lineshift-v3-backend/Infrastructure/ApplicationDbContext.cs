@@ -39,14 +39,14 @@ namespace lineshift_v3_backend.Infrastructure
                     .ValueGeneratedOnAdd();
 
                 // Configure other properties (validation, constraints, Indexes)
-                entity.Property(entity => entity.SportName)
+                entity.Property(e => e.SportName)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasIndex(entity => new {entity.SportName})
+                entity.HasIndex(e => new { e.SportName })
                     .IsUnique();
 
-                entity.Property(entity => entity.Description)
+                entity.Property(e => e.Description)
                     .HasMaxLength(250);
 
                 entity.Property(e => e.Type)
@@ -56,11 +56,38 @@ namespace lineshift_v3_backend.Infrastructure
                 entity.Property(e => e.CreatedAt).IsRequired();
                 entity.Property(e => e.UpdatedAt).IsRequired();
 
-                
-
                 // Configure Any Relationship that between Sport and other tables
                 // Define Relationships and how navigating those relationships work
                 // Have to have the model for relating models(tables) defined
+            });
+
+            modelBuilder.Entity<GoverningBody>(entity =>
+            {
+                entity.HasKey(e => e.GoverningBodyId);
+                entity.Property(e => e.GoverningBodyId)
+                    .IsRequired()
+                    .ValueGeneratedOnAdd(); // Auto Increment PK
+
+                entity.Property(e => e.GoverningBodyName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.HasIndex(e => new { e.GoverningBodyName })
+                    .IsUnique();
+
+                entity.Property(e => e.Abbreviation)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.CountryOfOrigin)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.DateFounded);
+
+                entity.Property(e => e.CreatedAt).IsRequired();
+                entity.Property(e => e.UpdatedAt).IsRequired();
             });
 
 
@@ -78,6 +105,9 @@ namespace lineshift_v3_backend.Infrastructure
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
             // claims specifically associated with roles (any user with that role gets these claims)
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+
+            // Resource Tables Explicit Configs
+            modelBuilder.Entity<GoverningBody>().ToTable("GoverningBodies");
         }
     }
 }

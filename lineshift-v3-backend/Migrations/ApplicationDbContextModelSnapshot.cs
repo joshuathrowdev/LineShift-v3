@@ -249,6 +249,52 @@ namespace lineshift_v3_backend.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("lineshift_v3_backend.Models.GoverningBody", b =>
+                {
+                    b.Property<int?>("GoverningBodyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("GoverningBodyId"));
+
+                    b.Property<string>("Abbreviation")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("CountryOfOrigin")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("DateFounded")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("GoverningBodyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("GoverningBodyId");
+
+                    b.HasIndex("GoverningBodyName")
+                        .IsUnique();
+
+                    b.ToTable("GoverningBodies", (string)null);
+                });
+
             modelBuilder.Entity("lineshift_v3_backend.Models.Sport", b =>
                 {
                     b.Property<int?>("SportId")
