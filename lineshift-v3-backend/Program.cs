@@ -36,6 +36,9 @@ namespace lineshift_v3_backend
             builder.Services.AddScoped<ISportsService, SportsService>();
             builder.Services.AddScoped<ISportsRepository,  SportsRepository>();
 
+            builder.Services.AddScoped<IGoverningBodiesServices, GoverningBodiesServices>();
+            builder.Services.AddScoped<IGoverningBodiesRepository, GoverningBodiesRepository>();
+
 
             // Configuring Auto Mapper for UserProfile
             // Source: ApplicationUser, Dest: SessionUser
@@ -43,6 +46,7 @@ namespace lineshift_v3_backend
             {
                 cfg.AddProfile<UserProfil>();
                 cfg.AddProfile<SportProfile>();
+                cfg.AddProfile<GoverningBodyProfile>();
             });
 
 
