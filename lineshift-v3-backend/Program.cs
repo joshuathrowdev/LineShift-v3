@@ -39,6 +39,9 @@ namespace lineshift_v3_backend
             builder.Services.AddScoped<IGoverningBodiesServices, GoverningBodiesServices>();
             builder.Services.AddScoped<IGoverningBodiesRepository, GoverningBodiesRepository>();
 
+            builder.Services.AddScoped<ILeaguesServices, LeaguesServices>();
+            builder.Services.AddScoped<ILeaguesRepository, LeaguesRepository>();
+
 
             // Configuring Auto Mapper for UserProfile
             // Source: ApplicationUser, Dest: SessionUser
@@ -47,6 +50,7 @@ namespace lineshift_v3_backend
                 cfg.AddProfile<UserProfil>();
                 cfg.AddProfile<SportProfile>();
                 cfg.AddProfile<GoverningBodyProfile>();
+                cfg.AddProfile<LeagueProfile>();
             });
 
 
