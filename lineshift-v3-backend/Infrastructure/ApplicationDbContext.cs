@@ -21,6 +21,7 @@ namespace lineshift_v3_backend.Infrastructure
         // When you query ApplicationDbContext.Books, EF Core knows to interact with the 'Books' table.
         public DbSet<Sport> Sports { get; set; }
         public DbSet<GoverningBody> GoverningBodies { get; set; }
+        public DbSet<League> Leagues { get; set; }
 
 
         // OnModelCreating method: This is where you configure your database model using the Fluent API.
@@ -86,6 +87,34 @@ namespace lineshift_v3_backend.Infrastructure
                 entity.Property(e => e.Description).HasMaxLength(250);
 
                 entity.Property(e => e.DateFounded);
+
+                entity.Property(e => e.CreatedAt).IsRequired();
+                entity.Property(e => e.UpdatedAt).IsRequired();
+
+                // Relationships
+                entity.HasMany(e => e.Leagues)
+                    .WithOne(league => league.GoverningBody) // Nav Property
+                    // Above fully describes the one to many relationship
+                    .HasForeignKey(league => league.GoverningBodyId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<League>(entity =>
+            {
+                entity.HasKey(e => e.LeagueId);
+                entity.Property(e => e.LeagueId)
+                    .IsRequired()
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.LeagueName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.HasIndex(e => e.LeagueName)
+                    .IsUnique();
+
+                entity.Property(e => e.Level).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Gender).IsRequired().HasMaxLength(20);
 
                 entity.Property(e => e.CreatedAt).IsRequired();
                 entity.Property(e => e.UpdatedAt).IsRequired();

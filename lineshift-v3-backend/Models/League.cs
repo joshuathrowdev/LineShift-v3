@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace lineshift_v3_backend.Models
 {
@@ -19,6 +20,15 @@ namespace lineshift_v3_backend.Models
         [StringLength(20)]
         public string? Gender{ get; set; }
 
+        // Relationships
+            // FK Property
+        public int? GoverningBodyId { get; set; }
+
+        // Navigation Property: Reference to the single related GoverningBody
+        // The [ForeignKey] attribute explicitly links this navigation property
+        // to the GoverningBodyId FK property.
+        [ForeignKey("GoverningBodyId")]
+        public GoverningBody GoverningBody { get; set; } = null!; // null! for non-null-able FK
 
         // Internal Flags
         public DateTimeOffset? CreatedAt { get; set; }

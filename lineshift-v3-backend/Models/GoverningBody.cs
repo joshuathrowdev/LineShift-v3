@@ -24,6 +24,12 @@ namespace lineshift_v3_backend.Models
 
         public DateTimeOffset? DateFounded { get; set; }
 
+        // Relationships
+
+            // Navigation Property: Collection of related Leagues
+            // EF Core knows 'Leagues' refers to this GoverningBody's 'Id'
+        public ICollection<League> Leagues = new List<League>();
+
         // Internal Flags
         public DateTimeOffset? CreatedAt { get; set; }
 

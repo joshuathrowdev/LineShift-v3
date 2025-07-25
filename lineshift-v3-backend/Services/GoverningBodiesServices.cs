@@ -13,11 +13,16 @@ namespace lineshift_v3_backend.Services
     public class GoverningBodiesServices : IGoverningBodiesServices
     {
         private readonly IGoverningBodiesRepository _governingBodiesRepository;
+        private readonly ILogger<GoverningBodiesServices> _logger;
         private readonly IMapper _mapper;
 
-        public GoverningBodiesServices(IGoverningBodiesRepository overningBodiesRepository, IMapper mapper)
+        public GoverningBodiesServices(
+            IGoverningBodiesRepository governingBodiesRepository, 
+            ILogger<GoverningBodiesServices> logger,
+            IMapper mapper)
         {
-            _governingBodiesRepository = overningBodiesRepository;
+            _governingBodiesRepository = governingBodiesRepository;
+            _logger = logger;
             _mapper = mapper;
             
         }
@@ -39,6 +44,7 @@ namespace lineshift_v3_backend.Services
             
             } catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while accessing governing bodies repository");
                 throw;
             }
         }
