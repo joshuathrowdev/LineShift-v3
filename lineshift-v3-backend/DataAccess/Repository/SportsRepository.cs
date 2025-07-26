@@ -1,4 +1,4 @@
-﻿using lineshift_v3_backend.DataAccess.Queries;
+﻿
 using lineshift_v3_backend.Dtos.Sport;
 using lineshift_v3_backend.Infrastructure;
 using lineshift_v3_backend.Models;
@@ -28,12 +28,12 @@ namespace lineshift_v3_backend.DataAccess.Repository
             _logger = logger;
         }
 
-        #region Methods
+        #region Database Calls
         public async Task<ICollection<Sport>> GetSportsAsync()
         {
             try
             {
-                var result = await _dbContext.Sports.GetSportsAsync().AsNoTracking().ToListAsync();
+                var result = await _dbContext.Sports.AsNoTracking().ToListAsync<Sport>();
                 return result;
             }
             catch (Exception ex) 

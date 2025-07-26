@@ -249,6 +249,103 @@ namespace lineshift_v3_backend.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("lineshift_v3_backend.Models.GoverningBody", b =>
+                {
+                    b.Property<int?>("GoverningBodyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("GoverningBodyId"));
+
+                    b.Property<string>("Abbreviation")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("CountryOfOrigin")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset?>("DateFounded")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("GoverningBodyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("GoverningBodyId");
+
+                    b.HasIndex("GoverningBodyName")
+                        .IsUnique();
+
+                    b.ToTable("GoverningBodies", (string)null);
+                });
+
+            modelBuilder.Entity("lineshift_v3_backend.Models.League", b =>
+                {
+                    b.Property<int?>("LeagueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("LeagueId"));
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int?>("GoverningBodyId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("LeagueName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("SportId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("LeagueId");
+
+                    b.HasIndex("GoverningBodyId");
+
+                    b.HasIndex("LeagueName")
+                        .IsUnique();
+
+                    b.HasIndex("SportId");
+
+                    b.ToTable("Leagues");
+                });
+
             modelBuilder.Entity("lineshift_v3_backend.Models.Sport", b =>
                 {
                     b.Property<int?>("SportId")
@@ -336,6 +433,35 @@ namespace lineshift_v3_backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("lineshift_v3_backend.Models.League", b =>
+                {
+                    b.HasOne("lineshift_v3_backend.Models.GoverningBody", "GoverningBody")
+                        .WithMany("Leagues")
+                        .HasForeignKey("GoverningBodyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("lineshift_v3_backend.Models.Sport", "Sport")
+                        .WithMany("Leagues")
+                        .HasForeignKey("SportId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GoverningBody");
+
+                    b.Navigation("Sport");
+                });
+
+            modelBuilder.Entity("lineshift_v3_backend.Models.GoverningBody", b =>
+                {
+                    b.Navigation("Leagues");
+                });
+
+            modelBuilder.Entity("lineshift_v3_backend.Models.Sport", b =>
+                {
+                    b.Navigation("Leagues");
                 });
 #pragma warning restore 612, 618
         }
