@@ -1,4 +1,4 @@
-🚀 LineSift Version 3 
+🚀 LineSift Version 3
 
 📘 Description
 _A brief summary of what your project does, its purpose, and what makes it unique or valuable._
@@ -7,14 +7,18 @@ _A brief summary of what your project does, its purpose, and what makes it uniqu
 
 🔧 Tech Stack
 🖥️ Frontend
+
 - **Vue 3**
 - **Vuetify** – Material Design component framework for Vue
 
 🧠 Backend
+
 - .NET Core Web API
 - RESTful API services built using .NET Core
+- Microsoft User Secrets
 
 🗄️ Database & Management
+
 - MariaDB – Relational database management system
 - DBeaver – GUI-based database management and browsing
 - Docker – Containerized environment for all services
@@ -41,3 +45,4 @@ root/
 ├── db/                 # MariaDB database configuration files
 ├── docker/             # Dockerfiles and docker-compose.yml
 └── README.md           # Project documentation
+```

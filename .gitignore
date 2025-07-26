@@ -106,3 +106,4 @@ Backups/
 
 task.txt
 setup-env.ps1
+DbInitializer.cs

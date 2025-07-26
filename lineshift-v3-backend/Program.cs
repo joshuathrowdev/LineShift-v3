@@ -72,14 +72,6 @@ namespace lineshift_v3_backend
                         maxRetryDelay: TimeSpan.FromSeconds(30),
                         errorNumbersToAdd: null
                      );
-
-                    // Optional: Configure specific data type mappings
-                    // This is useful if you want to explicitly control how certain C# types map to MariaDB types.
-                    // For example, mapping C# bool to MariaDB TINYINT(1) (default for Pomelo) or BIT(1)
-                    // mySqlOptions.DefaultDataTypeMappings(mappings => mappings.WithClrBoolean(MySqlBooleanType.Bit1));
-
-                    // Optional: Configure behavior for schema (MySQL/MariaDB don't have EF Core schemas)
-                    // mySqlOptions.SchemaBehavior(MySqlSchemaBehavior.Ignore); // Or .Throw()
                 });
             });
 
@@ -170,7 +162,6 @@ namespace lineshift_v3_backend
 
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
             // Register and config the swagger generator with the builder (server container) so it can

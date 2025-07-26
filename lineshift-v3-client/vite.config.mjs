@@ -78,7 +78,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': { // The path out frontend will request
-        target: 'https://localhost:44372', // .NET Web Core API URL
+        target: 'http://localhost:48089', // .NET Web Core API URL
         changeOrigin: true, // Important step to get CORS to work with proxy
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, '') // Removes the '/api' prefix when forwarding to the backend

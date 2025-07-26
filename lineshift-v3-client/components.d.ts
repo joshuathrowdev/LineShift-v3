@@ -23,7 +23,6 @@ declare module 'vue' {
     RailBar: typeof import('./src/components/navigation/RailBar.vue')['default']
     RegisterCard: typeof import('./src/components/authentication/RegisterCard.vue')['default']
     ResourcesTable: typeof import('./src/components/admin/resources/resourcesTable.vue')['default']
-    ResourceTable: typeof import('./src/components/admin/ResourceTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Snackbar: typeof import('./src/components/Snackbar.vue')['default']

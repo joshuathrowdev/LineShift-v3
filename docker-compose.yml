@@ -1,16 +1,14 @@
-version: '3.8'
-
 services:
   mariadb:
-    container_name: lineshift_mariadb # Name of Container
-    image: mariadb:10.11 # Specific MariaDB Image
+    container_name: ${COMPOSE_PROJECT_NAME}_mariadb # Name of Container
+    image: mariadb:${DB_VERSION} # Specific MariaDB Image
     restart: unless-stopped 
     ports:
-      - "3307:3306" # Associated ports (accouting for MySQL already on port)
+      - "${DB_EXTERNAL_PORT}:${DB_PORT}" # Associated ports (accoutring for MySQL already on port)
 
     environment:
-      MARIADB_ROOT_PASSWORD: MyPassword123
-      MARIADB_DATABASE: lineshiftdb
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
 
     volumes:
       - mariadb_data:/var/lib/mysql # Mounted Volume name and location
@@ -24,6 +22,47 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+
+  
+  client-api:
+    build: # "Don't use a pre-made image, build a custom one"
+      context: ./lineshift-v3-backend #  "Look in this folder for files to include"
+      dockerfile: Dockerfile # "Use this file as the recipe"
+    
+    container_name: ${COMPOSE_PROJECT_NAME}_client_api
+    ports:
+      - "${ASPNETCORE_EXTERNAL_PORT}:${ASPNETCORE_PORT}"
+
+    environment:
+      ASPNETCORE_ENVIROMENT: ${ASPNETCORE_ENVIROMENT}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+
+      # Connection String
+      ConnectionStrings__MariaDbConnection: "Server=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Uid=${DB_USER};Pwd=${DB_PASSWORD};SslMode=None"
+
+          # Add JWT environment variables
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      Jwt__ExpireDays: ${JWT_EXPIRE_DAYS}
+
+      # Individual Vars (Context and Logging Purposes)
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+    depends_on:
+      - mariadb
+
+    networks:
+      - lineshift-network
+
+
+
+
+
 
 volumes:
   mariadb_data:
