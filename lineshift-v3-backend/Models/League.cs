@@ -24,11 +24,16 @@ namespace lineshift_v3_backend.Models
             // FK Property
         public int? GoverningBodyId { get; set; }
 
+        public int? SportId { get; set; }
+
         // Navigation Property: Reference to the single related GoverningBody
         // The [ForeignKey] attribute explicitly links this navigation property
         // to the GoverningBodyId FK property.
         [ForeignKey("GoverningBodyId")]
         public GoverningBody GoverningBody { get; set; } = null!; // null! for non-null-able FK
+
+        [ForeignKey("SportId")]
+        public Sport Sport { get; set; } = null!;
 
         // Internal Flags
         public DateTimeOffset? CreatedAt { get; set; }

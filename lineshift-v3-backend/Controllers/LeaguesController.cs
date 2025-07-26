@@ -21,6 +21,7 @@ namespace lineshift_v3_backend.Controllers
         }
 
         #region Resource Routes
+        [HttpGet("")]
         public async Task<ActionResult<ICollection<LeagueDto>>> GetLeagues()
         {
             try

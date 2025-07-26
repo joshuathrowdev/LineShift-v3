@@ -93,6 +93,7 @@ Thumbs.db
 task.txt
 logs/
 Migrations/
+Backups/
 
 # ===================================================
 # ✅ ALLOW TRACKING OF TEMPLATE CONFIG FILES

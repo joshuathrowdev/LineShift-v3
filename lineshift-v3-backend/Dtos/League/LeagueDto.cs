@@ -23,5 +23,7 @@ namespace lineshift_v3_backend.Dtos.League
         // Relationships
         // FK Property
         public int? GoverningBodyId { get; set; }
+
+        public int? SportId { get; set; }
     }
 }

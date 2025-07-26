@@ -326,6 +326,10 @@ namespace lineshift_v3_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<int?>("SportId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .IsRequired()
                         .HasColumnType("datetime(6)");
@@ -336,6 +340,8 @@ namespace lineshift_v3_backend.Migrations
 
                     b.HasIndex("LeagueName")
                         .IsUnique();
+
+                    b.HasIndex("SportId");
 
                     b.ToTable("Leagues");
                 });
@@ -437,10 +443,23 @@ namespace lineshift_v3_backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("lineshift_v3_backend.Models.Sport", "Sport")
+                        .WithMany("Leagues")
+                        .HasForeignKey("SportId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("GoverningBody");
+
+                    b.Navigation("Sport");
                 });
 
             modelBuilder.Entity("lineshift_v3_backend.Models.GoverningBody", b =>
+                {
+                    b.Navigation("Leagues");
+                });
+
+            modelBuilder.Entity("lineshift_v3_backend.Models.Sport", b =>
                 {
                     b.Navigation("Leagues");
                 });

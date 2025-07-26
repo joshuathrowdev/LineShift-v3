@@ -58,9 +58,12 @@ namespace lineshift_v3_backend.Infrastructure
                 entity.Property(e => e.CreatedAt).IsRequired();
                 entity.Property(e => e.UpdatedAt).IsRequired();
 
-                // Configure Any Relationship that between Sport and other tables
-                // Define Relationships and how navigating those relationships work
-                // Have to have the model for relating models(tables) defined
+                // Relationships
+                entity.HasMany(e => e.Leagues)
+                    .WithOne(e => e.Sport)
+                    .HasForeignKey(e => e.SportId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<GoverningBody>(entity =>
