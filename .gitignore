@@ -100,8 +100,9 @@ Backups/
 # ===================================================
 
 # Allow sample env files
-!env.template
+!.env.template
 !docker-compose.yml
 !appsettings.json
 
 task.txt
+setup-env.ps1

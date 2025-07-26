@@ -1,22 +1,33 @@
 version: '3.8'
 
 services:
-  marialsdb:
-    container_name: marialsdb # Name of Container
+  mariadb:
+    container_name: lineshift_mariadb # Name of Container
     image: mariadb:10.11 # Specific MariaDB Image
-    restart: always 
+    restart: unless-stopped 
     ports:
       - "3307:3306" # Associated ports (accouting for MySQL already on port)
+
     environment:
-      - MARIADB_ROOT_PASSWORD: MyPassword123
-      - MARIADB_DATABASE: lineshiftdb
+      MARIADB_ROOT_PASSWORD: MyPassword123
+      MARIADB_DATABASE: lineshiftdb
+
     volumes:
-      - mariadata:/var/lib/mysql # Mounted Volume name and location
+      - mariadb_data:/var/lib/mysql # Mounted Volume name and location
+
     networks:
       - lineshift-network
 
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
 volumes:
-  mariadata: 
+  mariadb_data:
+    driver: local 
 
 networks:
   lineshift-network:
