@@ -1,11 +1,25 @@
-🚀 LineSift Version 3
+# 🚀 LineSift Version 3
 
-📘 Description
-_A brief summary of what your project does, its purpose, and what makes it unique or valuable._
+## 📘 Description
+
+Lineshift is your ultimate daily fantasy sports dashboard and companion. It provides intelligent tools and
+actionable insights, empowering you to make data-driven, strategic decisions that enhance your competitive
+edge and maximize your potential for success. It takes\* advantage of emerging technologies such as Web Bots,
+Generative AI, and Traditional AI to provide a more robust system for deciding which daily fantasy picks are
+the best.
+
+# 💡 Features
+
+**- 😸 Currently Implemented -**
+
+**- 🛠️ Being Implemented -**
+
+**- ✨ Feature Roadmap -**
 
 ---
 
-🔧 Tech Stack
+## 🔧 Tech Stack
+
 🖥️ Frontend
 
 - **Vue 3**
@@ -13,25 +27,18 @@ _A brief summary of what your project does, its purpose, and what makes it uniqu
 
 🧠 Backend
 
-- .NET Core Web API
+- **.NET Core Web API**
 - RESTful API services built using .NET Core
+- Entity Framework Core
+- Entity Framework Core Identity
 - Microsoft User Secrets
 
 🗄️ Database & Management
 
-- MariaDB – Relational database management system
+- **MariaDB – Relational database management system**
 - DBeaver – GUI-based database management and browsing
-- Docker – Containerized environment for all services
-  - The **MariaDB instance is fully containerized and managed via Docker**
-
----
-
-✨ Planned Features
-
-- 🧠 **AI Web Scraping Tool**  
-  _[Brief description to be added later]_
-
-- ✅ [Add more project features here]
+- **Docker – Containerized environment for all services**
+  - Docker-Compose to manage multiple services
 
 ---
 
@@ -40,9 +47,10 @@ _A brief summary of what your project does, its purpose, and what makes it uniqu
 ```bash
 root/
 │
-├── lineshift-v3-client/           # Vue 3 + Vuetify frontend application
-├── lineshift-v3-backend/            # .NET Core Web API project
-├── db/                 # MariaDB database configuration files
-├── docker/             # Dockerfiles and docker-compose.yml
-└── README.md           # Project documentation
+├── lineshift-v3-client/  # Vue 3 + Vuetify frontend application
+├── lineshift-v3-backend/ # .NET Core Web API project
+├── docker-compose        # For managing application sevices
+├── .env                  # Security with DB and Application secrets
+├── .gitignore
+└── README.md
 ```
