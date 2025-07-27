@@ -106,4 +106,4 @@ Backups/
 
 task.txt
 setup-env.ps1
-DbInitializer.cs
+lineshift-v3-backend/Utils/DbInitializer.cs

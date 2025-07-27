@@ -155,6 +155,17 @@ namespace lineshift_v3_backend.Controllers.Identity
             }
         }
 
+        [HttpDelete("deleteseed/{email}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteSeedUserByEmail([FromBody] string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound();
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded ? Ok() : BadRequest(result.Errors);
+        }
+
 
         #region Helper Methods
         
