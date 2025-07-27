@@ -26,7 +26,7 @@
       <nav-links />
     </v-list>
 
-    <div v-if="isAdmin">
+    <div v-if="hasPermissions">
       <v-divider color="primary" />
       <v-list-item
         class="py-5"
@@ -60,9 +60,11 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
 
-const { isAuthenticated, sessionUser, isAdmin } = storeToRefs(useAuthStore())
+const { isAuthenticated, sessionUser, isAdmin, isModerator } = storeToRefs(useAuthStore())
 
 const rail = ref(true)
+
+const hasPermissions = computed(() => !!isAdmin.value || !!isModerator.value)
 
 const isRailExpanded = ref(false)
 </script>

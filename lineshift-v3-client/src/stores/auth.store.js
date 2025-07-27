@@ -24,7 +24,8 @@ export const useAuthStore = defineStore('auth', () => {
   // Getters (computed functions)
   const isAuthenticated = computed(() => !!token.value && !!sessionUser.value);
 
-  const isAdmin = computed(() => sessionUser.value.roles.find(role => role == 'Admin'));
+  const isAdmin = computed(() => sessionUser.value.roles.find(role => role === 'Admin'));
+  const isModerator = computed(() => sessionUser.value.roles.find(role => role === 'Moderator'));
 
   const avatarContent = computed(() => {
     if (!isAuthenticated.value) {
@@ -132,6 +133,7 @@ export const useAuthStore = defineStore('auth', () => {
     // Getters
     isAuthenticated,
     isAdmin,
+    isModerator,
     avatarContent,
     formattedRegisteredDate,
 
