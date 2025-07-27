@@ -90,7 +90,7 @@ export default defineConfig(({ mode }) => {
       },
       // we could optionally set an explicit port number but (for docker container network)
       // the port will default to port: 3000
-      port: 3000,
+      port: env.VITE_CLIENT_PORT || 3000,
     },
     css: {
       preprocessorOptions: {

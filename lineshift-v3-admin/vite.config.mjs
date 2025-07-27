@@ -79,7 +79,15 @@ export default defineConfig(({ mode }) => {
       ],
     },
     server: {
-      port: env.VITE_ADMIN_CLIENT_PORT || 3001,
+      proxy: {
+        [env.VITE_API_TARGET_ADMIN_TRIGGER]: {
+          target: env.VITE_API_TARGET,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(new RegExp(env.VITE_API_TARGET_ADMIN_REGEX), '')
+        }
+      },
+      port: env.VITE_ADMIN_CLIENT_PORT,
     },
     css: {
       preprocessorOptions: {

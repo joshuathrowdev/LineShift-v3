@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
   timeout: import.meta.env.VITE_API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
-    // 'Authorization': 'Bearer ' + localStorage.getItem('token') // Example for adding auth token
   }
 });
 
@@ -17,8 +16,6 @@ const axiosInstance = axios.create({
 
 
 // intercepts all request and conditionally adds auth token if present
-
-
 axiosInstance.interceptors.request.use(
   async (config) => {
     // Initializing local instance of Auth Store
