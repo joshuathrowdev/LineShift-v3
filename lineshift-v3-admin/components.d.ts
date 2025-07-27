@@ -8,6 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminNavLink: typeof import('./src/components/navigation/AdminNavLink.vue')['default']
+    AdminNavLinkBanner: typeof import('./src/components/navigation/AdminNavLinkBanner.vue')['default']
+    AdminNavLinks: typeof import('./src/components/navigation/AdminNavLinks.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LoginForm: typeof import('./src/components/authentication/LoginForm.vue')['default']
