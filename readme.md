@@ -1,4 +1,4 @@
-# 🚀 LineSift Version 3
+# 🚀 Lineshift Version 3
 
 ## 📘 Description
 
@@ -8,14 +8,19 @@ edge and maximize your potential for success. It takes\* advantage of emerging t
 Generative AI, and Traditional AI to provide a more robust system for deciding which daily fantasy picks are
 the best.
 
-# 💡 Features
+## 💡 Features
 
 **- 😸 Currently Implemented -**
 
 **- 🛠️ Being Implemented -**
+- Statistical Metric Library (for providing context to what stats track and how you can use them)
 
 **- ✨ Feature Roadmap -**
-
+- 3rd Party API Integration for Live Sports Data
+- **Daily Fantasy Strategy that Contains Examples and Resoning for some Daily Fantasy Practices**
+- **Web Scrapper that gets Daily Fantasy Picks from Creditable Sources**
+- In App Web/Chat Bot (for managing lineups, adding context to picks, general questions (Gen AI))
+- **Tradition AI Model/Algorithim for Rating Daily Fantasy Picks or Generating Picks**
 ---
 
 ## 🔧 Tech Stack
@@ -24,6 +29,9 @@ the best.
 
 - **Vue 3**
 - **Vuetify** – Material Design component framework for Vue
+- Javascipt
+- HTML
+- CSS
 
 🧠 Backend
 
@@ -50,7 +58,7 @@ root/
 ├── lineshift-v3-client/  # Vue 3 + Vuetify frontend application
 ├── lineshift-v3-backend/ # .NET Core Web API project
 ├── docker-compose        # For managing application sevices
-├── .env                  # Security with DB and Application secrets
+├── .env                  # Security with DB and application secrets
 ├── .gitignore
 └── README.md
 ```
