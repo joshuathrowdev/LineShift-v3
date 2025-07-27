@@ -1,9 +1,9 @@
 <template>
   <v-card
     variant="flat"
-    color="secondary-lighten-1"
     class="my-3"
-  >
+    >
+    color="secondary-lighten-1"
     <v-card-title>{{ title }}</v-card-title>
   </v-card>
 </template>

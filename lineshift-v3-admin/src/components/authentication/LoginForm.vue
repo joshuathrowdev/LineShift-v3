@@ -14,7 +14,7 @@
       <v-row>
         <v-col>
           <v-text-field
-            label="password"
+            label="password "
           ></v-text-field>
         </v-col>
       </v-row>
