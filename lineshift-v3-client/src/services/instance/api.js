@@ -6,7 +6,7 @@ const backendApiPrefix = '/api/v3'; // backend api prefix (incase backend is ser
 
 const axiosInstance = axios.create({
   baseURL: `${clientProxyTrigger + backendApiPrefix}`,
-  timeout: 30000,
+  timeout: import.meta.env.VITE_API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
     // 'Authorization': 'Bearer ' + localStorage.getItem('token') // Example for adding auth token
