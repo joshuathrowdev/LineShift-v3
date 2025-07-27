@@ -67,6 +67,7 @@ router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.meta.requiresAuth;
   const requiresAdmin = to.meta.requiresAdmin;
   const isAdmin = computed(() => sessionUser.value?.roles.find(role => role === 'Admin'));
+  const isModerator = computed(() => sessionUser.value?.roles.find(role => role === 'Moderator'));
   const redirectIfAuthenticated = to.meta.redirectIfAuthenticated;
 
   // Route Names
@@ -92,7 +93,7 @@ router.beforeEach(async (to, from, next) => {
   else if (redirectIfAuthenticated && isAuthenticated.value) {
     next({ name: homeRouteName });
   }
-  else if (requiresAdmin && !isAdmin.value) {
+  else if (requiresAdmin && (!isAdmin.value && !isModerator.value)) {
     next({ name: homeRouteName });
   }
   else {
