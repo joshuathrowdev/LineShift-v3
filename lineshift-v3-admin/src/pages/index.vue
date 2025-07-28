@@ -1,13 +1,15 @@
-<template>This is the index/home page+ page</template>
+<template>
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-card-title>Lineshift Admin Panel </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
 
 <script setup>
-import sportsAdminApi from "../services/sports.admin.api";
-import { ref } from "vue";
 
-const sports = ref([]);
-
-onMounted(async () => {
-  sports.value = await sportsAdminApi.getAllSports();
-  console.log(sports.value);
-});
 </script>

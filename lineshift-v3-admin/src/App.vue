@@ -1,12 +1,21 @@
 <template>
   <v-app>
-    <router-view />
+    <!-- Navigation -->
+    <AdminNavigationLayout v-if="isAuthenticated" app />
+    
+    <v-main>
+      <router-view />
+    </v-main>
+
   </v-app>
 
-  <!-- Navigation -->
-  <AdminNavigationLayout />
 </template>
 
 <script setup>
 import AdminNavigationLayout from "./layouts/AdminNavigationLayout.vue";
+import { useAuthStore } from "./stores/auth.store";
+
+
+const {isAuthenticated} = storeToRefs(useAuthStore())
+
 </script>

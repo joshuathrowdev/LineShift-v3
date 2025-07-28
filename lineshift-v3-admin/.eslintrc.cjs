@@ -1,32 +1,25 @@
 // .eslintrc.cjs
 module.exports = {
-  // Specify the root directory for ESLint configuration
-  root: true,
+  root: true, // ESLint configuration is rooted here
 
-  // Define the environment variables (e.g., browser for client-side JavaScript)
   env: {
-    browser: true,
-    es2021: true, // For modern JS features (ES2021, equivalent to ES12)
-    node: true, // For Node.js specific globals, useful for build scripts etc.
+    browser: true, // Browser global variables
+    es2021: true, // ECMAScript 2021 global variables
+    node: true, // Node.js global variables
+    // 'vue/setup-compiler-macros': true, // Vue 3 <script setup> macros
   },
 
-  // Specify the parser to use for ESLint
-  // For standard JavaScript in Vue SFCs
-  parser: "vue-eslint-parser", // Use vue-eslint-parser for .vue files
+  parser: "vue-eslint-parser", // Parser for .vue files
 
-  // Configure parserOptions for the JavaScript parser
   parserOptions: {
-    ecmaVersion: "latest", // Allow parsing of latest ECMAScript features
+    ecmaVersion: "latest", // Allow latest ECMAScript syntax
     sourceType: "module", // Use ES Modules
-    // This tells vue-eslint-parser which parser to use for the <script> block
-    // Since not using TypeScript, we use ESLint's default parser (espree)
-    parser: "espree", // Or consider "@babel/eslint-parser" if you use Babel extensively
-    // Removed: project: "./tsconfig.json", // Not needed without TypeScript
+    parser: "espree", // JavaScript parser for <script> blocks
     extraFileExtensions: [".vue"], // Allow parsing JavaScript in .vue files
   },
 
-  // Define global variables (for Vue 3 Composition API macros in <script setup>)
   globals: {
+    // Vue 3 Composition API globals for <script setup>
     ref: "readonly",
     reactive: "readonly",
     computed: "readonly",
@@ -38,47 +31,60 @@ module.exports = {
     defineEmits: "readonly",
     defineExpose: "readonly",
     withDefaults: "readonly",
-    // Add other Vue 3 Composition API functions you use without explicit import
   },
 
-  // Extend recommended configurations (the "rulesets")
   extends: [
-    "eslint:recommended", // ESLint's own recommended JavaScript rules
-    // Removed: "plugin:@typescript-eslint/recommended", // Not needed without TypeScript
-    "plugin:vue/recommended", // Vue recommended rules (for Vue 3 in Legacy Config)
-    "plugin:prettier/recommended", // (Optional) Integrates Prettier rules
+    "eslint:recommended", // ESLint's recommended rules
+    "plugin:vue/recommended", // Vue 3 recommended rules (legacy format)
+    "plugin:prettier/recommended", // Integrates Prettier rules into ESLint
   ],
 
-  // Register plugins used in 'extends' or 'rules'
-  plugins: [
-    // Removed: "@typescript-eslint", // Not needed without TypeScript
-    "vue", // For Vue rules
-    "prettier", // For Prettier integration
-  ],
+  plugins: ["vue", "prettier"], // ESLint plugins
 
-  // Custom rules for your project (these override rules from 'extends')
   rules: {
     // General JavaScript rule overrides
-    "no-console": "warn", // Warn for console.log
-    // Re-enabled default `no-undef` and `no-unused-vars` since TypeScript won't handle them
-    "no-undef": "error", // Ensure undefined variables are caught
-    "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }], // Warn for unused variables (allow _ for ignored args)
+    "no-console": "warn",
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-undef": "error",
+    "no-unused-vars": ["warn", { argsIgnorePattern: "^_$" }],
 
-    // Vue specific rule overrides
-    "vue/multi-word-component-names": "off", // As you wanted
+    // Vue specific formatting rules
+    "vue/multi-word-component-names": "off",
     "vue/html-self-closing": [
       "error",
       { html: { void: "always", normal: "always", component: "always" } },
     ],
     "vue/max-attributes-per-line": [
       "error",
-      { singleline: { max: 1 }, multiline: { max: 1 } },
+      { singleline: { max: 2 }, multiline: { max: 1 } }, // Enforce 1 attribute per line
     ],
-    "vue/html-indent": ["error", 2], // Consistent indentation
-    "vue/singleline-html-element-content-newline": "off", // Allow elements on single line
-    "vue/multiline-html-element-content-newline": "off", // Allow multiline for readability
+    "vue/html-indent": ["error", 2], // 2-space indentation for Vue templates
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/multiline-html-element-content-newline": "off",
 
-    // Prettier-related (if you included plugin:prettier/recommended)
-    "prettier/prettier": "error",
+    "vue/first-attribute-linebreak": [
+      "error",
+      {
+        singleline: "beside",
+        multiline: "below", // Force attributes to new line for multi-line elements
+      },
+    ],
+
+    // Prettier rule for non-Vue files
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "lf", // Enforce LF line endings
+      },
+    ],
   },
+
+  overrides: [
+    {
+      files: ["*.vue"], // Apply these overrides only to .vue files
+      rules: {
+        "prettier/prettier": "off", // Disable Prettier rule for Vue templates
+      },
+    },
+  ],
 };
