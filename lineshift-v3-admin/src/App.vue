@@ -4,10 +4,9 @@
   </v-app>
 
   <!-- Navigation -->
-   <AdminNavigationLayout />
+  <AdminNavigationLayout />
 </template>
 
 <script setup>
-import AdminNavigationLayout from './layouts/AdminNavigationLayout.vue';
-
+import AdminNavigationLayout from "./layouts/AdminNavigationLayout.vue";
 </script>

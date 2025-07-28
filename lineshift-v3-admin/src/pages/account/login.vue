@@ -1,10 +1,7 @@
 <template>
-  <v-container> 
-
+  <v-container>
     <login-form />
   </v-container>
 </template>
 
-<script>
-
-</script>
+<script></script>

@@ -5,6 +5,6 @@
 </template>
 
 <script setup>
-const props = defineProps(['text', 'icon'])
-const {text, icon} = props
+const props = defineProps(["text", "icon"]);
+const { text, icon } = props;
 </script>

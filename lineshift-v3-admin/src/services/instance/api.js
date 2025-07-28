@@ -1,32 +1,31 @@
-import axios from "axios"
+import axios from "axios";
 
-const proxyTrigger = import.meta.env.VITE_API_TARGET_ADMIN_TRIGGER
+const proxyTrigger = import.meta.env.VITE_API_TARGET_ADMIN_TRIGGER;
 
 // Make env var
-const apiTargetPrefix = '/api/v3'
-const apiTargetURL = `${proxyTrigger + apiTargetPrefix}`
+const apiTargetPrefix = "/api/v3";
+const apiTargetURL = `${proxyTrigger + apiTargetPrefix}`;
 
-console.log(import.meta.env)
+console.log(import.meta.env);
 
 const axiosInstance = axios.create({
   baseURL: apiTargetURL,
   timeout: import.meta.env.VITE_API_TIMEOUT,
   headers: {
-    'Content-Type': 'application/json',
-  }
-})
-
+    "Content-Type": "application/json",
+  },
+});
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const token = import.meta.env.VITE_API_TARGET_ADMIN_TEMP_TOKEN
-    config.headers.Authorization = `Bearer ${token}`
+    const token = import.meta.env.VITE_API_TARGET_ADMIN_TEMP_TOKEN;
+    config.headers.Authorization = `Bearer ${token}`;
 
-    return config
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
-  }, (error) => {
-    return Promise.reject(error)
-  }
-)
-
-export default axiosInstance
+export default axiosInstance;
