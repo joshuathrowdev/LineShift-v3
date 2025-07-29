@@ -46,6 +46,21 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const logout = async () => {
+    try {
+      isLoading.value = true;
+
+      if (token.value) {
+        localStorage.removeItem("jwt_token");
+      }
+
+      token.value = null;
+      user.value = null;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   const setAuthData = (responseToken, sessionUser) => {
     token.value = responseToken;
     user.value = sessionUser;
@@ -67,5 +82,6 @@ export const useAuthStore = defineStore("auth", () => {
 
     initializeAuth,
     login,
+    logout,
   };
 });

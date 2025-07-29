@@ -15,6 +15,7 @@
 </script>
 
 <route lang="yaml">
+  name: 'hub'
   meta:
     requiresAuth: true
 </route>

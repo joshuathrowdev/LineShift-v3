@@ -1,7 +1,10 @@
 <template>
   <v-navigation-drawer floating>
     <v-list>
-      <admin-nav-link text="Hub" icon="mdi-hubspot" />
+      <admin-nav-link
+        text="Hub"
+        icon="mdi-hubspot"
+        :to="{name: 'hub'}"/>
 
       <admin-nav-link-banner title="Manage" />
 
@@ -14,7 +17,7 @@
       <admin-nav-link-banner title="Message Boards" />
       <admin-nav-link text="General Chat" icon="mdi-chat" />
       <admin-nav-link
-        v-for="role in sessionUser?.roles"
+        v-for="role in user?.roles"
         :key="role"
         icon="mdi-chat-outline"
         :text="role"
@@ -22,7 +25,12 @@
 
       <v-divider color="primary" :thickness="6" />
 
-      <admin-nav-link text="Back To Lineshift" icon="mdi-arrow-left-circle" />
+      <admin-nav-link
+        text="Back To Lineshift"
+        icon="mdi-arrow-left-circle"
+        :href="clientDomain"
+        target="blank"
+      />
     </v-list>
 
     <template #append>
@@ -42,14 +50,19 @@
 <script setup>
 import { useAuthStore } from "@/stores/auth.store";
 import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 
 const authStore = useAuthStore();
-const { sessionUser } = storeToRefs(authStore);
+const { user } = storeToRefs(authStore);
 const { logout } = authStore;
 
 const router = useRouter();
 const handleLogout = async () => {
   await logout();
+  console.log(router.getRoutes())
   router.push({ name: "login" });
 };
+
+const clientDomain = computed(() => import.meta.env.VITE_CLIENT_DOMAIN)
+console.log(clientDomain.value)
 </script>

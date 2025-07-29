@@ -53,9 +53,9 @@ router.beforeEach(async (to, from, next) => {
   const redirectIfAuth = to.meta.redirectIfAuth;
 
   if (requiresAuth && !isAuthenticated.value) {
-    next({ name: "/account/login" });
+    next({ name: "login" });
   } else if (redirectIfAuth && isAuthenticated.value) {
-    next({ name: "/" });
+    next({ name: "hub" });
   } else {
     next();
   }

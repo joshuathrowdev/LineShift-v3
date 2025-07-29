@@ -2,9 +2,6 @@
   <v-spacer/>
 
   <v-container class="min-h">
-    {{ user }}<br/></br><br/></br><br/></br>
-    {{ token }}<br/></br>
-
     <v-row class="">
       <v-col cols="12">
         <login-form @login-attempt="handleLoginAttempt"/>
@@ -29,12 +26,13 @@ const handleLoginAttempt = async (credentials) => {
   await login(credentials)
 
   if(isAuthenticated.value) {
-    router.push({name: '/'})
+    router.push({name: 'hub'})
   }
 }
 </script>
 
 <route lang="yaml">
+  name: 'login'
   meta:
     requiresAuth: false
     redirectIfAuth: true

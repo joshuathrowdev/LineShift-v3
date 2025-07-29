@@ -9,7 +9,7 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn :to="{name: '/'}"
+      <v-btn :to="{name: 'hub'}"
       >Hub</v-btn>
     </v-card-actions>
   </v-card>
