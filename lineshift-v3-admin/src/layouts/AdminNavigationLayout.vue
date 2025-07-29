@@ -4,7 +4,6 @@
     v-if="isAuthenticated"
     :elevation="2" 
     color="primary"
-    app
     density="compact">
     <template #prepend>
       <v-app-bar-nav-icon

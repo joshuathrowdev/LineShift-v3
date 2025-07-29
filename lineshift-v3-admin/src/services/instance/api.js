@@ -1,3 +1,5 @@
+import { useAuthStore } from "@/stores/auth.store";
+import { storeToRefs } from "pinia";
 import axios from "axios";
 
 const proxyTrigger = import.meta.env.VITE_API_TARGET_ADMIN_TRIGGER;
@@ -18,8 +20,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const token = import.meta.env.VITE_API_TARGET_ADMIN_TEMP_TOKEN;
-    config.headers.Authorization = `Bearer ${token}`;
+    const { token } = storeToRefs(useAuthStore());
+    config.headers.Authorization = `Bearer ${token.value}`;
 
     return config;
   },

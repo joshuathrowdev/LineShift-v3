@@ -8,6 +8,8 @@
 import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes";
+import { useAuthStore } from "@/stores/auth.store";
+import { storeToRefs } from "pinia";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +33,24 @@ router.onError((err, to) => {
 
 router.isReady().then(() => {
   localStorage.removeItem("vuetify:dynamic-reload");
+});
+
+router.beforeEach(async (to, from, next) => {
+  const { token, isAuthReady, isAuthenticated, user, isLoading } =
+    storeToRefs(useAuthStore());
+  const { initializeAuth } = useAuthStore();
+
+  if (token.value && !isAuthReady.value && !isLoading.value) {
+    await initializeAuth();
+  }
+
+  if (token.value && !isAuthReady.value && isLoading.value) {
+    return new Promise((resolve) => setTimeout(resolve, 100));
+  }
+
+  // Route Metas
+
+  next();
 });
 
 export default router;
