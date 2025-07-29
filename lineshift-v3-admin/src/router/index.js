@@ -49,8 +49,16 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Route Metas
+  const requiresAuth = to.meta.requiresAuth;
+  const redirectIfAuth = to.meta.redirectIfAuth;
 
-  next();
+  if (requiresAuth && !isAuthenticated.value) {
+    next({ name: "/account/login" });
+  } else if (redirectIfAuth && isAuthenticated.value) {
+    next({ name: "/" });
+  } else {
+    next();
+  }
 });
 
 export default router;

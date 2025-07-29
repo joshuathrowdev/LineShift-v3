@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- Navigation -->
-    <AdminNavigationLayout v-if="isAuthenticated" app />
+    <AdminNavigationLayout v-if="isAuthenticated" />
     
     <v-main>
       <router-view />

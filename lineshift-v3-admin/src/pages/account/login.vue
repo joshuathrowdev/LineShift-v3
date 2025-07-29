@@ -35,5 +35,7 @@ const handleLoginAttempt = async (credentials) => {
 </script>
 
 <route lang="yaml">
-  
+  meta:
+    requiresAuth: false
+    redirectIfAuth: true
 </route>
