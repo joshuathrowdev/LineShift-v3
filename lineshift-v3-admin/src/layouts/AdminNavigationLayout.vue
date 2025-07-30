@@ -12,11 +12,9 @@
         @click="navMenu = !navMenu"
       />
     </template>
-
-    <v-app-bar-title class="text-h5"> Welcome {{ user?.userName }} </v-app-bar-title>
   </v-app-bar>
+  
   <admin-nav-links v-model="navMenu" />
-
 </template>
 
 <script setup>

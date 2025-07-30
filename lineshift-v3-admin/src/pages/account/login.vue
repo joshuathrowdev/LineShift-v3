@@ -1,8 +1,16 @@
 <template>
-
-
-  <v-container class="">
-    <v-row class="h-100">
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-card class="text-center" color="secondary-darken-1">
+          <v-card-title class="text-h3">
+            Lineshift Admin Panel
+          </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
+    
+    <v-row>
       <v-col cols="12">
         <login-form @login-attempt="handleLoginAttempt"/>
       </v-col>

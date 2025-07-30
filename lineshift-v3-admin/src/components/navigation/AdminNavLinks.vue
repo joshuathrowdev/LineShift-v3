@@ -1,21 +1,28 @@
 <template>
-  <v-navigation-drawer floating>
+  <v-navigation-drawer v-model="navDrawer" floating>
     <v-list>
       <admin-nav-link
         text="Hub"
         icon="mdi-hubspot"
-        :to="{name: 'hub'}"/>
+        :to="{name: 'hub'}"
+        @click="navDrawer.value = false"/>
 
       <admin-nav-link-banner title="Manage" />
 
-      <admin-nav-link text="Resources" icon="mdi-chart-bubble" />
+      <admin-nav-link
+        text="Resources"
+        icon="mdi-chart-bubble"
+        :to="{name: 'resources'}" 
+        @click="navDrawer.value = false"/>
 
       <admin-nav-link text="Users" icon="mdi-account-group" />
 
       <admin-nav-link text="Reports" icon="mdi-alert-outline" />
 
       <admin-nav-link-banner title="Message Boards" />
+
       <admin-nav-link text="General Chat" icon="mdi-chat" />
+
       <admin-nav-link
         v-for="role in user?.roles"
         :key="role"
@@ -56,6 +63,8 @@ const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 const { logout } = authStore;
 
+const navDrawer = ref(false )
+
 const router = useRouter();
 const handleLogout = async () => {
   await logout();
@@ -64,5 +73,4 @@ const handleLogout = async () => {
 };
 
 const clientDomain = computed(() => import.meta.env.VITE_REG_CLIENT_DOMAIN)
-console.log(clientDomain.value)
 </script>

@@ -1,6 +1,6 @@
 import axiosInstance from "./instance/api";
 
-const sportsAdminApi = {
+const sportsApi = {
   async getAllSports() {
     try {
       const response = await axiosInstance.get("/sports");
@@ -12,4 +12,4 @@ const sportsAdminApi = {
   },
 };
 
-export default sportsAdminApi;
+export default sportsApi;
