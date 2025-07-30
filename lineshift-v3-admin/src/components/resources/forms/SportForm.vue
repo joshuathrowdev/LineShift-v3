@@ -51,61 +51,26 @@
       <v-row>
         <v-col>
           <div class="d-flex flex-row justify-space-around">
-            <slot name="resourceFormModalCloseBtn" />
+            <slot name="closeBtn" />
 
-            <v-dialog>
-              <template #activator="{props}">
-                <v-btn
-                  v-bind="props"
-                  color="secondary"
-                  :disabled="!isSportFormValid"
-                >
-                  <template #prepend>
-                    <v-icon
-                      icon="mdi-database-plus-outline"
-                      color="secondary-accent"
-                    />
-                  </template>
-                  Create
-                </v-btn>
-              </template> 
-
-              <template #default="{isActive}">
-                <div class="d-flex flex-row justify-center"
-                >
-                  <v-card
-                    class="pa-5"
-                    rounded
-                  >
-                    <v-card-title class="text-wrap">
-                      Are you sure you would like to create the {{ keyword }}: "{{ sportDto.SportName }}"
-                    </v-card-title>
-
-                    <v-card-actions class="d-flex flex-row justify-space-around"
-                    >
-                      <v-btn
-                        color="primary"
-                        variant="flat"
-                        @click="isActive.value = false"
-                      >
-                        No
-                      </v-btn>
-                      <v-btn
-                        color="secondary"
-                        variant="flat"
-                        type="submit"
-                        
-                      >
-                        Yes
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </div>
+            <v-btn
+              v-bind="props"
+              color="primary-darken-1"
+              :disabled="!isSportFormValid"
+            >
+              <template #prepend>
+                <v-icon
+                  icon="mdi-database-plus-outline"
+                  color="primary-accent"
+                />
               </template>
-            </v-dialog>
+              Create
+            </v-btn>
           </div>
         </v-col>
       </v-row>
+
+
     </v-container>
   </v-form>
 </template>

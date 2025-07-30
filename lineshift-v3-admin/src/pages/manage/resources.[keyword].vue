@@ -13,7 +13,7 @@
     </v-row>
 
     <v-row>
-      <v-col>
+      <v-col cols="12">
         <v-card color="secondary"
         >
           <v-card-title class="text-h4 text-uppercase">
@@ -24,12 +24,10 @@
     </v-row>
 
     <v-row>
-      <v-col>
+      <v-col cols="12">
         <component :is="resourceComponent" :key="keyword"/>
       </v-col>
     </v-row>
-
-    
   </v-container>
 </template>
 
