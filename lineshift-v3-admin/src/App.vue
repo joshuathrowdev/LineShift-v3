@@ -3,7 +3,7 @@
     <!-- Navigation -->
     <AdminNavigationLayout v-if="isAuthenticated" />
     
-    <v-main>
+    <v-main class="h-100">
       <router-view />
     </v-main>
 

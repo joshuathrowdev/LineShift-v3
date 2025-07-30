@@ -63,6 +63,6 @@ const handleLogout = async () => {
   router.push({ name: "login" });
 };
 
-const clientDomain = computed(() => import.meta.env.VITE_CLIENT_DOMAIN)
+const clientDomain = computed(() => import.meta.env.VITE_REG_CLIENT_DOMAIN)
 console.log(clientDomain.value)
 </script>

@@ -4,8 +4,8 @@
     rounded
     variant="flat"
   >
-    <v-card-text>
-      <v-form ref="form" > 
+    <v-form v-model="isFormValid" > 
+      <v-card-text>
         <v-text-field
           v-model="credentials.email"
           label="U Email"
@@ -30,20 +30,20 @@
           variant="underlined"
           prepend-inner-icon="mdi-onepassword"
         />
+        {{ credentials }}
+      </v-card-text>
 
-      </v-form>
-      {{ credentials }}
-    </v-card-text>
-
-    <v-card-actions class="d-flex flex-row justify-space-around">
-      <v-btn
-        color="primary-darken-1"
-        variant="flat"
-        class="px-5"
-        type="submit"
-        prepend-icon="mdi-door-closed-lock"
-        @click="handleLoginAttempt"><span class="text-primary-accent">Login</span></v-btn>
-    </v-card-actions>
+      <v-card-actions class="d-flex flex-row justify-space-around">
+        <v-btn
+          color="primary-darken-1"
+          variant="flat"
+          class="px-5"
+          :disabled="!isFormValid"
+          type="submit"
+          prepend-icon="mdi-door-closed-lock"
+          @click="handleLoginAttempt"><span class="text-primary-accent">Login</span></v-btn>
+      </v-card-actions>
+    </v-form>
   </v-card>
 </template>
 
@@ -56,12 +56,11 @@ const credentials = ref({
   password: null,
 })
 
-const form = ref(null)
+const isFormValid = ref(null)
 
 const handleLoginAttempt = async () => {
-  const {valid} = await form.value.validate()
 
-  if (valid) {
+  if (isFormValid.value) {
     console.log(credentials.value)
 
     emits('login-attempt', credentials.value)

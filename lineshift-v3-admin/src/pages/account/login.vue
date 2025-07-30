@@ -1,15 +1,14 @@
 <template>
-  <v-spacer/>
 
-  <v-container class="min-h">
-    <v-row class="">
+
+  <v-container class="">
+    <v-row class="h-100">
       <v-col cols="12">
         <login-form @login-attempt="handleLoginAttempt"/>
       </v-col>
     </v-row>
   </v-container>
 
-  <v-spacer />
 </template>
 
 <script setup>
