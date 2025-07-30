@@ -28,6 +28,7 @@
 
     <div v-if="hasPermissions">
       <v-divider color="primary" />
+      
       <v-list-item
         class="py-5"
         rounded

@@ -42,5 +42,12 @@
 </template>
 
 <script setup>
+import useSportsStore from '@/stores/sports.store';
 
+const {getAllSports} = useSportsStore()
+
+
+onMounted(async () => {
+  await getAllSports()
+})
 </script>

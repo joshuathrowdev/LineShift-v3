@@ -1,11 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, shallowRef } from "vue";
 import { defineAsyncComponent } from "vue";
-import sportsApi from "@/services/sports.api";
-
-const resourceApisGetHttpMethod = {
-  sports: sportsApi.getAllSports,
-};
 
 export const useResourceStore = defineStore("resources", () => {
   // AUto find and map components based on glob template we pass
@@ -29,14 +24,6 @@ export const useResourceStore = defineStore("resources", () => {
   );
 
   // Actions
-  const getResourceByKeyword = async (keyword) => {
-    try {
-      resourceItems.value = await resourceApisGetHttpMethod[keyword]();
-    } catch (error) {
-      throw error;
-    }
-  };
-
   const loadResourceComponent = async () => {
     resourceComponent.value = null; // clears old loaded component
 
@@ -75,7 +62,6 @@ export const useResourceStore = defineStore("resources", () => {
     singularNounResourceKeyword,
 
     // Actions
-    getResourceByKeyword,
     loadResourceComponent,
   };
 });

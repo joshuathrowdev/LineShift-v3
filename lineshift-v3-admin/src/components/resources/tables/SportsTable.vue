@@ -1,7 +1,8 @@
 <template>
   <v-data-table
-    :items="resourceItems"
+    :items="sports"
     :search="tableSearch"
+    :headers="headers"
     class="pa-4"
   > 
     <template #top>
@@ -18,16 +19,17 @@
 </template>
 
 <script setup>
-  import { useResourceStore } from '@/stores/resources.store';
+  import useSportsStore from '@/stores/sports.store';
   import { storeToRefs } from 'pinia';
 
-  const {resourceItems} = storeToRefs(useResourceStore())
-  const {getResourceByKeyword} = useResourceStore()
-
+ 
+  const {sports} = storeToRefs(useSportsStore())
+  
   const tableSearch = ref('')
-
-
-  onMounted(async () => {
-    await getResourceByKeyword('sports')
-  })
+  const headers = [
+    {title: 'Sport Id', value: 'sportId', sortable: true},
+    {title: 'Name', value: 'sportName', sortable: true},
+    {title: 'Type', value: 'type'},
+    {title: 'Description', value: 'description'},
+  ]
 </script>
