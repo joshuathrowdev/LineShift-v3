@@ -19,6 +19,7 @@ declare module 'vue' {
     ResourcesTable: typeof import('./src/components/resources/resourcesTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Snackbar: typeof import('./src/components/Snackbar.vue')['default']
     SportForm: typeof import('./src/components/resources/forms/SportForm.vue')['default']
     Sports: typeof import('./src/components/resources/Sports.vue')['default']
     SportsTable: typeof import('./src/components/resources/tables/SportsTable.vue')['default']

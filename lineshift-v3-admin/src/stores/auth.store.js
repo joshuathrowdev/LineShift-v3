@@ -1,7 +1,10 @@
 import { defineStore } from "pinia";
 import authAdminApi from "@/services/auth.api";
+import { useSnackbarStore } from "./snackbar.store";
 
 export const useAuthStore = defineStore("auth", () => {
+  const { showError, showSuccess } = useSnackbarStore();
+
   // State
   const user = ref(null);
   const token = ref(localStorage.getItem("jwt_token") || null);
@@ -33,14 +36,11 @@ export const useAuthStore = defineStore("auth", () => {
   const login = async (credentials) => {
     try {
       isLoading.value = true;
-
       const response = await authAdminApi.login(credentials);
-
-      if (response) {
-        setAuthData(response.token, response.sessionUser);
-      }
+      setAuthData(response.token, response.sessionUser);
     } catch (error) {
-      throw error;
+      console.log(error);
+      showError(error.message);
     } finally {
       isLoading.value = false;
     }
@@ -49,6 +49,7 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = async () => {
     try {
       isLoading.value = true;
+      const userName = user.value.userName;
 
       if (token.value) {
         localStorage.removeItem("jwt_token");
@@ -56,6 +57,12 @@ export const useAuthStore = defineStore("auth", () => {
 
       token.value = null;
       user.value = null;
+
+      showSuccess(`Successfully logged out, goodbye ${userName} `);
+      return true;
+    } catch (error) {
+      showError("An error occurred while attempting to logout");
+      return false;
     } finally {
       isLoading.value = false;
     }

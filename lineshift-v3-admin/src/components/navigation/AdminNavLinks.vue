@@ -67,9 +67,10 @@ const navDrawer = ref(false )
 
 const router = useRouter();
 const handleLogout = async () => {
-  await logout();
-  console.log(router.getRoutes())
-  router.push({ name: "login" });
+  const success = await logout();
+  if (success) {
+    router.push({ name: "login" });
+  }
 };
 
 const clientDomain = computed(() => import.meta.env.VITE_REG_CLIENT_DOMAIN)

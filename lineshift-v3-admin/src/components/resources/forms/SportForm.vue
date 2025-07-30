@@ -1,6 +1,7 @@
 <template>
   <v-form
     v-model="sportForm"
+    class="pa-5"
     @submit.prevent
   > 
     <v-container>
@@ -69,8 +70,6 @@
           </div>
         </v-col>
       </v-row>
-
-
     </v-container>
   </v-form>
 </template>

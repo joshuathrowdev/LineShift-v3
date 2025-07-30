@@ -1,14 +1,16 @@
 import { defineStore } from "pinia";
 import { ref, computed, shallowRef } from "vue";
 import { defineAsyncComponent } from "vue";
+import { useSnackbarStore } from "./snackbar.store";
 
 export const useResourceStore = defineStore("resources", () => {
-  // AUto find and map components based on glob template we pass
+  const { showError } = useSnackbarStore();
+
+  // Auto find and map components based on glob template we pass
   const componentGlobModules = import.meta.glob("@/components/resources/*.vue");
 
   // State
   const resourceKeyword = ref("");
-  const resourceItems = ref([]);
   const resourceComponent = shallowRef(null);
 
   // Getters
@@ -39,22 +41,16 @@ export const useResourceStore = defineStore("resources", () => {
         // wraps dynamic import, handling loading
         resourceComponent.value = defineAsyncComponent(componentLoader);
       } catch (error) {
-        console.error(
-          `Failed to load component for ${resourceKeyword.value}: `,
-          error,
-        );
+        showError(`Failed to load component for ${resourceKeyword.value}.`);
       }
     } else {
-      console.warn(
-        `Component for keyword '${resourceKeyword.value}' not found`,
-      );
+      showError(`Component for keyword '${resourceKeyword.value}' not found.`);
     }
   };
 
   return {
     // State
     resourceKeyword,
-    resourceItems,
     resourceComponent,
 
     // Getters

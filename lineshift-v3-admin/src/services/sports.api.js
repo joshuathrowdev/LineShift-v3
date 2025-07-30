@@ -1,4 +1,6 @@
+import { useSnackbarStore } from "@/stores/snackbar.store";
 import axiosInstance from "./instance/api";
+import { parseApiErrorResponse } from "@/utilities/apiResponseParser";
 
 const sportsApi = {
   async getAllSports() {
@@ -7,7 +9,7 @@ const sportsApi = {
       console.log(response.data);
       return response.data;
     } catch (error) {
-      throw error;
+      throw parseApiErrorResponse(error);
     }
   },
 };
