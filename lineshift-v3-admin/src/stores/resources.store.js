@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import sportsApi from "@/services/sports.api";
+import Sports from "@/components/resources/Sports.vue";
 
 const resourceApisGetHttpMethod = {
   sports: sportsApi.getAllSports,
@@ -12,11 +13,20 @@ export const useResourceStore = defineStore("resources", () => {
   const resourceItems = ref([]);
   const loading = ref(false);
 
+  const resourceComponentMap = ref({
+    sports: () => import(Sports),
+  });
+
   // Getters
   const formattedResourceKeyword = computed(
     () =>
       resourceKeyword.value.charAt(0).toUpperCase() +
       resourceKeyword.value.slice(1),
+  );
+  const singularNounResourceKeyword = computed(
+    () =>
+      resourceKeyword.value.charAt(0).toUpperCase() +
+      resourceKeyword.value.slice(1, resourceKeyword.value.length - 1),
   );
 
   // Actions
@@ -34,9 +44,11 @@ export const useResourceStore = defineStore("resources", () => {
     // State
     resourceKeyword,
     resourceItems,
+    resourceComponentMap,
 
     // Getters
     formattedResourceKeyword,
+    singularNounResourceKeyword,
 
     // Actions
     getResourceByKeyword,
