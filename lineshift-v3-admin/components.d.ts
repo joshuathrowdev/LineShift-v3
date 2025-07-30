@@ -13,10 +13,13 @@ declare module 'vue' {
     AdminNavLinks: typeof import('./src/components/navigation/AdminNavLinks.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    LeagueForm: typeof import('./src/components/resources/forms/LeagueForm.vue')['default']
+    Leagues: typeof import('./src/components/resources/Leagues.vue')['default']
     LoginForm: typeof import('./src/components/authentication/LoginForm.vue')['default']
     ResourcesTable: typeof import('./src/components/resources/resourcesTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SportForm: typeof import('./src/components/resources/forms/SportForm.vue')['default']
     Sports: typeof import('./src/components/resources/Sports.vue')['default']
     SportsTable: typeof import('./src/components/resources/tables/SportsTable.vue')['default']
   }

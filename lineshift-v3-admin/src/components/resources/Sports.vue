@@ -17,6 +17,7 @@
 </template>
 
 <script setup>
-import SportForm from '@/pages/manage/forms/SportForm.vue';
+import SportsTable from './tables/SportsTable.vue';
+import SportForm from './forms/SportForm.vue';
 
 </script>

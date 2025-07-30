@@ -21,8 +21,6 @@ declare module 'vue-router/auto-routes' {
     '/[...notFound]': RouteRecordInfo<'/[...notFound]', '/:notFound(.*)', { notFound: ParamValue<true> }, { notFound: ParamValue<false> }>,
     'login': RouteRecordInfo<'login', '/account/login', Record<never, never>, Record<never, never>>,
     'hub': RouteRecordInfo<'hub', '/hub', Record<never, never>, Record<never, never>>,
-    '/manage/forms/LeagueForm': RouteRecordInfo<'/manage/forms/LeagueForm', '/manage/forms/LeagueForm', Record<never, never>, Record<never, never>>,
-    '/manage/forms/SportForm': RouteRecordInfo<'/manage/forms/SportForm', '/manage/forms/SportForm', Record<never, never>, Record<never, never>>,
     'resources': RouteRecordInfo<'resources', '/manage/resources', Record<never, never>, Record<never, never>>,
     '/manage/resources.[keyword]': RouteRecordInfo<'/manage/resources.[keyword]', '/manage/resources/:keyword', { keyword: ParamValue<true> }, { keyword: ParamValue<false> }>,
   }

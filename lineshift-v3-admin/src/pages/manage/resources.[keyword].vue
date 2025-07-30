@@ -39,17 +39,16 @@ import { useResourceStore } from '@/stores/resources.store';
 import { storeToRefs } from 'pinia';
 
 
-
-const {resourceKeyword, formattedResourceKeyword, resourceComponentMap} = storeToRefs(useResourceStore())
-
+const {resourceComponent, resourceKeyword, formattedResourceKeyword} = storeToRefs(useResourceStore())
+const {loadResourceComponent} = useResourceStore()
 
 const route = useRoute()
 const keyword = route.params.keyword
-const resourceComponent = computed(() => resourceComponentMap[keyword])
 
 
 onMounted(async () => {
   resourceKeyword.value = keyword
+  await loadResourceComponent()
 })
 </script>
 

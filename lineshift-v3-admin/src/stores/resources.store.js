@@ -1,21 +1,20 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref, computed, shallowRef } from "vue";
+import { defineAsyncComponent } from "vue";
 import sportsApi from "@/services/sports.api";
-import Sports from "@/components/resources/Sports.vue";
 
 const resourceApisGetHttpMethod = {
   sports: sportsApi.getAllSports,
 };
 
 export const useResourceStore = defineStore("resources", () => {
+  // AUto find and map components based on glob template we pass
+  const componentGlobModules = import.meta.glob("@/components/resources/*.vue");
+
   // State
   const resourceKeyword = ref("");
   const resourceItems = ref([]);
-  const loading = ref(false);
-
-  const resourceComponentMap = ref({
-    sports: () => import(Sports),
-  });
+  const resourceComponent = shallowRef(null);
 
   // Getters
   const formattedResourceKeyword = computed(
@@ -32,11 +31,36 @@ export const useResourceStore = defineStore("resources", () => {
   // Actions
   const getResourceByKeyword = async (keyword) => {
     try {
-      loading.value = true;
       resourceItems.value = await resourceApisGetHttpMethod[keyword]();
     } catch (error) {
-    } finally {
-      loading.value = false;
+      throw error;
+    }
+  };
+
+  const loadResourceComponent = async () => {
+    resourceComponent.value = null; // clears old loaded component
+
+    const componentPath = `/src/components/resources/${formattedResourceKeyword.value}.vue`;
+    const componentLoader = componentGlobModules[componentPath];
+
+    console.log(componentPath);
+    console.log(componentLoader);
+    console.log(componentGlobModules);
+
+    if (componentLoader) {
+      try {
+        // wraps dynamic import, handling loading
+        resourceComponent.value = defineAsyncComponent(componentLoader);
+      } catch (error) {
+        console.error(
+          `Failed to load component for ${resourceKeyword.value}: `,
+          error,
+        );
+      }
+    } else {
+      console.warn(
+        `Component for keyword '${resourceKeyword.value}' not found`,
+      );
     }
   };
 
@@ -44,7 +68,7 @@ export const useResourceStore = defineStore("resources", () => {
     // State
     resourceKeyword,
     resourceItems,
-    resourceComponentMap,
+    resourceComponent,
 
     // Getters
     formattedResourceKeyword,
@@ -52,5 +76,6 @@ export const useResourceStore = defineStore("resources", () => {
 
     // Actions
     getResourceByKeyword,
+    loadResourceComponent,
   };
 });
