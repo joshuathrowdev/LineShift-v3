@@ -1,6 +1,6 @@
 <template>
   <v-form
-    v-model="sportForm"
+    v-model="form"
     class="pa-5"
     @submit.prevent
   > 
@@ -57,7 +57,7 @@
             <v-btn
               v-bind="props"
               color="primary-darken-1"
-              :disabled="!isSportFormValid"
+              :disabled="!isformValid"
             >
               <template #prepend>
                 <v-icon
@@ -78,7 +78,7 @@
 import { ref } from 'vue';
 
 
-const props = defineProps(['keyword'])
+const props = defineProps(['parent-display'])
 const {keyword} = props
 
 const sportNameRules = [
@@ -103,9 +103,9 @@ const sportDto = ref ({
   Type: ''
 })
 
-const sportForm = ref(null)
-const isSportFormValid = computed(() => 
-  sportForm.value && sportDto.value.SportName !== '' && sportDto.value.Type !== '' & sportDto.value.Description !== ''
+const form = ref(null)
+const isformValid = computed(() => 
+  form.value && sportDto.value.SportName !== '' && sportDto.value.Type !== '' & sportDto.value.Description !== ''
 )
 
 
@@ -118,7 +118,7 @@ const resetSportDto = () => {
   sportDto.value.Type = ''
 }
 
-const handleSportFormSubmit = async() => {
+const handleformSubmit = async() => {
   // await createSport(sportDto.value)
 
   resetSportDto()

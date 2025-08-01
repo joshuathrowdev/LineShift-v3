@@ -1,5 +1,5 @@
 import sportsApi from "@/services/sports.api";
-import { useSnackbarStore } from "./snackbar.store";
+import { useSnackbarStore } from "../snackbar.store";
 
 const useSportsStore = defineStore("sports", () => {
   const { showError } = useSnackbarStore();

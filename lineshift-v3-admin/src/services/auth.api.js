@@ -17,7 +17,6 @@ const authAdminApi = {
   },
 
   async login(credentials) {
-    const { showError } = useSnackbarStore();
     try {
       const response = await axiosInstance.post("/auth/login", credentials);
       return response.data;

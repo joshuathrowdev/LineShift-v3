@@ -8,8 +8,6 @@ const proxyTrigger = import.meta.env.VITE_API_TARGET_ADMIN_TRIGGER;
 const apiTargetPrefix = "/api/v3";
 const apiTargetURL = `${proxyTrigger + apiTargetPrefix}`;
 
-console.log(import.meta.env);
-
 const axiosInstance = axios.create({
   baseURL: apiTargetURL,
   timeout: import.meta.env.VITE_API_TIMEOUT,

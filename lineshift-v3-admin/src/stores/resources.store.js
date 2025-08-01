@@ -14,10 +14,13 @@ export const useResourceStore = defineStore("resources", () => {
   const resourceComponent = shallowRef(null);
 
   // Getters
-  const formattedResourceKeyword = computed(
-    () =>
-      resourceKeyword.value.charAt(0).toUpperCase() +
-      resourceKeyword.value.slice(1),
+  const formattedResourceKeyword = computed(() =>
+    resourceKeyword.value
+      .split("-")
+      .map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(""),
   );
   const singularNounResourceKeyword = computed(
     () =>
@@ -29,7 +32,10 @@ export const useResourceStore = defineStore("resources", () => {
   const loadResourceComponent = async () => {
     resourceComponent.value = null; // clears old loaded component
 
+    // grabs components from the 'components/resources' folder only
+    // tries to match the route name to a component name in the blob (component dir its looking at )
     const componentPath = `/src/components/resources/${formattedResourceKeyword.value}.vue`;
+    console.log(formattedResourceKeyword.value);
     const componentLoader = componentGlobModules[componentPath];
 
     console.log(componentPath);

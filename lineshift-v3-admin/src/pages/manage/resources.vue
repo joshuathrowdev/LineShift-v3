@@ -28,19 +28,13 @@
       </v-col>
 
       <v-col cols="4">
-        <v-card>
-          <v-card-title>Teams</v-card-title>
+        <v-card :to="{name: '/manage/resources.[keyword]', params: {'keyword': 'governing-bodies'}}">
+          <v-card-title>Governing Bodies</v-card-title>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
-
-<script setup>
-import router from '@/router';
-
-console.log(router.getRoutes())
-</script>
 
 <route lang="yaml">
   name: 'resources'

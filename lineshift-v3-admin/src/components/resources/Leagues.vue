@@ -6,12 +6,17 @@
     </v-card-text>
   </v-card>
 
-  s
+  <div class="d-flex justify-end w-100 mt-4">
+    <create-new-resource-button 
+      single-noun-resource-key="League"
+      :resource-post-form="LeagueForm"
+    />
+  </div>
 </template>
 
 <script setup>
-import useLeaguesStore from '@/stores/leagues.store';
-
+import useLeaguesStore from '@/stores/resources/leagues.store'
+import LeagueForm from './forms/LeagueForm.vue'
 
 const {getAllLeagues} = useLeaguesStore()
 

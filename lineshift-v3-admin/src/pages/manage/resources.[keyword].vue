@@ -17,7 +17,7 @@
         <v-card color="secondary"
         >
           <v-card-title class="text-h4 text-uppercase">
-            {{ formattedResourceKeyword }}
+            {{ displayResourceKeyword }}
           </v-card-title>
         </v-card>
       </v-col>
@@ -40,9 +40,11 @@ import { storeToRefs } from 'pinia';
 const {resourceComponent, resourceKeyword, formattedResourceKeyword} = storeToRefs(useResourceStore())
 const {loadResourceComponent} = useResourceStore()
 
+
+const displayResourceKeyword = computed(() => formattedResourceKeyword.value.replace(/([A-Z])/g, ' $1').trim()) // Find all uppercase letters, replace each with space + that letter, then trim whitespace
+
 const route = useRoute()
 const keyword = route.params.keyword
-
 
 onMounted(async () => {
   resourceKeyword.value = keyword

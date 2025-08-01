@@ -20,6 +20,7 @@
 
 
 <script setup>
+useSnackbarStore
 import { useSnackbarStore } from '@/stores/snackbar.store';
 import { storeToRefs } from 'pinia';
 

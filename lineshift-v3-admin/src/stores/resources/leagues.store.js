@@ -1,5 +1,5 @@
 import leaguesApi from "@/services/leagues.api";
-import { useSnackbarStore } from "./snackbar.store";
+import { useSnackbarStore } from "../snackbar.store";
 import { defineStore } from "pinia";
 
 const useLeaguesStore = defineStore("leagues", () => {

@@ -61,8 +61,6 @@ const isFormValid = ref(null)
 const handleLoginAttempt = async () => {
 
   if (isFormValid.value) {
-    console.log(credentials.value)
-
     emits('login-attempt', credentials.value)
     resetForm()
   }

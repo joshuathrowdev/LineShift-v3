@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-  import useSportsStore from '@/stores/sports.store';
+  import useSportsStore from '@/stores/resources/sports.store';
   import { storeToRefs } from 'pinia';
 
  
