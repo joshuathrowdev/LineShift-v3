@@ -7,7 +7,8 @@
     </v-card-text>
   </v-card>
   
-  <v-card-actions class="d-flex justify-end w-100">
+
+  <div class="d-flex justify-end w-100 mt-4">
     <v-dialog>
       <template #activator="{props}">
         <v-btn
@@ -38,7 +39,7 @@
         </div>
       </template>
     </v-dialog>
-  </v-card-actions>
+  </div>
 </template>
 
 <script setup>
@@ -51,3 +52,8 @@ onMounted(async () => {
   await getAllSports()
 })
 </script>
+
+<route lang="yaml">
+  meta:
+    requiresAuth: true
+</route>

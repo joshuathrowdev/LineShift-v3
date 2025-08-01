@@ -6,14 +6,7 @@
     class="pa-4"
   > 
     <template #top>
-      <v-text-field 
-        v-model="tableSearch"
-        variant="outlined"
-        label="Search"
-        color="primary-accent"
-        prepend-inner-icon="mdi-card-search-outline"
-        class="ml-3"
-      />
+      <resource-table-search  v-model="tableSearch"/>
     </template>
   </v-data-table>
 </template>

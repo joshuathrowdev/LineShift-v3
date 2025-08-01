@@ -54,5 +54,4 @@ onMounted(async () => {
 <route lang="yaml">
   meta:
     requiredAuth: true
-    requiresAdmin: true
 </route>

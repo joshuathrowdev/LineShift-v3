@@ -44,4 +44,6 @@ console.log(router.getRoutes())
 
 <route lang="yaml">
   name: 'resources'
+  meta:
+   requiresAuth: true
 </route>
