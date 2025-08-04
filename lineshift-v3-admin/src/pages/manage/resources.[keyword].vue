@@ -3,8 +3,8 @@
     <v-row>
       <v-col>
         <v-btn
-          color="primary-darken-1"
-          variant="flat"
+          color="primary"
+          variant="underlined"
           prepend-icon="mdi-arrow-left-thin"
           text="Back"
           :to="{name: 'resources'}"
@@ -14,7 +14,7 @@
 
     <v-row>
       <v-col cols="12">
-        <v-card color="secondary"
+        <v-card color="primary"
         >
           <v-card-title class="text-h4 text-uppercase">
             {{ displayResourceKeyword }}

@@ -10,7 +10,7 @@
           <v-text-field 
             v-model="sportDto.SportName"
             label="Sport Name"
-            variant="solo"
+            variant="underlined"
             :rules="sportNameRules"
             color="secondary-accent"
             clearable

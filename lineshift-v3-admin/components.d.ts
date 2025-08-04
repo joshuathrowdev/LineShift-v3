@@ -12,6 +12,7 @@ declare module 'vue' {
     AdminNavLinkBanner: typeof import('./src/components/navigation/AdminNavLinkBanner.vue')['default']
     AdminNavLinks: typeof import('./src/components/navigation/AdminNavLinks.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
+    CreateFormSubmitResourceButton: typeof import('./src/components/resources/forms/CreateFormSubmitResourceButton.vue')['default']
     CreateNewResourceButton: typeof import('./src/components/resources/CreateNewResourceButton.vue')['default']
     GoverningBodies: typeof import('./src/components/resources/GoverningBodies.vue')['default']
     GoverningBodiesTable: typeof import('./src/components/resources/tables/GoverningBodiesTable.vue')['default']

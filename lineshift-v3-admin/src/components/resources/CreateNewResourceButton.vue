@@ -3,7 +3,7 @@
     <template #activator="{props}">
       <v-btn
         v-bind="props"
-        color="primary"
+        color="primary-darken-1"
         variant="flat"
       >
         Create a New {{singleNounResourceKey}}
@@ -25,7 +25,7 @@
                 </v-btn>
               </template>
             </component>
-            
+
           </v-card-text>
         </v-card>
       </div>

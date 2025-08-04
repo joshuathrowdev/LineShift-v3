@@ -6,7 +6,7 @@ using System.Net.Mime;
 
 namespace lineshift_v3_backend.Controllers
 {
-    [Route("api/v3/[controller]")]
+    [Route("api/v3/governing-bodies")]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [Authorize]

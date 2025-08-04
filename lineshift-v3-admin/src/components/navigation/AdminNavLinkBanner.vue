@@ -2,7 +2,7 @@
   <v-card
     variant="flat"
     class="my-3"
-    color="secondary"
+    color="primary"
   >
     <v-card-title>{{ title }}</v-card-title>
   </v-card>

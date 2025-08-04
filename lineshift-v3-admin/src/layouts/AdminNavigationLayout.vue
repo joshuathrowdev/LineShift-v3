@@ -3,7 +3,7 @@
   <v-app-bar
     v-if="isAuthenticated"
     :elevation="2" 
-    color="primary"
+    color="secondary"
     density="compact">
     <template #prepend>
       <v-app-bar-nav-icon

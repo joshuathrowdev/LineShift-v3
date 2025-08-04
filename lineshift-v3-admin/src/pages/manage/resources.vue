@@ -4,7 +4,7 @@
       <v-col>
         <v-card
           variant="flat"
-          color="secondary"
+          color="primary"
         >
           <v-card-title class="text-h4">
             Manage Resources
