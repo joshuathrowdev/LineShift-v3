@@ -4,7 +4,7 @@
       <v-col>
         <v-btn
           color="primary"
-          variant="underlined"
+          variant="outlined"
           prepend-icon="mdi-arrow-left-thin"
           text="Back"
           :to="{name: 'resources'}"

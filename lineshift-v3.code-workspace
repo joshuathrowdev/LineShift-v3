@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "lineshift-v3-admin"
+		},
+		{
+			"path": "lineshift-v3-client"
+		},
+		{
+			"path": "lineshift-v3-backend"
+		}
+	],
+	"settings": {}
+}

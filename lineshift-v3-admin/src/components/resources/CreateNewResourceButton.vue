@@ -16,7 +16,7 @@
           <v-card-text>
 
             <component :is="resourcePostForm"> 
-              <template #closeBtn>
+              <template #closeBtn> <!-- defining universal closeBtn slot for all forms, just need to declare in specific form -->
                 <v-btn
                   color="secondary"
                   @click="isActive.value = false"

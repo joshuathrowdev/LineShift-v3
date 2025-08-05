@@ -64,7 +64,7 @@
       <v-row>
         <v-col>
           <div class="d-flex flex-row justify-space-around">
-            <slot name="CloseBtn" />
+            <slot name="closeBtn" />
 
             <create-form-submit-resource-button type="submit"> 
               <template #CloseBtn>
