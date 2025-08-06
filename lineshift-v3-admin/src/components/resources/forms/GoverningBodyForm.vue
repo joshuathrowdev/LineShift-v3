@@ -42,7 +42,10 @@
             v-model="governingBodyDto.CountryOfOrigin"
             label="Country Of Origin"
             :items="orderedCountries"
+            autocomplete="off"
             class="w-300px"
+            :rules="CountryOfOriginRules"
+            color="secondary-lighten-1"
             clearable
             item-title="name"
             item-value="alpha3"

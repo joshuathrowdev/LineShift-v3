@@ -7,6 +7,18 @@ const useLeaguesStore = defineStore("leagues", () => {
 
   // State
   const leagues = ref([]);
+  const leagueLevels = ref([
+    { title: "Professional", value: "professional" },
+    { title: "Collegiate", value: "collegiate" },
+    { title: "International", value: "international" },
+    { title: "Miscellaneous", value: "miscellaneous" },
+  ]);
+
+  const leagueGenders = ref([
+    { title: "Men", value: "men" },
+    { title: "Women", value: "women" },
+    { title: "Mixed", value: "mixed" },
+  ]);
 
   // Getters
 
@@ -24,6 +36,8 @@ const useLeaguesStore = defineStore("leagues", () => {
   return {
     // State
     leagues,
+    leagueLevels,
+    leagueGenders,
 
     // Actions
     getAllLeagues,

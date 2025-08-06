@@ -17,11 +17,17 @@
 <script setup>
 import useLeaguesStore from '@/stores/resources/leagues.store'
 import LeagueForm from './forms/LeagueForm.vue'
+import useSportsStore from '@/stores/resources/sports.store'
+import useGoverningBodiesStore from '@/stores/resources/governingBodies.store'
 
 const {getAllLeagues} = useLeaguesStore()
+const {getAllSports} = useSportsStore()
+const {getAllGoverningBodies} = useGoverningBodiesStore()
 
 onMounted(async () => {
   await getAllLeagues()
+  await getAllSports()
+  await getAllGoverningBodies()
 })
 </script>
 
