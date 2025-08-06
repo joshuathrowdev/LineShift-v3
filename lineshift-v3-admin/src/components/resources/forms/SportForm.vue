@@ -57,7 +57,7 @@
             <v-btn
               v-bind="props"
               color="primary-darken-1"
-              :disabled="!isformValid"
+              :disabled="!isFormValid"
             >
               <template #prepend>
                 <v-icon
@@ -82,12 +82,12 @@ const props = defineProps(['parent-display'])
 const {keyword} = props
 
 const sportNameRules = [
-  v => !!v || "Sport Name is required",
+  v => !!v || "Sport name is required",
   v => (v && v.length <= 50) || "Sport Name must be 50 characters or less",
   v => /^[a-zA-Z\s]+$/.test(v) || "Sport Name can only contain letters and spaces"
 ]
 
-const sportTypes = ["Team", "Individual"]
+const sportTypes = ["Team", "Individual"] // needs to go in sports store
 const typeRules = [
   v => !!v || "Type is required",
 ]
@@ -104,7 +104,7 @@ const sportDto = ref ({
 })
 
 const form = ref(null)
-const isformValid = computed(() => 
+const isFormValid = computed(() => 
   form.value && sportDto.value.SportName !== '' && sportDto.value.Type !== '' & sportDto.value.Description !== ''
 )
 
