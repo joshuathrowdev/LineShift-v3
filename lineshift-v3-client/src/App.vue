@@ -1,8 +1,6 @@
 <template>
   <v-app>
-    <!-- Any top level content that we want to persist between pages -->
-    <AdminNavigationLayout v-if="isAdminView" />
-    <NavigationLayout v-else />
+    <NavigationLayout />
 
     <v-main> 
       <router-view /> <!-- the content of the page we are on -->
@@ -13,7 +11,6 @@
 </template>
 
 <script setup>
-  import AdminNavigationLayout from './layouts/admin/AdminNavigationLayout.vue';
   import NavigationLayout from './layouts/NavigationLayout.vue';
 
   import { useRoute } from 'vue-router';
