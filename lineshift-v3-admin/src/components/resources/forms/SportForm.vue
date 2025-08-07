@@ -11,8 +11,8 @@
             v-model="sportDto.SportName"
             label="Sport Name"
             variant="underlined"
-            :rules="sportNameRules"
-            color="secondary-accent"
+            :rules="[rules.required('Sport Name'), rules.maxLength(50, 'Sport Name'), rules.charactersOnly('Sport Name')]"
+            color="primary-lighten-1"
             clearable
             glow
             type="text"
@@ -25,9 +25,11 @@
             v-model="sportDto.Type"
             label="Type"
             :items="sportTypes"
+            item-title="title"
+            item-value="value"
             variant="outlined"
-            :rules="typeRules"
-            color="altTwo"
+            :rules="[rules.required('Type')]"
+            color="secondary-lighten-1"
             clearable
             required
           />
@@ -41,9 +43,9 @@
             label="Description"
             variant="outlined"
             clearable
-            :rules="descriptionRules"
+            :rules="[rules.required('Description'), rules.maxLength(250, 'Description')]"
             type="text"
-            color="altTwo"
+            color="secondary-lighten-1"
             required
           />
         </v-col>
@@ -75,22 +77,15 @@
 </template>
 
 <script setup>
+import useSportsStore from '@/stores/resources/sports.store';
+import { useFormValidation } from '@/composables/useFormValidation';
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 
 const props = defineProps(['parent-display'])
 const {keyword} = props
 
-const sportNameRules = [
-  v => !!v || "Sport name is required",
-  v => (v && v.length <= 50) || "Sport Name must be 50 characters or less",
-  v => /^[a-zA-Z\s]+$/.test(v) || "Sport Name can only contain letters and spaces"
-]
-
-const sportTypes = ["Team", "Individual"] // needs to go in sports store
-const typeRules = [
-  v => !!v || "Type is required",
-]
 
 const descriptionRules = [
   v => !!v || "Description is required",
@@ -102,7 +97,10 @@ const sportDto = ref ({
   Description: '',
   Type: ''
 })
+const{sportTypes} = storeToRefs(useSportsStore())
 
+
+const {rules} = useFormValidation()
 const form = ref(null)
 const isFormValid = computed(() => 
   form.value && sportDto.value.SportName !== '' && sportDto.value.Type !== '' & sportDto.value.Description !== ''

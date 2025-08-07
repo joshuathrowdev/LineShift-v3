@@ -10,6 +10,7 @@
             color="primary-lighten-1"
             label="League Name"
             required
+            :rules="[rules.required('League Name'), rules.maxLength(100, 'League Name')]"
             clearable
           />
         </v-col>
@@ -20,6 +21,7 @@
           <v-select
             v-model="leagueDto.Level"
             label="Level"
+            :rules="[rules.required('Level'), rules.maxLength(50, 'Level')]"
             :items="leagueLevels"
             item-title="title"
             item-value="value"
@@ -34,6 +36,7 @@
           <v-select
             v-model="leagueDto.Gender"
             required
+            :rules="[rules.required('Gender'), rules.maxLength(20, 'Gender')]"
             :items="leagueGenders"
             item-title="title"
             item-value="value" 
@@ -51,9 +54,10 @@
       <v-row>
         <v-col cols="6"> 
           <v-autocomplete
-            v-model="leagueDto.Sport"
+            v-model="leagueDto.SportId"
             required
             autocomplete="off"
+            :rules="[rules.required('Sport')]"
             clearable
             :items="sports"
             item-title="sportName"
@@ -66,8 +70,9 @@
 
         <v-col cols="6">
           <v-autocomplete
-            v-model="leagueDto.GoverningBody"
+            v-model="leagueDto.GoverningBodyId"
             required
+            :rules="[rules.required('Governing Body')]"
             clearable
             autocomplete="off"
             :items="governingBodies"
@@ -103,10 +108,17 @@
 import useSportsStore from '@/stores/resources/sports.store';
 import useGoverningBodiesStore from '@/stores/resources/governingBodies.store';
 import useLeaguesStore from '@/stores/resources/leagues.store';
+import { useFormValidation } from '@/composables/useFormValidation';
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
+
+
 const form = ref(null)
+
+const {leagueLevels, leagueGenders} = storeToRefs(useLeaguesStore())
+const {sports} = storeToRefs(useSportsStore())
+const {governingBodies} = storeToRefs(useGoverningBodiesStore())
 
 const leagueDto = ref({
   LeagueName: null,
@@ -116,32 +128,7 @@ const leagueDto = ref({
   GoverningBodyId: null
 })
 
-const {leagueLevels, leagueGenders} = storeToRefs(useLeaguesStore())
-const {sports} = storeToRefs(useSportsStore())
-const {governingBodies} = storeToRefs(useGoverningBodiesStore())
-console.log(sports.value)
-console.log(governingBodies.value)
+const {rules} = useFormValidation()
 
 
 </script>
-
- <!-- [Key]
- public int? LeagueId { get; set; }
-
- [Required]
- [StringLength(100)]
- public string? LeagueName { get; set; }
-
- [Required]
- [StringLength(50)]
- public string? Level { get; set; }
-
- [Required]
- [StringLength(20)]
- public string? Gender { get; set; }
-
- // Relationships
- // FK Property
- public int? GoverningBodyId { get; set; }
-
- public int? SportId { get; set; } -->

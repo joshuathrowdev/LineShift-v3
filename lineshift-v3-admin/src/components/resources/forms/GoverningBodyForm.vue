@@ -14,7 +14,7 @@
             color="primary-lighten-1"
             clearable
             glow
-            :rules="nameRules"
+            :rules="[rules.required('Governing Body Name'), rules.maxLength(100, 'Governing Body Name'), rules.charactersOnly('Governing Body Name')]"
             type="text"
             required
           />
@@ -24,7 +24,7 @@
           <v-text-field
             v-model="governingBodyDto.Abbreviation"
             required
-            :rules="AbbreviationRules"
+            :rules="[rules.required('Abbreviation'), rules.maxLength(10, 'Abbreviation')]"
             clearable
             label="Abbreviation"
             glow
@@ -40,11 +40,11 @@
         <v-col cols="6">
           <v-autocomplete
             v-model="governingBodyDto.CountryOfOrigin"
-            label="Country Of Origin"
+            label="Country of Origin"
             :items="orderedCountries"
             autocomplete="off"
             class="w-300px"
-            :rules="CountryOfOriginRules"
+            :rules="[rules.required('Country of Origin'), rules.maxLength(3, 'Country of Origin'), rules.charactersOnly('Country of Origin')]"
             color="secondary-lighten-1"
             clearable
             item-title="name"
@@ -65,7 +65,7 @@
                 readonly
                 v-bind="props"
                 label="Date Founded"
-                :rules="foundedDateRules"
+                :rules="[rules.required('Date Founded')]"
                 append-inner-icon="mdi-calendar"
                 variant="outlined"
                 icon-color="secondary-accent"
@@ -91,7 +91,7 @@
             variant="outlined"
             label="Description"
             required
-            :rules="descriptionRules"
+            :rules="[rules.required('Description'), rules.maxLength(250, 'Description')]"
             glow
             clearable
             type="text"
@@ -116,6 +116,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useFormValidation } from '@/composables/useFormValidation';
 import { countries, popularCountries } from '@/data/countries';
 
 const governingBodyDto = ref({
@@ -160,31 +161,7 @@ const orderedCountries = computed(() => {
   return [...pinnedCountries, ...otherPopularCountries, ...otherCountries]
 })
 
-
-const nameRules = [
-  v => !!v || 'Governing Body name is required',
-  v => (v && v.length <=100) || 'Governing Body name must be 100 characters or less',
-  v => /^[a-zA-Z\s]+$/.test(v) || "Governing Body Name can only contain letters and spaces"
-]
-
-const AbbreviationRules = [
-  v => !!v || 'Abbreviation is required',
-  v => (v && v.length <= 10) || 'Abbreviation must be 10 characters or less'
-]
-
-const CountryOfOriginRules = [
-  v => !!v || 'Country of origin is required',
-  v => (v && v.length <=3) || 'Country of origin name must be 3 characters or less',
-  v => /^[a-zA-Z\s]+$/.test(v) || "Country of origin can only contain letters and spaces"
-]
-
-const foundedDateRules = [v=> !!v || 'Founded date is required']
-
-const descriptionRules = [
-  v => !!v || 'Description is required',
-  v => (v && v.length <= 250) || 'Description must be 250 characters or less'
-]
-
+const {rules} = useFormValidation()
 const form = ref(null)
 
 const resetGoverningBodyDto = () => {
