@@ -67,9 +67,8 @@ const { isAuthenticated, sessionUser, isAdmin, isModerator } = storeToRefs(useAu
 const rail = ref(true)
 
 const hasPermissions = computed(() => !!isAdmin.value || !!isModerator.value)
-
+_
 const isRailExpanded = ref(false)
 
 const adminClientDomain = computed(() => import.meta.env.VITE_ADMIN_CLIENT_DOMAIN)
-console.log(adminClientDomain.value)
 </script>
