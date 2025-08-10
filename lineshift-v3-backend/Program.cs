@@ -275,9 +275,10 @@ namespace lineshift_v3_backend
             {
                 var services = scope.ServiceProvider;
                 // Resolve logger for DbInitializer to ensure messages are captured
-                var logger = services.GetRequiredService<ILogger<DbInitializerLoggerCategory>>();
+                //var logger = services.GetRequiredService<ILogger<DbInitializerLoggerCategory>>();
+                
                 // Call static method to initialize
-                await DbInitializer.Initialize(services, logger);
+                //await DbInitializer.Initialize(services, logger);
             }
 
             app.Run();

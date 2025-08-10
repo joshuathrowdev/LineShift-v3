@@ -1,15 +1,17 @@
 import axios from 'axios';
 
-const clientProxyTrigger = '/api'; // client side proxy server trigger
-const backendApiPrefix = '/api/v3'; // backend api prefix (incase backend is service multiple applications)
+const proxyTrigger = import.meta.env.VITE_API_TARGET_CLIENT_TRIGGER
+
+// Make env var
+const apiTargetPrefix = '/api/v3'
+const apiTargetUrl = `${proxyTrigger + apiTargetPrefix}`
 
 
 const axiosInstance = axios.create({
-  baseURL: `${clientProxyTrigger + backendApiPrefix}`,
+  baseURL: apiTargetUrl,
   timeout: import.meta.env.VITE_API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
-    // 'Authorization': 'Bearer ' + localStorage.getItem('token') // Example for adding auth token
   }
 });
 
@@ -17,8 +19,6 @@ const axiosInstance = axios.create({
 
 
 // intercepts all request and conditionally adds auth token if present
-
-
 axiosInstance.interceptors.request.use(
   async (config) => {
     // Initializing local instance of Auth Store

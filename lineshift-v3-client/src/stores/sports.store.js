@@ -25,14 +25,7 @@ export const useSportsStore = defineStore('sports', () => {
   };
 
 
-  const createSport = async (sportDto) => {
-    try {
-      const response = await sportsApi.createSport(sportDto);
-      return response;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
 
 
   return {
@@ -43,6 +36,5 @@ export const useSportsStore = defineStore('sports', () => {
 
     // Action
     getAllSports,
-    createSport,
   };
 });

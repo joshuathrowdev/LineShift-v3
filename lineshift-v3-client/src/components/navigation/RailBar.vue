@@ -28,10 +28,12 @@
 
     <div v-if="hasPermissions">
       <v-divider color="primary" />
+      
       <v-list-item
         class="py-5"
         rounded
-        :to="{name: '/admin/hub'}"
+        :href="adminClientDomain"
+        target="blank"
       >
         <template #prepend>
           <v-icon
@@ -67,4 +69,6 @@ const rail = ref(true)
 const hasPermissions = computed(() => !!isAdmin.value || !!isModerator.value)
 
 const isRailExpanded = ref(false)
+
+const adminClientDomain = computed(() => import.meta.env.VITE_ADMIN_CLIENT_DOMAIN)
 </script>

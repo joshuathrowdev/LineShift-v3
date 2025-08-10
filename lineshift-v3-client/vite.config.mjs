@@ -81,16 +81,14 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        '/api': { // The path out frontend will request
-          target: env.VITE_API_TARGET || 'http://localhost:48089', // Default to Docker
+        [env.VITE_API_TARGET_CLIENT_TRIGGER]: { // The path out frontend will request
+          target: env.VITE_API_TARGET, // Default to Docker
           changeOrigin: true, // Important step to get CORS to work with proxy
           secure: false,
-          rewrite: (path) => path.replace(/^\/api/, '') // Removes the '/api' prefix when forwarding to the backend
+          rewrite: (path) => path.replace(new RegExp(env.VITE_API_TARGET_CLIENT_REGEX), '')
         }
       },
-      // we could optionally set an explicit port number but (for docker container network)
-      // the port will default to port: 3000
-      port: 3000,
+      port: env.VITE_REG_CLIENT_PORT,
     },
     css: {
       preprocessorOptions: {

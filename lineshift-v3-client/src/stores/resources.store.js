@@ -5,7 +5,7 @@ import { useSnackbarStore } from './snackbar.store';
 
 
 const resourceApisGetHttpMethod = {
-  'sports': sportsApi.getAllSports,
+  sports : sportsApi.getAllSports,
 };
 
 

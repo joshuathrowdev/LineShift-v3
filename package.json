@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "vuetify": "^3.9.2"
+  },
+  "scripts": {
+    "compose:database": "docker-compose up -d mariadb",
+    "compose:down": "docker-compose down"
+  }
+}

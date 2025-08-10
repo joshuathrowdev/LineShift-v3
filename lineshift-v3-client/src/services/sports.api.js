@@ -14,29 +14,6 @@ const sportsApi = {
       throw error;
     }
   },
-
-  async createSport(sportDto) {
-    const { showSuccess, showError } = useSnackbarStore();
-    try {
-      const response = await axiosInstance.post(sportsEndpoint, sportDto);
-      showSuccess(`Successfully created sport '${sportDto.SportName}'`);
-      return response.data;
-    } catch (error) {
-      if (error.response) {
-        showError(error.response.data);
-        throw error;
-      }
-      else if (error.request) {
-
-        showError(error.request);
-        throw error;
-      }
-      else {
-        showError(error);
-        throw error;
-      }
-    }
-  }
 };
 
 export default sportsApi;
