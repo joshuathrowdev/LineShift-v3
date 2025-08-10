@@ -59,7 +59,7 @@ router.beforeEach(async (to, from, next) => {
   // waiting until auth stats is definitely ready (via isAuthReady)
   if (token.value && !isAuthReady.value && isLoading.value) {
     // wait a tiny but for this condition to be evaluated
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 250));
   }
 
 

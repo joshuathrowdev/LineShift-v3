@@ -17,7 +17,6 @@ import path from 'node:path';
 export default defineConfig(({ mode }) => {
   // Load env file based on 'mode' in teh current working directory
   const env = loadEnv(mode, process.cwd());
-            console.log(env.VITE_API_TARGET_CLIENT_REGEX)
 
   return {
     plugins: [

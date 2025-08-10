@@ -23,7 +23,7 @@
 
       <v-col cols="4">
         <v-card :to="{name: '/manage/resources.[keyword]', params: {'keyword': 'leagues'}}">
-          <v-card-title>League</v-card-title>
+          <v-card-title>Leagues</v-card-title>
         </v-card>
       </v-col>
 
