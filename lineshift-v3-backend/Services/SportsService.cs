@@ -62,30 +62,23 @@ namespace lineshift_v3_backend.Services
 
         public async Task<Result<Sport>> CreateSportAsync(CreateSportDto createSportDto)
         {
-            try
-            {
-                var sport = _mapper.Map<Sport>(createSportDto);
-                var recordsAffected = await _sportsRepository.CreateSportAsync(sport);
+            //try
+            //{
+            var sport = _mapper.Map<Sport>(createSportDto);
+            var recordsAffected = await _sportsRepository.CreateSportAsync(sport);
 
-                if (recordsAffected < 1)
-                {
-                    return Result<Sport>.Failure("An error occurred while attempting to add sport", "INVALID_OPERATION");
-                }
-                return Result<Sport>.Success(sport);
+            if (recordsAffected < 1)
+            {
+                return Result<Sport>.Failure("An error occurred while attempting to add sport", "INVALID_OPERATION");
+            }
+            return Result<Sport>.Success(sport);
 
-            } catch (DbUpdateException) // database constrain violation (duplicate sport names)
-            {
-                return Result<Sport>.Failure($"Sport '{createSportDto.SportName}' already exist", "DATABASE_CONSTRAINT_VIOLATION");
-            }
-            catch (OperationCanceledException) // Async operation canceled (timeout)
-            {
-                return Result<Sport>.Failure("Operation canceled", "REQUEST_CANCELLED");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while trying to access the sport repository.");
-                return Result<Sport>.Failure("An unexpected server error occurred", "SERVER_ERROR");
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, "An error occurred while trying to access the sport repository.");
+            //    return Result<Sport>.Failure("An unexpected server error occurred", "SERVER_ERROR");
+            //}
         }
         #endregion
 
