@@ -1,4 +1,5 @@
 ﻿using lineshift_v3_backend.Models;
+using lineshift_v3_backend.Models.Errors;
 using lineshift_v3_backend.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -7,7 +8,7 @@ namespace lineshift_v3_backend.Exceptions
 {
     public class ExceptionDetailsMapper
     {
-        public static (int statusCode, string message) Map(Exception exception)
+        public static ErrorDetails Map(Exception exception)
         {
             var statusCode = (int)HttpStatusCode.InternalServerError;
             var message = "An unexpected server error occurred. Please try again later.";
@@ -15,14 +16,26 @@ namespace lineshift_v3_backend.Exceptions
             switch (exception)
             {
                 // More efficient than if-else
-                case DbUpdateException: // database constraint violation (ex: duplicate sport names)
+                case ResourceCreationException ex:
+                    statusCode = (int)HttpStatusCode.BadRequest;
+                    //message = ex.Message ?? "An error occurred while attempting to add the resource.";
+                    message = ex.Message;
+                    break;
+                case DuplicateResourceException ex: // database constraint violation (ex: duplicate sport names)
                     statusCode = (int)HttpStatusCode.Conflict;
-                    message = "The request could not be processed due to invalid data.";
+                    //message = ex.InnerException?.Message ?? ex.Message ?? "The request could not be processed due to invalid data.";
+                    message = ex.Message;
                     break;
 
-                case OperationCanceledException: // Async operation canceled (timeout)
+                case DatabaseOperationException ex:
+                    statusCode = (int)HttpStatusCode.BadRequest;
+                    message = ex.Message;
+                    break;
+
+                case OperationCanceledException ex: // Async operation canceled (timeout)
                     statusCode = (int)HttpStatusCode.RequestTimeout;
-                    message = "Operation canceled";
+                    //message = ex.InnerException?.Message ?? ex.Message ?? "Operation canceled.";
+                    message = ex.Message;
                     break;
 
                 default:
@@ -30,7 +43,7 @@ namespace lineshift_v3_backend.Exceptions
                     break;
             }
 
-            return (statusCode, message);
+            return new ErrorDetails{ status = statusCode, message = message };
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using lineshift_v3_backend.Dtos.Sport;
 using lineshift_v3_backend.Models;
+using lineshift_v3_backend.Models.Errors;
 using lineshift_v3_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Net.Mime;
 
 namespace lineshift_v3_backend.Controllers
@@ -19,62 +21,30 @@ namespace lineshift_v3_backend.Controllers
         // Have to declare vars that the class is going to use
         // Dependent Service for the Controller
         private readonly ISportsService _sportsService;
+        private readonly ILogger<SportsService> _logger;
 
         // Constructor
-        public SportsController(ISportsService sportsService) 
+        public SportsController(ISportsService sportsService, ILogger<SportsService> logger)
         {
             _sportsService = sportsService;
+            _logger = logger;
         }
 
         #region Resource Routes
         [HttpGet("")]
         public async Task<ActionResult<ICollection<SportDto>>> GetSports()
         {
-            try
-            {
-                var sports = await _sportsService.GetSportsAsync();
-                return Ok(sports);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var sports = await _sportsService.GetSportsAsync();
+            return Ok(sports);
         }
 
 
         [HttpPost("")]
         public async Task<ActionResult> CreateSportAsync([FromBody] CreateSportDto createSportDto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var result = await _sportsService.CreateSportAsync(createSportDto);
 
-            try
-            {
-                var result = await _sportsService.CreateSportAsync(createSportDto);
-
-                if (result.ErrorCode == "INVALID_OPERATION")
-                {
-                    return BadRequest(result.Error);
-                }
-
-                if (result.ErrorCode == "DATABASE_CONSTRAINT_VIOLATION")
-                {
-                    return Conflict(result.Error);
-                }
-
-                if (result.ErrorCode == "REQUEST_CANCELLED")
-                {
-                    return StatusCode(408, result.Error);
-                }
-
-                if (result.ErrorCode == "SERVER_ERROR") return StatusCode(500, result.Error);
-
-                return Ok(result.Value);
-
-            }
-            catch(Exception ex)
-            {
-                throw;
-            }
+            return Ok(result);
         }
         #endregion
     }

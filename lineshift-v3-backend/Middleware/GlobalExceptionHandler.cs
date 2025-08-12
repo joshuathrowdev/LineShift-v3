@@ -25,8 +25,6 @@ namespace lineshift_v3_backend.Middleware
             }
             catch (Exception ex)
             {
-                // Log the exception Here
-                _logger.LogError(ex, "An exception was thrown by the application");
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -35,19 +33,12 @@ namespace lineshift_v3_backend.Middleware
         {
             // Exception processing
             // Mapping the status code and message based on the exception given
-            var (statusCode, message) = ExceptionDetailsMapper.Map(exception); 
-
+            var errorDetails = ExceptionDetailsMapper.Map(exception); 
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = statusCode;
-
-            var exceptionDetails = new
-            {
-                StatusCode = context.Response.StatusCode,
-                Message = message,
-            };
-
-            return context.Response.WriteAsync(JsonSerializer.Serialize(exceptionDetails));
+            context.Response.StatusCode = errorDetails.status;
+           
+            return context.Response.WriteAsync(JsonSerializer.Serialize(errorDetails));
         }
     }
         #endregion
