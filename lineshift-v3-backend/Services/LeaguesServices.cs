@@ -32,15 +32,11 @@ namespace lineshift_v3_backend.Services
             {
                 var result = await _leaguesRepository.GetLeaguesAsync();
 
-                List<LeagueDto> leagues = new List<LeagueDto>();
-                foreach (var league in result)
-                {
-                    leagues.Add(_mapper.Map<LeagueDto>(league));
-                }
-
+                var leagues = result.Select(league => _mapper.Map<LeagueDto>(league)).ToList();
                 return leagues;
 
-            } catch (Exception ex)
+            } 
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "An error has occurred while accessing the leagues repository");
                 throw;

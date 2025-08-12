@@ -34,11 +34,8 @@ namespace lineshift_v3_backend.Services
             {
                 var result = await _governingBodiesRepository.GetGoverningBodiesAsync();
 
-                List<GoverningBodyDto> governingBodies = new List<GoverningBodyDto>();
-                foreach (var governingBody in result)
-                {
-                    governingBodies.Add(_mapper.Map<GoverningBodyDto>(governingBody));
-                }
+                var governingBodies = result.Select(governingBody =>
+                _mapper.Map<GoverningBodyDto>(governingBody)).ToList();
 
                 return governingBodies;
             

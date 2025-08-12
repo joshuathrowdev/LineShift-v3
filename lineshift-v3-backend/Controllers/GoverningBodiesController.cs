@@ -24,16 +24,8 @@ namespace lineshift_v3_backend.Controllers
         [HttpGet("")]
         public async Task<ActionResult<ICollection<GoverningBodyDto>>> GetGoverningBodies()
         {
-            try
-            {
-                var governingBodies = await _governingBodiesServices.GetGoverningBodiesAsync();
-                return Ok(governingBodies);
-            
-            } catch (Exception ex)
-            {
-                throw;
-            }
-
+            var governingBodies = await _governingBodiesServices.GetGoverningBodiesAsync();
+            return Ok(governingBodies);
         }
         #endregion
     }

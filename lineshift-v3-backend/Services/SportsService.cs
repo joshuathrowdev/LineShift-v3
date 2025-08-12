@@ -53,7 +53,6 @@ namespace lineshift_v3_backend.Services
                 //}
 
                 var sports = result.Select(sport => _mapper.Map<SportDto>(sport)).ToList();
-
                 return sports;
             }
             catch (Exception ex)
