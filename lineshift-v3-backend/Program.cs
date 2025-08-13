@@ -6,7 +6,6 @@ using lineshift_v3_backend.MappingProfiles;
 using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Services;
 using lineshift_v3_backend.Services.Identity;
-using lineshift_v3_backend.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

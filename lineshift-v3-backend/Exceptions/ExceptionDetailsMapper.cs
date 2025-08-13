@@ -1,6 +1,5 @@
 ﻿using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Models.Errors;
-using lineshift_v3_backend.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 

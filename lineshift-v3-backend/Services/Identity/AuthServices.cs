@@ -3,7 +3,7 @@ using lineshift_v3_backend.DataAccess.Repository.Identity;
 using lineshift_v3_backend.Dtos;
 using lineshift_v3_backend.Dtos.Identity;
 using lineshift_v3_backend.Models;
-using lineshift_v3_backend.Utils;
+using lineshift_v3_backend.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -17,8 +17,8 @@ namespace lineshift_v3_backend.Services.Identity
     #region Auth Service Interface
     public interface IAuthServices
     {
-        Task<SessionUser> GetUserByIdAsync(string id);
-        Task<Result<AuthResponse>> LoginAsync(LoginDto loginDto);
+        Task<AuthResponse<AuthDto>> LoginAsync(LoginDto loginDto);
+        Task<AuthResponse<SessionUser>> GetUserByIdAsync(string id);
     }
     #endregion
 
@@ -49,35 +49,35 @@ namespace lineshift_v3_backend.Services.Identity
         }
 
 
-        public async Task<Result<AuthResponse>> LoginAsync(LoginDto loginDto)
+        public async Task<AuthResponse<AuthDto>> LoginAsync(LoginDto loginDto)
         {
             try
             {
                 var userEntity = await _authRepository.LoginAsync(loginDto);
                 if (userEntity == null) // email doesn't exist
                 {
-                    return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
+                    return AuthResponse<AuthDto>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
                 }
 
                 if (!userEntity.IsActive || userEntity.IsDeleted)
                 {
-                    return Result<AuthResponse>.Failure("Inactive or Deleted Account", "INACTIVE_ACCOUNT");
+                    return AuthResponse<AuthDto>.Failure("Inactive or Deleted Account.", "INACTIVE_ACCOUNT");
                 }
 
                 var isPasswordValid = await _signInManager.CheckPasswordSignInAsync(userEntity, loginDto.Password, lockoutOnFailure: true);
                 if (!isPasswordValid.Succeeded)
                 {
-                    return Result<AuthResponse>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
+                    return AuthResponse<AuthDto>.Failure("Invalid Credentials.", "INVALID_CREDENTIALS");
                 }
 
                 if (isPasswordValid.IsLockedOut)
                 {
-                    return Result<AuthResponse>.Failure("Locked Out Account", "LOCKEDOUT_ACCOUNT");
+                    return AuthResponse<AuthDto>.Failure("Locked Out Account.", "LOCKEDOUT_ACCOUNT");
                 }
 
                 if (isPasswordValid.IsNotAllowed)
                 {
-                    return Result<AuthResponse>.Failure("Not Allowed to Sign IN", "NOT_ALLOWED_ACCOUNT");
+                    return AuthResponse<AuthDto>.Failure("Not Allowed to Sign In.", "NOT_ALLOWED_ACCOUNT");
                 }
 
                 // Update Last Login Dater
@@ -92,13 +92,13 @@ namespace lineshift_v3_backend.Services.Identity
                 sessionUser.Roles = (await _userManager.GetRolesAsync(userEntity)).ToList();
 
 
-                var authResponse = new AuthResponse
+                var authDto = new AuthDto
                 {
                     Token = jwt_token,
                     SessionUser = sessionUser
                 };
 
-                return Result<AuthResponse>.Success(authResponse);
+                return AuthResponse<AuthDto>.Success(authDto);
             
             } catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace lineshift_v3_backend.Services.Identity
             }
         }
 
-        public async Task<SessionUser> GetUserByIdAsync(string id)
+        public async Task<AuthResponse<SessionUser>> GetUserByIdAsync(string id)
         {
             try
             {
@@ -117,20 +117,24 @@ namespace lineshift_v3_backend.Services.Identity
                 {
                     // This indicated a discrepancy where a valid token was issued but the user was not
                     // found from this token (maybe the token was issues and the user got deleted)
-                    return null;
+                    
+                    _logger.LogWarning($"UserId '{id}' could not be found from Claim Types.");
+                    return AuthResponse<SessionUser>.Failure("User could not be found.", "VALID_TOKEN_NO_USER");
                 }
 
                 if (!userEntity.IsActive)
                 {
-                    // this mean that a valid token was issues but the user got suspended or
+                    // this means that a valid token was issues but the user got suspended or
                     // for whatever reason their account is not not active or locked
-                    return null;
+
+                    //_logger.LogWarning($"UserId '{id}' is currently not active.");
+                    return AuthResponse<SessionUser>.Failure("User could not be found.", "INACTIVE_USER");
                 }
 
                 var sessionUser = _mapper.Map<SessionUser>(userEntity);
                 sessionUser.Roles = (await _userManager.GetRolesAsync(userEntity)).ToList();
 
-                return sessionUser;
+                return AuthResponse<SessionUser>.Success(sessionUser);
             }
             catch (Exception ex)
             {

@@ -3,7 +3,6 @@ using lineshift_v3_backend.DataAccess.Repository;
 using lineshift_v3_backend.Dtos.Sport;
 using lineshift_v3_backend.Exceptions;
 using lineshift_v3_backend.Models;
-using lineshift_v3_backend.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Threading;
