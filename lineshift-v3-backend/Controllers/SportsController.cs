@@ -21,13 +21,11 @@ namespace lineshift_v3_backend.Controllers
         // Have to declare vars that the class is going to use
         // Dependent Service for the Controller
         private readonly ISportsService _sportsService;
-        private readonly ILogger<SportsService> _logger;
 
         // Constructor
-        public SportsController(ISportsService sportsService, ILogger<SportsService> logger)
+        public SportsController(ISportsService sportsService)
         {
             _sportsService = sportsService;
-            _logger = logger;
         }
 
         #region Resource Routes
