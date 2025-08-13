@@ -68,44 +68,36 @@ namespace lineshift_v3_backend.Controllers.Identity
             }
 
 
-            try
+            var result = await _authServices.LoginAsync(loginDto);
+
+            if (!result.IsSuccess)
             {
-                var result = await _authServices.LoginAsync(loginDto);
-
-                if (!result.IsSuccess)
+                if (result.ErrorCode == "INVALID_CREDENTIALS")
                 {
-                    if (result.ErrorCode == "INVALID_CREDENTIALS")
-                    {
-                        return Unauthorized(new { Message = result.Error });
-                    }
-
-                    if (result.ErrorCode == "INACTIVE_ACCOUNT")
-                    {
-                        return Unauthorized(new { Message = result.Error });
-                        // Technically, a 403 Forbid / Forbidden would be right be add a slight security risk
-                        // attackers could index what usernames and passwords are valid 
-                    }
-
-                    if (result.ErrorCode == "LOCKEDOUT_ACCOUNT")
-                    {
-                        return Unauthorized(new { Message = result.Error });
-                    }
-
-                    if (result.ErrorCode == "NOT_ALLOWED_ACCOUNT")
-                    {
-                        return Unauthorized(new { Message = result.Error });
-                    }
-
-                    return StatusCode(500, "An unexpected server error occurred during login.");
+                    return Unauthorized(result.Error);
                 }
 
-                return Ok(result.Value);
-            } 
-            catch (Exception ex)
-            {
-                _logger.LogWarning(exception: ex, message: "An error occurred while accessing the auth services.");
-                throw;
+                if (result.ErrorCode == "INACTIVE_ACCOUNT")
+                {
+                    return Unauthorized(new { Message = result.Error });
+                    // Technically, a 403 Forbid / Forbidden would be right be add a slight security risk
+                    // attackers could index what usernames and passwords are valid 
+                }
+
+                if (result.ErrorCode == "LOCKEDOUT_ACCOUNT")
+                {
+                    return Unauthorized(new { Message = result.Error });
+                }
+
+                if (result.ErrorCode == "NOT_ALLOWED_ACCOUNT")
+                {
+                    return Unauthorized(new { Message = result.Error });
+                }
+
+                
             }
+
+            return Ok(result.Value);
         }
 
 
@@ -121,39 +113,33 @@ namespace lineshift_v3_backend.Controllers.Identity
         [Authorize]
         public async Task<ActionResult> GetMe()
         { 
-            try
+
+            // LOCAL/CLIENT JWT is passed in request headers under the Bearer key
+
+            // 1. Extract User ID from the JWT (ClaimsPrincipal)
+            // The ClaimTypes.NameIdentifier claim (often 'sub') typically holds the user's unique ID
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
             {
-                // LOCAL/CLIENT JWT is passed in request headers under the Bearer key
-
-                // 1. Extract User ID from the JWT (ClaimsPrincipal)
-                // The ClaimTypes.NameIdentifier claim (often 'sub') typically holds the user's unique ID
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (string.IsNullOrEmpty(userId))
-                {
-                    // this should theoretically not happen 
-                    _logger.LogError($"A valid token is present for '{userId}', but no claim id found.");
-                    return Unauthorized(); // Token valid, but no Id claim found
-                }
-
-                // Extracting UserProfile from Auth Services
-                var sessionUser = await _authServices.GetUserByIdAsync(userId);
-
-                if (sessionUser == null)
-                {
-                    _logger.LogWarning($"UserId '{userId}' could not be found from Claim Types.");
-                    return NotFound(); // valid token but the user could not be found
-                }
-
-                // If session user found from claim id and is active
-                return Ok(sessionUser);
+                // this should theoretically not happen 
+                _logger.LogError($"A valid token is present for '{userId}', but no claim id found.");
+                return Unauthorized(); // Token valid, but no Id claim found
             }
-            catch (Exception ex)
+
+            // Extracting UserProfile from Auth Services
+            var result = await _authServices.GetUserByIdAsync(userId);
+
+            if (result.ErrorCode == "VALID_TOKEN_NO_USER" || result.ErrorCode == "INACTIVE_USER")
             {
-                _logger.LogError(ex, "An error occurred while attempting to access the Auth services.");
-                throw;
+                    
+                return NotFound(result.Error); // valid token but the user could not be found
             }
+
+            // If session user found from claim id and is active
+            return Ok(result.Value);
         }
+
 
         [HttpDelete("deleteseed/{email}")]
         [Authorize(Roles = "Admin")]

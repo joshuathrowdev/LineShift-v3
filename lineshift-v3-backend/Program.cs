@@ -6,7 +6,6 @@ using lineshift_v3_backend.MappingProfiles;
 using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Services;
 using lineshift_v3_backend.Services.Identity;
-using lineshift_v3_backend.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +15,7 @@ using Serilog;
 using System.Text;
 using AutoMapper;
 using System.Reflection;
+using lineshift_v3_backend.Middleware;
 
 namespace lineshift_v3_backend
 {
@@ -26,8 +26,6 @@ namespace lineshift_v3_backend
             var builder = WebApplication.CreateBuilder(args);
 
             // --- Services and DbContext ---
-
-            // Add services to the container.
             // Any dependencies or transitive dependencies to controller (services and repos)
             builder.Services.AddScoped<ITokenServices, TokenServices>();
             builder.Services.AddScoped<IAuthServices, AuthServices>();
@@ -165,7 +163,6 @@ namespace lineshift_v3_backend
             builder.Services.AddEndpointsApiExplorer();
 
             // Register and config the swagger generator with the builder (server container) so it can
-            // inspect our api endpoints and build out the UI
             builder.Services.AddSwaggerGen(options =>
             {
                 // SwaggerGen Security Services Schema
@@ -209,6 +206,9 @@ namespace lineshift_v3_backend
 
             // --- MIDDLEWARE PIPELINE (app.Use...) ---
             // This is where request processing middleware is ordered.
+
+            // Global Exception Handler
+            app.UseMiddleware<GlobalExceptionHandler>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

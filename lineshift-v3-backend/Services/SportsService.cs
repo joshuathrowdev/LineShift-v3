@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using lineshift_v3_backend.DataAccess.Repository;
 using lineshift_v3_backend.Dtos.Sport;
+using lineshift_v3_backend.Exceptions;
 using lineshift_v3_backend.Models;
-using lineshift_v3_backend.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Threading;
@@ -16,7 +16,7 @@ namespace lineshift_v3_backend.Services
     public interface ISportsService
     {
         Task<ICollection<SportDto>> GetSportsAsync();
-        Task<Result<Sport>> CreateSportAsync(CreateSportDto createSportDto);
+        Task<Sport> CreateSportAsync(CreateSportDto createSportDto);
     }
     #endregion
     public class SportsService : ISportsService
@@ -45,12 +45,13 @@ namespace lineshift_v3_backend.Services
                 var result = await _sportsRepository.GetSportsAsync();
 
                 // Mapping Sport Model
-                List<SportDto> sports = new List<SportDto>();
-                foreach (var sport in result)
-                { 
-                    sports.Add(_mapper.Map<SportDto>(sport));
-                }
+                //List<SportDto> sports = new List<SportDto>();
+                //foreach (var sport in result)
+                //{ 
+                //    sports.Add(_mapper.Map<SportDto>(sport));
+                //}
 
+                var sports = result.Select(sport => _mapper.Map<SportDto>(sport)).ToList();
                 return sports;
             }
             catch (Exception ex)
@@ -60,7 +61,7 @@ namespace lineshift_v3_backend.Services
             }
         }
 
-        public async Task<Result<Sport>> CreateSportAsync(CreateSportDto createSportDto)
+        public async Task<Sport> CreateSportAsync(CreateSportDto createSportDto)
         {
             try
             {
@@ -69,22 +70,29 @@ namespace lineshift_v3_backend.Services
 
                 if (recordsAffected < 1)
                 {
-                    return Result<Sport>.Failure("An error occurred while attempting to add sport", "INVALID_OPERATION");
+                    throw new ResourceCreationException("sport");
                 }
-                return Result<Sport>.Success(sport);
 
-            } catch (DbUpdateException) // database constrain violation (duplicate sport names)
-            {
-                return Result<Sport>.Failure($"Sport '{createSportDto.SportName}' already exist", "DATABASE_CONSTRAINT_VIOLATION");
+                return sport;
             }
-            catch (OperationCanceledException) // Async operation canceled (timeout)
+            catch (DbUpdateException ex)
             {
-                return Result<Sport>.Failure("Operation canceled", "REQUEST_CANCELLED");
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("IX_Sports_SportName"))
+                {
+                    throw new DuplicateResourceException($"The sport '{createSportDto.SportName}' already exist.", ex);
+                }
+                else
+                {
+                    // For all other DbUpdateExceptions, throw a more generic exception.
+                    //  A DbUpdateException could be caused by many things
+                    //  (e.g., a data type mismatch, a foreign key constraint), not just a duplicate.
+                    throw new DatabaseOperationException(ex);
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while trying to access the sport repository.");
-                return Result<Sport>.Failure("An unexpected server error occurred", "SERVER_ERROR");
+                throw;
             }
         }
         #endregion
@@ -96,7 +104,7 @@ namespace lineshift_v3_backend.Services
             return GetSportsAsync();
         }
 
-        Task<Result<Sport>> ISportsService.CreateSportAsync(CreateSportDto createSportDto)
+        Task<Sport> ISportsService.CreateSportAsync(CreateSportDto createSportDto)
         {
             return CreateSportAsync(createSportDto);
         }

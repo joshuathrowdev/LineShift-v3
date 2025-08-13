@@ -24,16 +24,8 @@ namespace lineshift_v3_backend.Controllers
         [HttpGet("")]
         public async Task<ActionResult<ICollection<LeagueDto>>> GetLeagues()
         {
-            try
-            {
-                var leagues = await _leaguesServices.GetLeaguesAsync();
-                return Ok(leagues);
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var leagues = await _leaguesServices.GetLeaguesAsync();
+            return Ok(leagues);
         }
         #endregion
     }

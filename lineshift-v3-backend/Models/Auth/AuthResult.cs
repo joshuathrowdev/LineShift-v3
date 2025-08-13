@@ -1,7 +1,7 @@
-﻿namespace lineshift_v3_backend.Utils
+﻿namespace lineshift_v3_backend.Models.Auth
 {
     // Base class for all ops results (and dont return specific data)
-    public class Result
+    public class AuthResult
     {
         // general response ops success 
         public bool IsSuccess { get; protected set; } 
@@ -28,7 +28,7 @@
         #region Constructors
 
         // General ops failure
-        protected Result(bool isSuccess, string? error, string? errorCode = null)
+        protected AuthResult(bool isSuccess, string? error, string? errorCode = null)
         {
             IsSuccess = isSuccess;
             Error = error;
@@ -36,7 +36,7 @@
         }
 
         // Validation failure
-        protected Result(Dictionary<string, string[]> validationErrors)
+        protected AuthResult(Dictionary<string, string[]> validationErrors)
         {
             IsSuccess = false;
             ValidationErrors = validationErrors;
@@ -47,38 +47,38 @@
 
 
         #region Factory Methods 
-        public static Result Success() => new Result(true, null); // for sucess
-        public static Result Failure(string error, string? errorCode = null) 
-            => new Result(false, error, errorCode); // for failure
-        public static Result ValidationFailure(Dictionary<string, string[]> validationErrors) 
-            => new Result(validationErrors); // validation errors
+        public static AuthResult Success() => new AuthResult(true, null); // for sucess
+        public static AuthResult Failure(string error, string? errorCode = null) 
+            => new AuthResult(false, error, errorCode); // for failure
+        public static AuthResult ValidationFailure(Dictionary<string, string[]> validationErrors) 
+            => new AuthResult(validationErrors); // validation errors
         #endregion
     }
 
 
     #region Result Generic
-    public class Result<T> : Result
+    public class AuthResponse<T> : AuthResult
     {
         public T? Value { get; protected set; } // The data returned on success
 
 
         #region Constructors
         // private constructor for success
-        private Result(T value) : base(true, null)
+        private AuthResponse(T value) : base(true, null)
         {
             Value = value;
         }
 
 
-        // priavte constructor for failure
-        private Result(T? value, bool isSuccess, string? error, string? errorCode = null)
+        // private constructor for failure
+        private AuthResponse(T? value, bool isSuccess, string? error, string? errorCode = null)
             : base(isSuccess, error, errorCode)
         {
             Value = value; // Value might be default(T) or null on failure
         }
 
-        // private constructor for validation erros
-        private Result(T? value, Dictionary<string, string[]> validationErrors)
+        // private constructor for validation errors
+        private AuthResponse(T? value, Dictionary<string, string[]> validationErrors)
             : base(validationErrors)
         {
             Value = value;
@@ -87,11 +87,11 @@
 
 
         #region Factory Methods
-        public static Result<T> Success(T value) => new Result<T>(value);
-        public static Result<T> Failure(string error, string? errorCode = null)
-            => new Result<T>(default, false, error, errorCode);
-        public static Result<T> ValidationFailure(Dictionary<string, string[]> validationErrors)
-            => new Result<T>(default, validationErrors);
+        public static AuthResponse<T> Success(T value) => new AuthResponse<T>(value);
+        public static AuthResponse<T> Failure(string error, string? errorCode = null)
+            => new AuthResponse<T>(default, false, error, errorCode);
+        public static AuthResponse<T> ValidationFailure(Dictionary<string, string[]> validationErrors)
+            => new AuthResponse<T>(default, validationErrors);
         #endregion
     }
     #endregion
