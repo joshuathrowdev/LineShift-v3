@@ -1,9 +1,11 @@
 ﻿using lineshift_v3_backend.Dtos.Sport;
+using lineshift_v3_backend.Exceptions;
 using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Models.Errors;
 using lineshift_v3_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Mime;
 

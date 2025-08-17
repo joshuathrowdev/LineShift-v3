@@ -5,7 +5,7 @@
         text="Hub"
         icon="mdi-hubspot"
         :to="{name: 'hub'}"
-        @click="navDrawer.value = false"/>
+        @click="navDrawer = false"/>
 
       <admin-nav-link-banner title="Manage" />
 
@@ -13,7 +13,7 @@
         text="Resources"
         icon="mdi-chart-bubble"
         :to="{name: 'resources'}" 
-        @click="navDrawer.value = false"/>
+        @click="navDrawer = false"/>
 
       <admin-nav-link text="Users" icon="mdi-account-group" />
 

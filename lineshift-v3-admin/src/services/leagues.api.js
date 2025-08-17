@@ -1,5 +1,5 @@
-import { parseApiErrorResponse } from "@/utilities/apiResponseParser";
 import axiosInstance from "./instance/api";
+import parseNetworkErrorResponse from "./parsers/api.response.parser";
 
 const leaguesApi = {
   async getAllLeagues() {
@@ -7,7 +7,7 @@ const leaguesApi = {
       const response = await axiosInstance.get("/leagues");
       return response.data;
     } catch (error) {
-      throw parseApiErrorResponse(error);
+      throw parseNetworkErrorResponse(error);
     }
   },
 };

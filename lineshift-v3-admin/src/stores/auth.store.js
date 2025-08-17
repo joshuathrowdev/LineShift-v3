@@ -26,6 +26,7 @@ export const useAuthStore = defineStore("auth", () => {
         setAuthData(token.value, userData);
       } catch (error) {
         console.error(error);
+        showError(error.message);
       } finally {
         isLoading.value = false;
         isAuthReady.value = true;
