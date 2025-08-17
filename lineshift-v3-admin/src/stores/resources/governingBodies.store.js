@@ -17,6 +17,7 @@ const useGoverningBodiesStore = defineStore("governing-bodies", () => {
       const response = await governingBodiesApi.getAllGoverningBodies();
       governingBodies.value = response;
     } catch (error) {
+      console.log(error);
       showError(error.message);
     }
   };

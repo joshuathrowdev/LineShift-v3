@@ -1,5 +1,5 @@
-import { parseApiErrorResponse } from "@/utilities/apiResponseParser";
 import axiosInstance from "./instance/api";
+import parseNetworkErrorResponse from "./parsers/api.response.parser";
 
 const governingBodiesApi = {
   async getAllGoverningBodies() {
@@ -7,7 +7,7 @@ const governingBodiesApi = {
       const response = await axiosInstance.get("/governing-bodies");
       return response.data;
     } catch (error) {
-      return parseApiErrorResponse(error);
+      return parseNetworkErrorResponse(error);
     }
   },
 };
