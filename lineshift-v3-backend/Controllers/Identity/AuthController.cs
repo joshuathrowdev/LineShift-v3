@@ -10,6 +10,8 @@ using lineshift_v3_backend.Services.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using lineshift_v3_backend.Dtos;
 using lineshift_v3_backend.Models;
+using lineshift_v3_backend.Models.Errors;
+using System.Net;
 
 namespace lineshift_v3_backend.Controllers.Identity
 {
@@ -74,7 +76,11 @@ namespace lineshift_v3_backend.Controllers.Identity
             {
                 if (result.ErrorCode == "INVALID_CREDENTIALS")
                 {
-                    return Unauthorized(result.Error);
+                    return Unauthorized(new ErrorDetails
+                    {
+                        status = (int)HttpStatusCode.Unauthorized,
+                        message = result.Error ?? string.Empty
+                    });
                 }
 
                 if (result.ErrorCode == "INACTIVE_ACCOUNT")

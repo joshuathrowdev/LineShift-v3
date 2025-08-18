@@ -34,6 +34,8 @@ namespace lineshift_v3_backend.Controllers
         [HttpGet("")]
         public async Task<ActionResult<ICollection<SportDto>>> GetSports()
         {
+            return Forbid("you are currently forbidden for viewing this information");
+
             var sports = await _sportsService.GetSportsAsync();
             return Ok(sports);
         }
