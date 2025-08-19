@@ -3,8 +3,6 @@ import { useSnackbarStore } from "../snackbar.store";
 import { defineStore } from "pinia";
 
 const useSportsStore = defineStore("sports", () => {
-  const { showError } = useSnackbarStore();
-
   // State
   const sports = ref([]);
   const sportTypes = ref([
@@ -23,6 +21,7 @@ const useSportsStore = defineStore("sports", () => {
       sports.value = response;
     } catch (error) {
       console.log(error);
+      const { showError } = useSnackbarStore();
       showError(error.message);
     }
   };

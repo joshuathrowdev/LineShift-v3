@@ -3,8 +3,6 @@ import { useSnackbarStore } from "../snackbar.store";
 import { defineStore } from "pinia";
 
 const useLeaguesStore = defineStore("leagues", () => {
-  const { showError } = useSnackbarStore();
-
   // State
   const leagues = ref([]);
   const leagueLevels = ref([
@@ -29,6 +27,7 @@ const useLeaguesStore = defineStore("leagues", () => {
       leagues.value = response;
     } catch (error) {
       console.log(error);
+      const { showError } = useSnackbarStore();
       showError(error.message);
     }
   };

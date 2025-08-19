@@ -3,8 +3,6 @@ import authAdminApi from "@/services/auth.api";
 import { useSnackbarStore } from "./snackbar.store";
 
 export const useAuthStore = defineStore("auth", () => {
-  const { showError, showSuccess } = useSnackbarStore();
-
   // State
   const user = ref(null);
   const token = ref(localStorage.getItem("jwt_token") || null);
@@ -26,6 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
         setAuthData(token.value, userData);
       } catch (error) {
         console.error(error);
+        const { showError } = useSnackbarStore();
         showError(error.message);
       } finally {
         isLoading.value = false;
@@ -41,6 +40,7 @@ export const useAuthStore = defineStore("auth", () => {
       setAuthData(response.token, response.sessionUser);
     } catch (error) {
       console.log(error);
+      const { showError } = useSnackbarStore();
       showError(error.message);
     } finally {
       isLoading.value = false;
@@ -59,10 +59,12 @@ export const useAuthStore = defineStore("auth", () => {
       token.value = null;
       user.value = null;
 
+      const { showSuccess } = useSnackbarStore();
       showSuccess(`Successfully logged out, goodbye ${userName} `);
       return true;
     } catch (error) {
-      showError("An error occurred while attempting to logout");
+      const { showError } = useSnackbarStore();
+      showError(error.message);
       return false;
     } finally {
       isLoading.value = false;

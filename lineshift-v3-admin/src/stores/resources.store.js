@@ -4,8 +4,6 @@ import { defineAsyncComponent } from "vue";
 import { useSnackbarStore } from "./snackbar.store";
 
 export const useResourceStore = defineStore("resources", () => {
-  const { showError } = useSnackbarStore();
-
   // Auto find and map components based on glob template we pass
   const componentGlobModules = import.meta.glob("@/components/resources/*.vue");
 
@@ -47,9 +45,11 @@ export const useResourceStore = defineStore("resources", () => {
         // wraps dynamic import, handling loading
         resourceComponent.value = defineAsyncComponent(componentLoader);
       } catch (error) {
+        const { showError } = useSnackbarStore();
         showError(`Failed to load component for ${resourceKeyword.value}.`);
       }
     } else {
+      const { showError } = useSnackbarStore();
       showError(`Component for keyword '${resourceKeyword.value}' not found.`);
     }
   };

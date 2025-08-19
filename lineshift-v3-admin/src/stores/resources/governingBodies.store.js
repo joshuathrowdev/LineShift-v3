@@ -4,8 +4,6 @@ import governingBodiesApi from "@/services/governingBodies.api";
 import { defineStore } from "pinia";
 
 const useGoverningBodiesStore = defineStore("governing-bodies", () => {
-  const { showError } = useSnackbarStore();
-
   // State
   const governingBodies = ref([]);
 
@@ -18,6 +16,7 @@ const useGoverningBodiesStore = defineStore("governing-bodies", () => {
       governingBodies.value = response;
     } catch (error) {
       console.log(error);
+      const { showError } = useSnackbarStore();
       showError(error.message);
     }
   };
