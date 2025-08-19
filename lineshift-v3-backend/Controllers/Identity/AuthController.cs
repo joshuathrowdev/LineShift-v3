@@ -85,19 +85,31 @@ namespace lineshift_v3_backend.Controllers.Identity
 
                 if (result.ErrorCode == "INACTIVE_ACCOUNT")
                 {
-                    return Unauthorized(new { Message = result.Error });
+                    return Unauthorized(new ErrorDetails
+                    {
+                        status = (int)HttpStatusCode.Unauthorized,
+                        message = result.Error ?? string.Empty
+                    });
                     // Technically, a 403 Forbid / Forbidden would be right be add a slight security risk
                     // attackers could index what usernames and passwords are valid 
                 }
 
                 if (result.ErrorCode == "LOCKEDOUT_ACCOUNT")
                 {
-                    return Unauthorized(new { Message = result.Error });
+                    return Unauthorized(new ErrorDetails
+                    {
+                        status = (int)HttpStatusCode.Unauthorized,
+                        message = result.Error ?? string.Empty
+                    });
                 }
 
                 if (result.ErrorCode == "NOT_ALLOWED_ACCOUNT")
                 {
-                    return Unauthorized(new { Message = result.Error });
+                    return Unauthorized(new ErrorDetails
+                    {
+                        status = (int)HttpStatusCode.Unauthorized,
+                        message = result.Error ?? string.Empty
+                    });
                 }
 
                 
@@ -139,7 +151,11 @@ namespace lineshift_v3_backend.Controllers.Identity
             if (result.ErrorCode == "VALID_TOKEN_NO_USER" || result.ErrorCode == "INACTIVE_USER")
             {
                     
-                return NotFound(result.Error); // valid token but the user could not be found
+                return NotFound(new ErrorDetails
+                {
+                    status = (int)HttpStatusCode.NotFound,
+                    message = result.Error ?? string.Empty
+                }); // valid token but the user could not be found
             }
 
             // If session user found from claim id and is active
