@@ -1,9 +1,11 @@
 ﻿using lineshift_v3_backend.Dtos.Sport;
+using lineshift_v3_backend.Exceptions;
 using lineshift_v3_backend.Models;
 using lineshift_v3_backend.Models.Errors;
 using lineshift_v3_backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Mime;
 
@@ -32,6 +34,8 @@ namespace lineshift_v3_backend.Controllers
         [HttpGet("")]
         public async Task<ActionResult<ICollection<SportDto>>> GetSports()
         {
+            return Forbid("you are currently forbidden for viewing this information");
+
             var sports = await _sportsService.GetSportsAsync();
             return Ok(sports);
         }

@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-  import { useSportsStore } from '@/stores/sports.store';
+  import { useSportsStore } from '@/stores/resources/sports.store';
 
   const sportsStore = useSportsStore()
   const {sports} = storeToRefs(sportsStore)

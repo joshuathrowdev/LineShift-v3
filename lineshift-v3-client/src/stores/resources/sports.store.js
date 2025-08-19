@@ -1,12 +1,9 @@
 import sportsApi from '@/services/sports.api';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { useSnackbarStore } from './snackbar.store';
+import { useSnackbarStore } from '../snackbar.store';
 
 export const useSportsStore = defineStore('sports', () => {
-  const snackbarStore = useSnackbarStore();
-  const { showSuccess, showError } = snackbarStore;
-
   // State
   const sports = ref([]);
 
@@ -19,8 +16,8 @@ export const useSportsStore = defineStore('sports', () => {
     }
     catch (error) {
       console.error(error);
-      showError(error);
-      throw error;
+      const {showError} = useSnackbarStore()
+      showError(error.message);
     }
   };
 

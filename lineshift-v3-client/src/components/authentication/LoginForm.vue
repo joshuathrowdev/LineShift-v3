@@ -1,6 +1,7 @@
 <template>
   <v-form
     ref="form"
+    v-model="isFormValid"
     @submit.prevent="handleLoginForm"
   >
     <v-text-field
@@ -58,6 +59,7 @@
         color="secondary"
         variant="tonal"
         type="submit"
+        :disabled="!isFormValid"
       >
         Login
       </v-btn>
@@ -70,6 +72,7 @@
 const emit = defineEmits(['loginAttempt'])
 
 const form = ref(null)
+const isFormValid = ref(null)
 
 const credentials = ref({
   email: '',
@@ -77,9 +80,8 @@ const credentials = ref({
 })
 
 const handleLoginForm = async () => {
-  const {valid} = await form.value.validate()
 
-  if(valid) {
+  if(isFormValid.value) {
     emit('loginAttempt', credentials)
     resetLoginUtils()
   }
@@ -101,6 +103,7 @@ const emailRules = [
 
 const passwordRules = [
   v => !!v || 'Password is required',
+  v => !!v && (v.length >= 6) || "Password must be 6 characters or more"
   // Add more later
 ];
 

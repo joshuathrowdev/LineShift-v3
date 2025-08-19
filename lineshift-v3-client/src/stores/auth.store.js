@@ -1,7 +1,9 @@
+import { authApi } from '@/services/auth.api';
+
+
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-
-import { authApi } from '@/services/auth.api';
+import { useSnackbarStore } from './snackbar.store';
 
 // Store is responsible for managing its own state
 // (includes api calls to get data, mapping, etc)
@@ -50,6 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
     return formattedDate;
   });
 
+
   // Actions / Mutators (reg functions)
   // Core Actions
   const initializeAuth = async () => {
@@ -65,6 +68,8 @@ export const useAuthStore = defineStore('auth', () => {
       }
       catch (error) {
         console.error(error);
+        const {showError} = useSnackbarStore()
+        showError(error.message)
       }
       finally {
         // resetting loading value
@@ -85,6 +90,9 @@ export const useAuthStore = defineStore('auth', () => {
       }
     } catch (error) {
       console.error(error);
+      const {showError} = useSnackbarStore()
+      showError(error.message)
+
     }
     finally {
       isLoading.value = false;
@@ -93,19 +101,25 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = async () => {
-    const storageToken = localStorage.getItem('jwt_token');
+    try {
+      const storageToken = localStorage.getItem('jwt_token');
 
-    if (!storageToken) {
-      console.warn('No JWT token currently in local storage memory');
-      return;
-    }
-    if (!token.value) {
-      console.warn('No token stored in auth store session user');
-      return;
-    }
+      if (!storageToken) {
+        console.warn('No JWT token currently in local storage memory');
+        return;
+      }
+      if (!token.value) {
+        console.warn('No token stored in auth store session user');
+        return;
+      }
 
-    setAuthData(null, null);
-    isAuthReady.value = true;
+      setAuthData(null, null);
+      isAuthReady.value = true;
+    }
+    catch (error) {
+      const {showError} = useSnackbarStore()
+      showError(error.message || error)
+    }
   };
 
   const setAuthData = (newToken, authResponseUser) => {

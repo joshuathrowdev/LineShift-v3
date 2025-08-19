@@ -44,13 +44,6 @@ namespace lineshift_v3_backend.Services
             {
                 var result = await _sportsRepository.GetSportsAsync();
 
-                // Mapping Sport Model
-                //List<SportDto> sports = new List<SportDto>();
-                //foreach (var sport in result)
-                //{ 
-                //    sports.Add(_mapper.Map<SportDto>(sport));
-                //}
-
                 var sports = result.Select(sport => _mapper.Map<SportDto>(sport)).ToList();
                 return sports;
             }
