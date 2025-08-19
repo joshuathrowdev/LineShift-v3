@@ -29,7 +29,8 @@ export const useResourceStore = defineStore('resources', () => {
       resourceItems.value = await resourceApisGetHttpMethod[keyword]();
     }
     catch (error) {
-      showError(error);
+      const {showError} = useSnackbarStore()
+      showError(error.message || error);
     }
     finally {
       loading.value = false;

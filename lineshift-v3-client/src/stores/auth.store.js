@@ -101,19 +101,25 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = async () => {
-    const storageToken = localStorage.getItem('jwt_token');
+    try {
+      const storageToken = localStorage.getItem('jwt_token');
 
-    if (!storageToken) {
-      console.warn('No JWT token currently in local storage memory');
-      return;
-    }
-    if (!token.value) {
-      console.warn('No token stored in auth store session user');
-      return;
-    }
+      if (!storageToken) {
+        console.warn('No JWT token currently in local storage memory');
+        return;
+      }
+      if (!token.value) {
+        console.warn('No token stored in auth store session user');
+        return;
+      }
 
-    setAuthData(null, null);
-    isAuthReady.value = true;
+      setAuthData(null, null);
+      isAuthReady.value = true;
+    }
+    catch (error) {
+      const {showError} = useSnackbarStore()
+      showError(error.message || error)
+    }
   };
 
   const setAuthData = (newToken, authResponseUser) => {

@@ -4,8 +4,6 @@ import { ref } from 'vue';
 import { useSnackbarStore } from '../snackbar.store';
 
 export const useSportsStore = defineStore('sports', () => {
-  const {showError} = useSnackbarStore()
-
   // State
   const sports = ref([]);
 
@@ -18,6 +16,7 @@ export const useSportsStore = defineStore('sports', () => {
     }
     catch (error) {
       console.error(error);
+      const {showError} = useSnackbarStore()
       showError(error.message);
     }
   };
