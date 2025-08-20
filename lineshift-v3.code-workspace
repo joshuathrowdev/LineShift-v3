@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "lineshift-v3-backend"
+		},
+		{
+			"path": "microservices"
 		}
 	],
 	"settings": {}
